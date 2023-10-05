@@ -13,10 +13,7 @@ public abstract class GeneralCode extends Robot {
 
     boolean leftTurnold = false;
     boolean rightTurnold = false;
-    double leftFrontPower;
-    double leftBackPower;
-    double rightFrontPower;
-    double rightBackPower;
+
 
     double LiftAdd;
     boolean slowMode;
@@ -29,7 +26,7 @@ public abstract class GeneralCode extends Robot {
     boolean upStack;
     boolean TurnLeft;
     boolean TurnRight;
-    boolean DriverOrientationDriveMode = true;
+
     public void UpdateControls(){
         drive = -gamepad1.left_stick_y;
         slide = gamepad1.left_stick_x;
@@ -64,18 +61,7 @@ public abstract class GeneralCode extends Robot {
             slide = 0;
         }
     }
-    public void straferAlgorithm(){
-        if(DriverOrientationDriveMode == true){
-            drive = slide * Math.cos(-robotHeading) - drive * Math.sin(-robotHeading);
-            slide = slide * Math.sin(-robotHeading) + drive * Math.cos(-robotHeading);
-        }
 
-        leftFrontPower = Range.clip(drive + slide + turn, -1.0, 1.0);
-        leftBackPower  =Range.clip(drive - slide + turn,-1.0, 1.0 );
-        rightFrontPower=Range.clip(drive - slide - turn, -1.0, 1.0);
-        rightBackPower =Range.clip(drive + slide - turn, -1.0, 1.0);
-
-    }
 
 
 

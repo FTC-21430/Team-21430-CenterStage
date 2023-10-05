@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -43,15 +44,31 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor rightFrontMotor = null;
     public DcMotor rightBackMotor = null;
     public double robotHeading;
+    double leftFrontPower;
+    double leftBackPower;
+    double rightFrontPower;
+    double rightBackPower;
+    boolean DriverOrientationDriveMode = true;
 
 
+    public void straferAlgorithm(){
+        if(DriverOrientationDriveMode == true){
+            slide = (slide * Math.cos(robotHeading)) - (drive * Math.sin(robotHeading));
+            drive = (slide * Math.sin(robotHeading)) + (drive * Math.cos(robotHeading));
+        }
 
+        leftFrontPower = Range.clip(drive + slide + turn, -1.0, 1.0);
+        leftBackPower  =Range.clip(drive - slide + turn,-1.0, 1.0 );
+        rightFrontPower=Range.clip(drive - slide - turn, -1.0, 1.0);
+        rightBackPower =Range.clip(drive + slide - turn, -1.0, 1.0);
+
+    }
     public void IMUstuffs(){
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
         current = orientation.getYaw(AngleUnit.DEGREES);
         telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
-        robotHeading = orientation.getYaw(AngleUnit.DEGREES);
+    robotHeading = orientation.getYaw(AngleUnit.RADIANS);
 
     }
     public void IMUReset(){
@@ -59,10 +76,11 @@ public abstract class Robot extends LinearOpMode {
 //        imu.resetYaw();
 //        Target = 0;
     }
+
     public void ProportionalFeedbackControl(){
         error = Wrap((Target - current));
         if (gamepad1.right_stick_x != 0){
-            imu.resetYaw();
+            //imu.resetYaw();
             Target = 0;
         }
 

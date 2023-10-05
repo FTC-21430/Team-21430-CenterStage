@@ -31,7 +31,7 @@ public class DriveTheRobotTeleop extends GeneralCode {
 
             leftTurnold = gamepad1.b;
             rightTurnold = gamepad1.x;
-            ProportionalFeedbackControl();
+            //ProportionalFeedbackControl();
             GridRunner();
             straferAlgorithm();
             telemetry.addData("error", error);
@@ -41,7 +41,7 @@ public class DriveTheRobotTeleop extends GeneralCode {
             setMotorPower();
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("robotAngle", robotHeading);
+            telemetry.addData("robotAngle", RobotAngle);
             telemetry.update();
         }
     }
