@@ -44,6 +44,6 @@ repositories {
 
 dependencies {
     implementation project(':FtcRobotController')
-    implementation 'org.team11260:fast-load:0.1.1'
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
+    implementation 'org.team11260:fast-load:0.1.1'
 }
