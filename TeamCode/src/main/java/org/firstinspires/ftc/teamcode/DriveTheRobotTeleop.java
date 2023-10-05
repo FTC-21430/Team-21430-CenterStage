@@ -37,10 +37,11 @@ public class DriveTheRobotTeleop extends GeneralCode {
             telemetry.addData("error", error);
             telemetry.addData("turn", turn);
 
-
+            speedControl();
             setMotorPower();
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("robotAngle", robotHeading);
             telemetry.update();
         }
     }

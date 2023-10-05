@@ -42,6 +42,7 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor leftBackMotor = null;
     public DcMotor rightFrontMotor = null;
     public DcMotor rightBackMotor = null;
+    public double robotHeading;
 
 
 
@@ -50,11 +51,13 @@ public abstract class Robot extends LinearOpMode {
         AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
         current = orientation.getYaw(AngleUnit.DEGREES);
         telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
+        robotHeading = orientation.getYaw(AngleUnit.DEGREES);
+
     }
     public void IMUReset(){
-        telemetry.addData("Yaw", "Reset" + "ing\n");
-        imu.resetYaw();
-        Target = 0;
+//        telemetry.addData("Yaw", "Reset" + "ing\n");
+//        imu.resetYaw();
+//        Target = 0;
     }
     public void ProportionalFeedbackControl(){
         error = Wrap((Target - current));
