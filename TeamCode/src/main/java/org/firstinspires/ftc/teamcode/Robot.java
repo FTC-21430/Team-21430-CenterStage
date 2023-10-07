@@ -49,12 +49,18 @@ public abstract class Robot extends LinearOpMode {
     double rightFrontPower;
     double rightBackPower;
     boolean DriverOrientationDriveMode = true;
+    boolean Driver1Leftbumper;
 
 
     public void straferAlgorithm(){
         if(DriverOrientationDriveMode == true){
-            slide = (slide * Math.cos(robotHeading)) - (drive * Math.sin(robotHeading));
-            drive = (slide * Math.sin(robotHeading)) + (drive * Math.cos(robotHeading));
+//            slide = (slide * Math.cos(robotHeading)) - (drive * Math.sin(robotHeading));
+//            drive = (slide * Math.sin(robotHeading)) + (drive * Math.cos(robotHeading));
+
+
+            double temp = drive * Math.cos(-robotHeading) + slide * Math.sin(-robotHeading);
+            slide = -drive * Math.sin(-robotHeading) + slide * Math.cos(-robotHeading);
+            drive = temp;
         }
 
         leftFrontPower = Range.clip(drive + slide + turn, -1.0, 1.0);

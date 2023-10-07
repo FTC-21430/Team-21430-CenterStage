@@ -26,20 +26,27 @@ public abstract class GeneralCode extends Robot {
     boolean upStack;
     boolean TurnLeft;
     boolean TurnRight;
+    boolean bumper_old;
+
 
     public void UpdateControls(){
         drive = -gamepad1.left_stick_y;
         slide = gamepad1.left_stick_x;
         turn = gamepad1.right_stick_x;
-        LiftAdd = gamepad2.left_stick_y;
         slowMode = gamepad1.right_bumper;
-        Intake = gamepad2.b;
-        highJunction = gamepad2.dpad_up;
-        mediumJunction = gamepad2.dpad_right;
-        lowJunction = gamepad2.dpad_left;
-        groundJunction = gamepad2.dpad_down;
         fastMode = gamepad1.right_trigger;
-        upStack = gamepad2.left_bumper;
+
+        //toggle Driver Orientation Mode
+        Driver1Leftbumper = gamepad1.left_bumper;
+        if (Driver1Leftbumper && !bumper_old){
+            if (!DriverOrientationDriveMode){
+                DriverOrientationDriveMode = true;
+            } else {
+                DriverOrientationDriveMode = false;
+            }
+        }
+        bumper_old = Driver1Leftbumper;
+
     }
 
 
