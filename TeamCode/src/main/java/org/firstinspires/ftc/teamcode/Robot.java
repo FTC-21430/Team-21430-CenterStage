@@ -78,15 +78,15 @@ public abstract class Robot extends LinearOpMode {
 
     }
     public void IMUReset(){
-//        telemetry.addData("Yaw", "Reset" + "ing\n");
-//        imu.resetYaw();
-//        Target = 0;
+        telemetry.addData("Yaw", "Reset" + "ing\n");
+        imu.resetYaw();
+        Target = 0;
     }
 
     public void ProportionalFeedbackControl(){
         error = Wrap((Target - current));
         if (gamepad1.right_stick_x != 0){
-            //imu.resetYaw();
+            imu.resetYaw();
             Target = 0;
         }
 

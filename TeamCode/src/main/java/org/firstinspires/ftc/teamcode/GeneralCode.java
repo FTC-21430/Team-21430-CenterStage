@@ -35,7 +35,13 @@ public abstract class GeneralCode extends Robot {
         turn = gamepad1.right_stick_x;
         slowMode = gamepad1.right_bumper;
         fastMode = gamepad1.right_trigger;
-
+        LiftAdd = gamepad2.left_stick_y;
+        Intake = gamepad2.b;
+        highJunction = gamepad2.dpad_up;
+        mediumJunction = gamepad2.dpad_right;
+        lowJunction = gamepad2.dpad_left;
+        groundJunction = gamepad2.dpad_down;
+        upStack = gamepad2.left_bumper;
         //toggle Driver Orientation Mode
         Driver1Leftbumper = gamepad1.left_bumper;
         if (Driver1Leftbumper && !bumper_old){
@@ -46,7 +52,6 @@ public abstract class GeneralCode extends Robot {
             }
         }
         bumper_old = Driver1Leftbumper;
-
     }
 
 
@@ -68,15 +73,6 @@ public abstract class GeneralCode extends Robot {
             slide = 0;
         }
     }
-
-
-
-
-            // go down
-
-
-
-
     public void speedControl(){
         leftFrontPower=leftFrontPower / 2;
         leftBackPower = leftBackPower / 2;
