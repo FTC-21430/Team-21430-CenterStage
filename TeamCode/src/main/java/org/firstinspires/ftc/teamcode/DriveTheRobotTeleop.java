@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-@TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
+@TeleOp(name="DriveTheRobotTeleop", group="Linear Opmode")
 public class DriveTheRobotTeleop extends GeneralCode {
     // Wait for the game to start (driver presses PLAY)
     @Override
@@ -31,7 +31,7 @@ public class DriveTheRobotTeleop extends GeneralCode {
 
             leftTurnold = gamepad1.b;
             rightTurnold = gamepad1.x;
-            //ProportionalFeedbackControl();
+            ProportionalFeedbackControl();
             GridRunner();
             straferAlgorithm();
             telemetry.addData("error", error);

@@ -86,8 +86,7 @@ public abstract class Robot extends LinearOpMode {
     public void ProportionalFeedbackControl(){
         error = Wrap((Target - current));
         if (gamepad1.right_stick_x != 0){
-            imu.resetYaw();
-            Target = 0;
+            Target = current;
         }
 
         turn -= error/20;
@@ -136,6 +135,7 @@ public abstract class Robot extends LinearOpMode {
         leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
         rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
         rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
+        imu.resetYaw();
     }
 }
 
