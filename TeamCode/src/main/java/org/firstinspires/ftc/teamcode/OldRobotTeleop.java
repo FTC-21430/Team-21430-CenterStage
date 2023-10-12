@@ -13,12 +13,13 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-@TeleOp(name="DriveTheRobotTeleop", group="Linear Opmode")
-public class DriveTheRobotTeleop extends GeneralCode {
+@TeleOp(name="OldRobotTeleop", group="Linear Opmode")
+public class OldRobotTeleop extends OldCodeForPowerPlay {
     // Wait for the game to start (driver presses PLAY)
     @Override
     public void runOpMode() {
         Init();
+        PowerplayInit();
         waitForStart();
         runtime.reset();
         // run until the end of the match (driver presses STOP)
@@ -36,7 +37,19 @@ public class DriveTheRobotTeleop extends GeneralCode {
             straferAlgorithm();
             telemetry.addData("error", error);
             telemetry.addData("turn", turn);
-
+            if (gamepad1.y) {
+                IMUReset();
+            }
+            if (!calabrate_Lift) {
+                liftMotor.setPower(Math.abs(1));
+            }
+            LiftControl();
+            if (Intake == true) {
+                IntakeOpen();
+            }
+            if (Intake == false) {
+                IntakeClose();
+            }
             speedControl();
             setMotorPower();
 

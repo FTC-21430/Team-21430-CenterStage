@@ -13,10 +13,7 @@ public abstract class GeneralCode extends Robot {
 
     boolean leftTurnold = false;
     boolean rightTurnold = false;
-    double leftFrontPower;
-    double leftBackPower;
-    double rightFrontPower;
-    double rightBackPower;
+
 
     double LiftAdd;
     boolean slowMode;
@@ -29,19 +26,32 @@ public abstract class GeneralCode extends Robot {
     boolean upStack;
     boolean TurnLeft;
     boolean TurnRight;
+    boolean bumper_old;
+
+
     public void UpdateControls(){
         drive = -gamepad1.left_stick_y;
         slide = gamepad1.left_stick_x;
         turn = gamepad1.right_stick_x;
-        LiftAdd = gamepad2.left_stick_y;
         slowMode = gamepad1.right_bumper;
+        fastMode = gamepad1.right_trigger;
+        LiftAdd = gamepad2.left_stick_y;
         Intake = gamepad2.b;
         highJunction = gamepad2.dpad_up;
         mediumJunction = gamepad2.dpad_right;
         lowJunction = gamepad2.dpad_left;
         groundJunction = gamepad2.dpad_down;
-        fastMode = gamepad1.right_trigger;
         upStack = gamepad2.left_bumper;
+        //toggle Driver Orientation Mode
+        Driver1Leftbumper = gamepad1.left_bumper;
+        if (Driver1Leftbumper && !bumper_old){
+            if (!DriverOrientationDriveMode){
+                DriverOrientationDriveMode = true;
+            } else {
+                DriverOrientationDriveMode = false;
+            }
+        }
+        bumper_old = Driver1Leftbumper;
     }
 
 
@@ -63,21 +73,6 @@ public abstract class GeneralCode extends Robot {
             slide = 0;
         }
     }
-    public void straferAlgorithm(){
-        leftFrontPower = Range.clip(drive + slide + turn, -1.0, 1.0);
-        leftBackPower  =Range.clip(drive - slide + turn,-1.0, 1.0 );
-        rightFrontPower=Range.clip(drive - slide - turn, -1.0, 1.0);
-        rightBackPower =Range.clip(drive + slide - turn, -1.0, 1.0);
-
-    }
-
-
-
-            // go down
-
-
-
-
     public void speedControl(){
         leftFrontPower=leftFrontPower / 2;
         leftBackPower = leftBackPower / 2;
