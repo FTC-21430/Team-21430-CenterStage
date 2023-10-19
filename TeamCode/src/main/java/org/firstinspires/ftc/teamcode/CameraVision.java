@@ -50,8 +50,8 @@ import java.util.List;
 @TeleOp(name = "CameraVision", group = "Concept")
 
 public class CameraVision extends LinearOpMode {
-public float camBarrierONE=300;
-public float camBarrierTwo=600;
+public float camBarrierONE=200;
+public float camBarrierTwo=400;
 public double x;
 public double y;
 
@@ -59,7 +59,7 @@ public double y;
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
     // this is only used for Android Studio when using models in Assets.
-    private static final String TFOD_MODEL_ASSET = "MyModelStoredAsAsset.tflite";
+    private static final String TFOD_MODEL_ASSET = "model_20231014_120906.tflite";
     // TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
     // this is used when uploading models directly to the RC using the model upload interface.
     private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/model_20231014_120906.tflite";
@@ -127,12 +127,12 @@ public double y;
                 // choose one of the following:
                 //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
                 //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
-                //.setModelAssetName(TFOD_MODEL_ASSET)
+                .setModelAssetName(TFOD_MODEL_ASSET)
                 //.setModelFileName(TFOD_MODEL_FILE)
 
                 // The following default settings are available to un-comment and edit as needed to
                 // set parameters for custom models.
-                //.setModelLabels(LABELS)
+                .setModelLabels(LABELS)
                 //.setIsModelTensorFlow2(true)
                 //.setIsModelQuantized(true)
                 //.setModelInputSize(300)
@@ -182,7 +182,6 @@ public double y;
      * Add telemetry about TensorFlow Object Detection (TFOD) recognitions.
      */
     public int findZone(){
-        x= 160;
         if (x <= camBarrierONE){
             return 1;
         }else if(x >= camBarrierONE && x <=camBarrierTwo){
@@ -198,12 +197,12 @@ public double y;
 
         List<Recognition> currentRecognitions = tfod.getRecognitions();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
-        telemetry.addData("zone!",findZone());
+
         // Step through the list of recognitions and display info for each one.
         for (Recognition recognition : currentRecognitions) {
              x = (recognition.getLeft() + recognition.getRight()) / 2 ;
              y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
-
+            telemetry.addData("zone!",findZone());
             telemetry.addData(""," ");
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
