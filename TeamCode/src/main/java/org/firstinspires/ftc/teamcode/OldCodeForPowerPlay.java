@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public abstract class OldCodeForPowerPlay extends GeneralCode {
+public abstract class OldCodeForPowerPlay extends OdometryCode  {
 
     public  DcMotor liftMotor = null;
     public Servo servoL;

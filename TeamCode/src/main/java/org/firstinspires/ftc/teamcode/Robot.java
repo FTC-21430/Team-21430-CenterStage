@@ -50,6 +50,7 @@ public abstract class Robot extends LinearOpMode {
     double rightBackPower;
     boolean DriverOrientationDriveMode = true;
     boolean Driver1Leftbumper;
+    float startingangle;
 
 
     public void straferAlgorithm(){
@@ -72,7 +73,7 @@ public abstract class Robot extends LinearOpMode {
     public void IMUstuffs(){
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
-        current = orientation.getYaw(AngleUnit.DEGREES);
+        current = orientation.getYaw(AngleUnit.DEGREES) + startingangle;
         telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
     robotHeading = orientation.getYaw(AngleUnit.RADIANS);
 
