@@ -15,6 +15,7 @@ public class backUpAutoRedLeft extends OldCodeForPowerPlay {
     @Override
     public void runOpMode() throws InterruptedException {
         Init();
+        startOfsetRadians = 0;
         waitForStart();
         runtime.reset();
         leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -34,24 +35,24 @@ public class backUpAutoRedLeft extends OldCodeForPowerPlay {
         IMUReset();
         PowerplayInit();
 
-//        RobotX = -65;
-//        RobotY = 61;
+       RobotX = 0;
+       RobotY = -63;
 
         DriverOrientationDriveMode = false;
-        startOfsetRadians = 0;
+
 //MAKE IT FASTER!!!!!!
 // put autoPather Output here
         //purple pixcel placement for zone 2
 
         IntakeClose();
-
+RunToPoint(0, -12);
         // if (Zone==1)
 //        RunToPoint(-14,21);
 //        IntakeOpen();
         //if (Zone==2)
-        RunToPoint(-2,5);
-        RunToPoint(0,35);
-        IntakeOpen();
+//        RunToPoint(-2,5);
+//        RunToPoint(0,35);
+//        IntakeOpen();
         //if (Zone==3)
 
 //        RunToPoint(0,5);
@@ -62,8 +63,8 @@ public class backUpAutoRedLeft extends OldCodeForPowerPlay {
 //        RunToPoint(-2,29);
         //if statments stop
 
-        RunToPoint(-2,5);
-        RunToPoint(98,5);
+//        RunToPoint(-2,5);
+//        RunToPoint(98,5);
 
 
         // code for just parking in the corner
