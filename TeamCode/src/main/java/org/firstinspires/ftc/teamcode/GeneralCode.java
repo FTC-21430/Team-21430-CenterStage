@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.robotcore.internal.camera.delegating.DelegatingCaptureSequence;
 
 public abstract class GeneralCode extends Robot {
     int LiftManual = 0;
@@ -29,7 +30,7 @@ public abstract class GeneralCode extends Robot {
     boolean bumper_old;
 
 
-    public void UpdateControls(){
+    public void UpdateControls() {
         drive = -gamepad1.left_stick_y;
         slide = gamepad1.left_stick_x;
         turn = gamepad1.right_stick_x;
@@ -44,8 +45,8 @@ public abstract class GeneralCode extends Robot {
         upStack = gamepad2.left_bumper;
         //toggle Driver Orientation Mode
         Driver1Leftbumper = gamepad1.left_bumper;
-        if (Driver1Leftbumper && !bumper_old){
-            if (!DriverOrientationDriveMode){
+        if (Driver1Leftbumper && !bumper_old) {
+            if (!DriverOrientationDriveMode) {
                 DriverOrientationDriveMode = true;
             } else {
                 DriverOrientationDriveMode = false;
@@ -55,43 +56,45 @@ public abstract class GeneralCode extends Robot {
     }
 
 
-    public void GridRunner(){
-        if(gamepad1.dpad_up){
+    public void GridRunner() {
+        if (gamepad1.dpad_up) {
             drive = 1;
             slide = 0;
         }
-        if(gamepad1.dpad_left){
+        if (gamepad1.dpad_left) {
             drive = 0;
             slide = -1;
         }
-        if(gamepad1.dpad_right){
+        if (gamepad1.dpad_right) {
             drive = 0;
             slide = 1;
         }
-        if(gamepad1.dpad_down){
+        if (gamepad1.dpad_down) {
             drive = -1;
             slide = 0;
         }
     }
-    public void speedControl(){
-        leftFrontPower=leftFrontPower / 2;
+
+    public void speedControl() {
+        leftFrontPower = leftFrontPower / 2;
         leftBackPower = leftBackPower / 2;
         rightFrontPower = rightFrontPower / 2;
         rightBackPower = rightBackPower / 2;
-        if(fastMode==1){
-            leftFrontPower=leftFrontPower * 2;
+        if (fastMode == 1) {
+            leftFrontPower = leftFrontPower * 2;
             leftBackPower = leftBackPower * 2;
             rightFrontPower = rightFrontPower * 2;
             rightBackPower = rightBackPower * 2;
         }
-        if(slowMode){
-            leftFrontPower=leftFrontPower / 2;
+        if (slowMode) {
+            leftFrontPower = leftFrontPower / 2;
             leftBackPower = leftBackPower / 2;
             rightFrontPower = rightFrontPower / 2;
             rightBackPower = rightBackPower / 2;
         }
     }
-    public void setMotorPower(){
+
+    public void setMotorPower() {
         // Send calculated power to wheels
         leftFrontMotor.setPower(leftFrontPower);
         leftBackMotor.setPower(leftBackPower);
@@ -99,4 +102,23 @@ public abstract class GeneralCode extends Robot {
         rightBackMotor.setPower(rightBackPower);
         //Set the servo to the new position and pause;
     }
+
+    public void CenterStageUpdateControls() {
+        drive = -gamepad1.left_stick_y;
+        slide = gamepad1.left_stick_x;
+        turn = gamepad1.right_stick_x;
+        slowMode = gamepad1.right_bumper;
+        fastMode = gamepad1.right_trigger;
+    }
+
+    public void Climber() {
+        if (gamepad2.dpad_up && climberMotor.getCurrentPosition()<=100) {
+            climberMotor.setPower(1);
+        } else if (gamepad2.dpad_down && ClimberLimitSwitchBottom.getState() == false) {
+            climberMotor.setPower(-1);
+        } else {
+            climberMotor.setPower(0);
+        }
+    }
 }
+

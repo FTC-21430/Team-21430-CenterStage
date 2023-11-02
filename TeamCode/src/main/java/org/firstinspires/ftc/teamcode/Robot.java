@@ -43,6 +43,8 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor leftBackMotor = null;
     public DcMotor rightFrontMotor = null;
     public DcMotor rightBackMotor = null;
+
+    public DcMotor climberMotor = null;
     public double robotHeading;
     double leftFrontPower;
     double leftBackPower;
@@ -51,7 +53,7 @@ public abstract class Robot extends LinearOpMode {
     boolean DriverOrientationDriveMode = true;
     boolean Driver1Leftbumper;
     float startingangle;
-
+    public DigitalChannel ClimberLimitSwitchBottom;
 
     public void straferAlgorithm(){
         if(DriverOrientationDriveMode == true){
@@ -128,7 +130,10 @@ public abstract class Robot extends LinearOpMode {
         leftBackMotor = hardwareMap.get(DcMotor.class, "left_Back");
         rightFrontMotor = hardwareMap.get(DcMotor.class, "right_Front");
         rightBackMotor = hardwareMap.get(DcMotor.class, "right_Back");
-
+        climberMotor = hardwareMap.get(DcMotor.class, "climber");
+        climberMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        ClimberLimitSwitchBottom = hardwareMap.get(DigitalChannel.class, "Climber_Limit_Switch_Bottom");
+        ClimberLimitSwitchBottom.setMode(DigitalChannel.Mode.INPUT);
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
         // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
