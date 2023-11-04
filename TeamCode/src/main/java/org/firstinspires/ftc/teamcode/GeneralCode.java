@@ -113,9 +113,9 @@ public abstract class GeneralCode extends Robot {
         IntakeInput = gamepad2.left_stick_y;
     }
 //ClimberLimitSwitchBottom.getState() == false
-
+// && climberMotor.getCurrentPosition()<=100
     public void Climber() {
-        if (gamepad2.dpad_up && climberMotor.getCurrentPosition()<=100) {
+        if (gamepad2.dpad_up) {
             climberMotor.setPower(1);
         } else if (gamepad2.dpad_down) {
             climberMotor.setPower(-0.9);

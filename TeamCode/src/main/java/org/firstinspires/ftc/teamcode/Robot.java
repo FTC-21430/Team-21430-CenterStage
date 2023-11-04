@@ -133,6 +133,7 @@ public abstract class Robot extends LinearOpMode {
         rightFrontMotor = hardwareMap.get(DcMotor.class, "right_Front");
         rightBackMotor = hardwareMap.get(DcMotor.class, "right_Back");
         climberMotor = hardwareMap.get(DcMotor.class, "climber");
+        climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         climberMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
