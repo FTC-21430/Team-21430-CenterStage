@@ -28,6 +28,7 @@ public abstract class GeneralCode extends Robot {
     boolean TurnLeft;
     boolean TurnRight;
     boolean bumper_old;
+    float IntakeInput;
 
 
     public void UpdateControls() {
@@ -109,16 +110,21 @@ public abstract class GeneralCode extends Robot {
         turn = gamepad1.right_stick_x;
         slowMode = gamepad1.right_bumper;
         fastMode = gamepad1.right_trigger;
+        IntakeInput = gamepad2.left_stick_y;
     }
+//ClimberLimitSwitchBottom.getState() == false
 
     public void Climber() {
         if (gamepad2.dpad_up && climberMotor.getCurrentPosition()<=100) {
             climberMotor.setPower(1);
-        } else if (gamepad2.dpad_down && ClimberLimitSwitchBottom.getState() == false) {
-            climberMotor.setPower(-1);
+        } else if (gamepad2.dpad_down) {
+            climberMotor.setPower(-0.9);
         } else {
             climberMotor.setPower(0);
         }
+    }
+    public void Intake(){
+        intakeMotor.setPower(IntakeInput);
     }
 }
 
