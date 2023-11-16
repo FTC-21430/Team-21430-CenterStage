@@ -43,6 +43,7 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor leftBackMotor = null;
     public DcMotor rightFrontMotor = null;
     public DcMotor rightBackMotor = null;
+    public float controlHubChange = 51;
 
     public DcMotor climberMotor = null;
     public DcMotor intakeMotor = null;
@@ -58,6 +59,7 @@ public abstract class Robot extends LinearOpMode {
     public DigitalChannel ClimberLimitSwitchBottom;
 
     public void straferAlgorithm(){
+        DriverOrientationDriveMode = false;
         if(DriverOrientationDriveMode == true){
 //            slide = (slide * Math.cos(robotHeading)) - (drive * Math.sin(robotHeading));
 //            drive = (slide * Math.sin(robotHeading)) + (drive * Math.cos(robotHeading));
@@ -79,7 +81,7 @@ public abstract class Robot extends LinearOpMode {
         AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
         current = orientation.getYaw(AngleUnit.DEGREES) + startingangle;
         telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
-    robotHeading = orientation.getYaw(AngleUnit.RADIANS);
+    robotHeading = orientation.getYaw(AngleUnit.RADIANS) ;
 
     }
     public void IMUReset(){

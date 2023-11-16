@@ -16,10 +16,11 @@ public class Teleop extends OdometryCode{
             if (gamepad1.y) {
                 IMUReset();
             }
-            ProportionalFeedbackControl();
+           // ProportionalFeedbackControl();
             GridRunner();
             straferAlgorithm();
             Climber();
+            Intake();
             telemetry.addData("error", error);
             telemetry.addData("turn", turn);
             if (gamepad1.y) {
