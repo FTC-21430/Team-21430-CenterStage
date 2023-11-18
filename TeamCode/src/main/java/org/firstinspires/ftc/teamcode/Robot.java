@@ -50,7 +50,7 @@ public abstract class Robot extends LinearOpMode {
     double rightBackPower;
     boolean DriverOrientationDriveMode = true;
     boolean Driver1Leftbumper;
-    float startingangle;
+    double startingangle;
 
 
     public void straferAlgorithm(){

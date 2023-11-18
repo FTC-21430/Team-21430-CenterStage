@@ -19,6 +19,22 @@ public abstract class OdometryCode extends GeneralCode {
     public double FrontLeftOld,FrontRightOld,BackLeftOld,BackRightOld;
     public float TESTfLeft, TESTfRight, TESTbLeft, TESTbRight;
 
+    public void ProportionalFeedbackControlAuto(){
+        error = Wrap(((Target - ((180 * startOfsetRadians) /Math.PI)) - current));
+        turn -= error/20;
+    }
+
+
+public void setTurn(float angle){
+    Target = angle;
+}
+
+    public void OdometryInit(float x, float y){
+        RobotX = x;
+        RobotY = y;
+        InitX = x;
+        InitY = y;
+    }
 
 
     public double startOfsetRadians = 0;
@@ -82,7 +98,7 @@ public abstract class OdometryCode extends GeneralCode {
             IMUstuffs();
 
             RobotAngles();
-            ProportionalFeedbackControl();
+            ProportionalFeedbackControlAuto();
             UpdateEncoders();
 
             UpdateOdometry();
