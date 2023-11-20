@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -53,6 +54,30 @@ public abstract class Robot extends LinearOpMode {
     float startingangle;
 
 
+    RevBlinkinLedDriver blinkinLedDriver;
+    RevBlinkinLedDriver.BlinkinPattern pattern;
+
+    public void LightsInit(){
+        //Commented out so when you use code without the blinkin hooked up to the robot, the robot does not scream at you LOL
+//        blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver .class, "blinkin");
+//        pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
+//        blinkinLedDriver.setPattern(pattern);
+    }
+public void lightsUpdate(){
+        //Commented out because the buttons are just for debug :)
+//    if (gamepad1.dpad_up) pattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE;
+//    if (gamepad1.dpad_down) pattern = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
+//    if (gamepad1.dpad_left) pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
+//    if (gamepad1.dpad_right) pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LARSON_SCANNER;
+//    if (gamepad1.a)  pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
+//
+//    if (gamepad1.x)      pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET;
+//
+//    if (gamepad1.b) pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
+//
+//    if (gamepad1.y)  pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
+//    blinkinLedDriver.setPattern(pattern);
+}
     public void straferAlgorithm(){
         if(DriverOrientationDriveMode == true){
 //            slide = (slide * Math.cos(robotHeading)) - (drive * Math.sin(robotHeading));
