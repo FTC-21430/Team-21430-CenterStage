@@ -27,18 +27,19 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.SwitchableLight;
+
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 /*
@@ -66,7 +67,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  */
 @TeleOp(name = "Sensor: Color", group = "Sensor")
 //@Disabled
-public class SensorColor extends LinearOpMode {
+public class Color_Sensor_Test extends LinearOpMode {
 
   /** The colorSensor field will contain a reference to our color sensor hardware object */
   NormalizedColorSensor colorSensor;
@@ -216,6 +217,20 @@ public class SensorColor extends LinearOpMode {
           relativeLayout.setBackgroundColor(Color.HSVToColor(hsvValues));
         }
       });
+      if (hsvValues[2] > .14) {
+        //white pixel
+        telemetry.addData("Color", "White");
+      } else if (170 < hsvValues[0]) {
+        //purple pixel
+        telemetry.addData("Color", "Purple");
+        } else if (120 > hsvValues[0]){
+        //yellow pixel
+        telemetry.addData("Color", "Yellow");
+      }
+      else{
+        //green pixel
+        telemetry.addData("Color", "Green");
+      }
+      }
     }
   }
-}
