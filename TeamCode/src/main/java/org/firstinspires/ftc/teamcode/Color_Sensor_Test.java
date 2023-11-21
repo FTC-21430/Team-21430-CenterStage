@@ -208,7 +208,6 @@ public class Color_Sensor_Test extends LinearOpMode {
       if (colorSensor instanceof DistanceSensor) {
         telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) colorSensor).getDistance(DistanceUnit.CM));
       }
-
       telemetry.update();
 
       // Change the Robot Controller's background color to match the color detected by the color sensor.
@@ -217,7 +216,7 @@ public class Color_Sensor_Test extends LinearOpMode {
           relativeLayout.setBackgroundColor(Color.HSVToColor(hsvValues));
         }
       });
-      if (hsvValues[2] > .14) {
+      if (hsvValues[2] > .13) {
         //white pixel
         telemetry.addData("Color", "White");
       } else if (170 < hsvValues[0]) {
