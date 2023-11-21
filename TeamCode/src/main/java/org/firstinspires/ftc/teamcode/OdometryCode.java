@@ -146,11 +146,6 @@ public abstract class OdometryCode extends GeneralCode {
 
     }
 
-
-
-
-
-
     YawPitchRollAngles orientation;
     AngularVelocity angularVelocity;
 

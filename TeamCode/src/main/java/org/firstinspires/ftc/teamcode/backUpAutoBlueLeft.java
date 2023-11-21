@@ -11,12 +11,15 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.sun.tools.javac.jvm.Gen;
 @Autonomous(name = "backUpAutoBlueLeft" , group = "CenterStage")
-public class backUpAutoBlueLeft extends OldCodeForPowerPlay {
+public class backUpAutoBlueLeft extends CameraVision {
     @Override
     public void runOpMode() throws InterruptedException {
         Init();
+        CamInit();
+
         waitForStart();
         runtime.reset();
+
         leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -45,21 +48,28 @@ public class backUpAutoBlueLeft extends OldCodeForPowerPlay {
 
         IntakeClose();
 
-        // if (Zone==1)
-//        RunToPoint(-14,21);
-//        IntakeOpen();
-        //if (Zone==2)
-        RunToPoint(-2,5);
-        RunToPoint(0,35);
-        IntakeOpen();
-        //if (Zone==3)
+        CamRun(5);
 
-//        RunToPoint(0,5);
-//        Target = -90;
-//        RunToPoint(0,29);
-//        RunToPoint(4,29);
-//        IntakeOpen();
-//        RunToPoint(-2,29);
+        if (Zone == 0){
+    Zone = 2;}
+
+        if (Zone==1) {
+            RunToPoint(-14, 21);
+            IntakeOpen();}
+
+        if (Zone==2) {
+            RunToPoint(-2, 5);
+            RunToPoint(0, 35);
+            IntakeOpen();}
+
+        if (Zone==3) {
+            RunToPoint(0, 5);
+            Target = -90;
+            RunToPoint(0, 29);
+            RunToPoint(4, 29);
+            IntakeOpen();
+            RunToPoint(-2, 29);
+        }
         //if statments stop
 
         RunToPoint(-2,5);

@@ -47,13 +47,14 @@ import java.util.List;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@TeleOp(name = "CameraVision", group = "Concept")
+//@TeleOp(name = "CameraVision", group = "Concept")
 
-public class CameraVision extends LinearOpMode {
+public abstract class CameraVision extends OldCodeForPowerPlay {
 public float camBarrierONE=200;
 public float camBarrierTwo=400;
 public double x;
 public double y;
+public int Zone = 0;
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -78,8 +79,8 @@ public double y;
      */
     private VisionPortal visionPortal;
 
-    @Override
-    public void runOpMode() {
+
+    public void CamInit() {
 
         initTfod();
 
@@ -87,27 +88,28 @@ public double y;
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
-        waitForStart();
+    }
+public void CamRun(int timeoutS) {
+    resetRuntime();
+   while(timeoutS <= runtime.seconds() && opModeIsActive()){
+    telemetryTfod();
+Zone = findZone();
 
-        if (opModeIsActive()) {
-            while (opModeIsActive()) {
+    // Push telemetry to the Driver Station.
+    telemetry.update();
 
-                telemetryTfod();
+    // Save CPU resources; can resume streaming when needed.
+    if (gamepad1.dpad_down) {
+        visionPortal.stopStreaming();
+    } else if (gamepad1.dpad_up) {
+        visionPortal.resumeStreaming();
+    }
 
-                // Push telemetry to the Driver Station.
-                telemetry.update();
+    // Share the CPU.
+    sleep(20);
 
-                // Save CPU resources; can resume streaming when needed.
-                if (gamepad1.dpad_down) {
-                    visionPortal.stopStreaming();
-                } else if (gamepad1.dpad_up) {
-                    visionPortal.resumeStreaming();
-                }
-
-                // Share the CPU.
-                sleep(20);
-            }
-        }
+}}
+public void CamEnd(){
 
         // Save more CPU resources when camera is no longer needed.
         visionPortal.close();
