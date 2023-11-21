@@ -16,11 +16,16 @@ import static org.firstinspires.ftc.teamcode.Robot.operatorState.score;
 import static org.firstinspires.ftc.teamcode.Robot.operatorState.scoreFinished;
 import static org.firstinspires.ftc.teamcode.Robot.operatorState.scoreIdle;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 public abstract class GeneralCode extends Robot {
     int LiftManual = 0;
     boolean calabrate_Lift = false;
+
+
+    int LiftMAX = 1000;
+    int LiftSafe = 30;
 
     boolean leftTurnold = false;
     boolean rightTurnold = false;
@@ -166,18 +171,37 @@ public void LaunchDrone(){
     }
 
     public void updateCommunication(){
+        if (currentState == scoreIdle || currentState == score || currentState == liftOut){
+            if (ColorSensorCheck(frontColorSensor) == "White"){
+            pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
+            }
+            if (ColorSensorCheck(frontColorSensor) == "Yellow"){
+                pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
+            }
+            if (ColorSensorCheck(frontColorSensor) == "Green"){
+            pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
+            }
+            if (ColorSensorCheck(frontColorSensor) == "Purple"){
+                pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET;
+            }
+        }
+
         if (communicationMode >= 0.2){
             if (gamepad2.a){
-                //lights green
+
+            pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
             }
             if (gamepad2.b){
-                //lights white
+
+                pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
             }
             if (gamepad2.y){
-                //lights yellow
+
+                pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
             }
             if (gamepad2.x){
-                //lights purple
+                
+                pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET;
             }
         }}
 
@@ -231,26 +255,41 @@ switch (currentState){
 }}
 
 public void idleCode(){
-    // lights idle
-        if (gamepad2.left_bumper) currentState = intaking;
+    pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
+        if (gamepad2.left_bumper) {
+            currentState = intaking;
+            frontDepositorServo.setPosition(1);
+            backDepositorServo.setPosition(1);
+        }
         if (gamepad2.right_bumper) currentState = intakeManaul;
         if (gamepad2.dpad_up) currentState = extendLift;
     }
     public void intake(){
-        //slow mode add it
-        // add code for the lights
-        intakeMotor.setPower(0.7);
-        transferMotor.setPower(0.6);
-
+        if (gamepad2.left_trigger >= 0.5){
+            intakeMotor.setPower(0.7);
+            transferMotor.setPower(0.6);
+        }else{
+            intakeMotor.setPower(1);
+            transferMotor.setPower(1);
+        }
+        frontDepositorServo.setPosition(1);
+        pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LARSON_SCANNER;
         if (gamepad2.a) {
             currentState = intakeCancel;
             stateMachineTimer = getRuntime();
         }
-        // add transition for sensors detecting both pixels in the depositor
-
+        if (ColorSensorCheck(frontColorSensor) != "None"){
+            frontDepositorServo.setPosition(0);
+        }
+        if (ColorSensorCheck(backColorSensor) != "None"){
+            backDepositorServo.setPosition(0);
+        }
+    if (ColorSensorCheck(frontColorSensor) != "None" && ColorSensorCheck(backColorSensor) != "None"){
+        currentState = intakeDone;
+    }
     }
     public void intakeCancel(){
-        // add lights for spitting out pixels
+        pattern = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
         intakeMotor.setPower(-0.7);
         transferMotor.setPower(-0.6);
         if (stateMachineTimer <= getRuntime() - 1) {
@@ -261,7 +300,7 @@ public void idleCode(){
 
     }
     public void intakeManual(){
-        // add code for the lights
+        pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LARSON_SCANNER;
         if (gamepad2.left_trigger >= 0.3){ intakeMotor.setPower(0.6);} else intakeMotor.setPower(1);
         transferMotor.setPower(0.6);
 
@@ -273,7 +312,7 @@ public void idleCode(){
         }
 
     public void intakeDone() {
-        // add lights for spitting out pixels
+        pattern = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
         intakeMotor.setPower(-0.7);
         transferMotor.setPower(-0.6);
         if (stateMachineTimer <= getRuntime() - 1) {
@@ -297,29 +336,35 @@ public void idleCode(){
     public void liftOut(){
         int liftPosition = pixelLiftMotor.getCurrentPosition();
         liftPosition += gamepad2.left_stick_y * 3;
+        if (liftPosition >= LiftMAX) liftPosition = LiftMAX;
+        if (liftPosition <= LiftSafe) liftPosition = LiftSafe;
+        pixelLiftMotor.setTargetPosition(liftPosition);
         if(gamepad2.b) currentState = score;
         if(gamepad2.a) currentState = fourBarDock;
     }
     public void score(){
         frontDepositorServo.setPosition(1);
-        // if statment here!!! wait for color sensor to sense the pixel left the depositor
-        currentState = scoreFinished;
-
+        if (ColorSensorCheck(frontColorSensor) == "None"){
+            currentState = scoreFinished;
+        }
     }
     public void scoreFinished(){
-        //if there is no pixel in second position
-        currentState = fourBarWait;
-        stateMachineTimer = getRuntime();
-        // else
-        currentState = depoTransition;
+        if (ColorSensorCheck(backColorSensor) != "None"){
+            currentState = fourBarWait;
+            stateMachineTimer = getRuntime();
+        }else{
+            currentState = depoTransition;
+        }
     }
     public void depositorTransition(){
         frontDepositorServo.setPosition(1);
         backDepositorServo.setPosition(1);
-        // if front color sensor gets pixel in it then
-        currentState = liftOut;
-        frontDepositorServo.setPosition(0);
-        frontDepositorServo.setPosition(0);
+        if (ColorSensorCheck(frontColorSensor) != "None"){
+            currentState = liftOut;
+            frontDepositorServo.setPosition(0);
+            frontDepositorServo.setPosition(0);
+        }
+
     }
     public void fourBarWait(){
         if (stateMachineTimer <= getRuntime() - 0.6) currentState = fourBarDock;
