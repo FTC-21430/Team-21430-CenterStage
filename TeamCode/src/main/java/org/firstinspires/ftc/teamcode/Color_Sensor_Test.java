@@ -69,12 +69,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 //@Disabled
 public class Color_Sensor_Test extends LinearOpMode {
 
-  /** The colorSensor field will contain a reference to our color sensor hardware object */
+  /**
+   * The colorSensor field will contain a reference to our color sensor hardware object
+   */
   NormalizedColorSensor colorSensor;
 
-  /** The relativeLayout field is used to aid in providing interesting visual feedback
+  /**
+   * The relativeLayout field is used to aid in providing interesting visual feedback
    * in this sample application; you probably *don't* need this when you use a color sensor on your
-   * robot. Note that you won't see anything change on the Driver Station, only on the Robot Controller. */
+   * robot. Note that you won't see anything change on the Driver Station, only on the Robot Controller.
+   */
   View relativeLayout;
 
   /*
@@ -87,7 +91,8 @@ public class Color_Sensor_Test extends LinearOpMode {
    * block around the main, core logic, and an easy way to make that all clear was to separate
    * the former from the latter in separate methods.
    */
-  @Override public void runOpMode() {
+  @Override
+  public void runOpMode() {
 
     // Get a reference to the RelativeLayout so we can later change the background
     // color of the Robot Controller app to match the hue detected by the RGB sensor.
@@ -106,7 +111,7 @@ public class Color_Sensor_Test extends LinearOpMode {
           relativeLayout.setBackgroundColor(Color.WHITE);
         }
       });
-      }
+    }
   }
 
   protected void runSample() {
@@ -139,7 +144,7 @@ public class Color_Sensor_Test extends LinearOpMode {
     // If possible, turn the light on in the beginning (it might already be on anyway,
     // we just make sure it is if we can).
     if (colorSensor instanceof SwitchableLight) {
-      ((SwitchableLight)colorSensor).enableLight(false);
+      ((SwitchableLight) colorSensor).enableLight(false);
     }
 
     // Wait for the start button to be pressed.
@@ -174,7 +179,7 @@ public class Color_Sensor_Test extends LinearOpMode {
         // If the button is (now) down, then toggle the light
         if (xButtonCurrentlyPressed) {
           if (colorSensor instanceof SwitchableLight) {
-            SwitchableLight light = (SwitchableLight)colorSensor;
+            SwitchableLight light = (SwitchableLight) colorSensor;
             light.enableLight(!light.isLightOn());
           }
         }
@@ -216,20 +221,13 @@ public class Color_Sensor_Test extends LinearOpMode {
           relativeLayout.setBackgroundColor(Color.HSVToColor(hsvValues));
         }
       });
-      if (hsvValues[2] > .13) {
-        //white pixel
-        telemetry.addData("Color", "White");
-      } else if (170 < hsvValues[0]) {
-        //purple pixel
-        telemetry.addData("Color", "Purple");
-        } else if (120 > hsvValues[0]){
-        //yellow pixel
-        telemetry.addData("Color", "Yellow");
-      }
-      else{
-        //green pixel
-        telemetry.addData("Color", "Green");
-      }
-      }
+
+
+
+
     }
+  }
+
+
+
   }
