@@ -1,13 +1,19 @@
 package org.firstinspires.ftc.teamcode;
-
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.SwitchableLight;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
@@ -15,6 +21,7 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -55,6 +62,40 @@ public abstract class Robot extends LinearOpMode {
     boolean Driver1Leftbumper;
     float startingangle;
 
+    float gain = 2;
+    final float[] hsvValues = new float[3];
+
+    NormalizedColorSensor backColorSensor;
+    NormalizedColorSensor frontColorSensor;
+
+    View relativeLayout;
+
+
+    public void colorSenseInit(){
+        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+
+        try {
+            runSample(); // actually execute the sample
+        } finally {
+
+            relativeLayout.post(new Runnable() {
+                public void run() {
+                    relativeLayout.setBackgroundColor(Color.WHITE);
+                }
+            });
+        }
+    }
+
+    protected void runSample() {
+        frontColorSensor = hardwareMap.get(NormalizedColorSensor.class, "frontColorSensor");
+        backColorSensor = hardwareMap.get(NormalizedColorSensor.class, "backColorSensor");
+    }
+    public void updateColorSensors(){
+        gain += 0.005;
+        frontColorSensor.setGain(gain);
+        backColorSensor.setGain(gain);
+        }
 
     RevBlinkinLedDriver blinkinLedDriver;
     RevBlinkinLedDriver.BlinkinPattern pattern;
@@ -166,5 +207,42 @@ public void lightsUpdate(){
         rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
         imu.resetYaw();
     }
+
+
+    public String ColorSensorCheck(NormalizedColorSensor sensor) {
+
+
+
+        NormalizedRGBA colors = sensor.getNormalizedColors();
+
+        Color.colorToHSV(colors.toColor(), hsvValues);
+
+        relativeLayout.post(new Runnable() {
+            public void run() {
+                relativeLayout.setBackgroundColor(Color.HSVToColor(hsvValues));
+            }
+        });
+        telemetry.addData("Color Data:H", hsvValues[0]);
+        telemetry.addData("Color Data:S", hsvValues[1]);
+        telemetry.addData("Color Data:V", hsvValues[2]);
+        if (((DistanceSensor) sensor).getDistance(DistanceUnit.CM) <= 3) {
+            if (hsvValues[2] > .13) {
+                //white pixel
+                return "White";
+            } else if (170 < hsvValues[0]) {
+                //purple pixel
+                return "Purple";
+            } else if (120 > hsvValues[0]) {
+                //yellow pixel
+                return "Yellow";
+            } else {
+                //green pixel
+                return "Green";
+            }
+        } else {
+            return "None";
+        }
+    }
+
 }
 
