@@ -34,8 +34,10 @@ public class backUpAutoRedLeft extends OldCodeForPowerPlay {
         IMUReset();
         PowerplayInit();
 
-//        RobotX = -65;
-//        RobotY = 61;
+        RobotX = -65;
+        RobotY = 61;
+        InitX= -65;
+        InitY = 61;
 
         DriverOrientationDriveMode = false;
         startOfsetRadians = 0;
