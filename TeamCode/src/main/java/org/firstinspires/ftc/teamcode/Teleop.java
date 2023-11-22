@@ -12,6 +12,7 @@ public class Teleop extends OdometryCode{
         runtime.reset();
         while (opModeIsActive()){
             CenterStageUpdateControls();
+            UpdateControls();
             IMUstuffs();
             if (gamepad1.y) {
                 IMUReset();
@@ -19,28 +20,22 @@ public class Teleop extends OdometryCode{
            // ProportionalFeedbackControl();
             GridRunner();
             straferAlgorithm();
-            Climber();
 
-            intakeMotor.setPower(gamepad2.left_stick_y);
-            intakeServo.setPosition(gamepad2.left_stick_x);
-            transferMotor.setPower(gamepad2.right_stick_y);
-            if (gamepad2.dpad_up){
-                frontDepositorServo.setPosition(1);
-                backDepositorServo.setPosition(1);
-            }
-            if (gamepad2.dpad_down){
-                frontDepositorServo.setPosition(-1);
-                backDepositorServo.setPosition(-1);
-            }
-            telemetry.addData("error", error);
-            telemetry.addData("turn", turn);
-            if (gamepad1.y) {
-                IMUReset();
-            }
+
+            updateCommunication();
+            updateColorSensors();
+            lightsUpdate();
+
+
+            stateControl();
+
             speedControl();
-            setMotorPower();
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("robotAngle", robotHeading);
+
+           // setMotorPower();
+            //telemetry.addData("Status", "Run Time: " + runtime.toString());
+            //telemetry.addData("robotAngle", robotHeading);
+            telemetry.addData("Operator Current State", currentState);
+
             telemetry.update();
         }
 

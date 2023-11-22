@@ -25,7 +25,7 @@ public abstract class GeneralCode extends Robot {
 
 
     int LiftMAX = 1000;
-    int LiftSafe = 30;
+    int LiftSafe = 500;
 
     boolean leftTurnold = false;
     boolean rightTurnold = false;
@@ -50,8 +50,8 @@ public abstract class GeneralCode extends Robot {
     boolean TurnRight;
     boolean bumper_old;
     float IntakeInput;
-    int safeLiftHeight = 100;
-
+    int safeLiftHeight = 500;
+    //TODO: combine both safe lift heights
 
 
 float communicationMode;
@@ -259,7 +259,7 @@ public void idleCode(){
         if (gamepad2.left_bumper) {
             currentState = intaking;
             frontDepositorServo.setPosition(1);
-            backDepositorServo.setPosition(1);
+            backDepositorServo.setPosition(-1);
         }
         if (gamepad2.right_bumper) currentState = intakeManaul;
         if (gamepad2.dpad_up) currentState = extendLift;
@@ -267,31 +267,31 @@ public void idleCode(){
     public void intake(){
         if (gamepad2.left_trigger >= 0.5){
             intakeMotor.setPower(0.7);
-            transferMotor.setPower(0.6);
         }else{
             intakeMotor.setPower(1);
-            transferMotor.setPower(1);
+
         }
-        frontDepositorServo.setPosition(1);
+        transferMotor.setPower(1);
+
         pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LARSON_SCANNER;
         if (gamepad2.a) {
             currentState = intakeCancel;
             stateMachineTimer = getRuntime();
         }
         if (ColorSensorCheck(frontColorSensor) != "None"){
-            frontDepositorServo.setPosition(0);
-        }
-        if (ColorSensorCheck(backColorSensor) != "None"){
-            backDepositorServo.setPosition(0);
+            frontDepositorServo.setPosition(.5);
         }
     if (ColorSensorCheck(frontColorSensor) != "None" && ColorSensorCheck(backColorSensor) != "None"){
         currentState = intakeDone;
+        stateMachineTimer = getRuntime();
+        frontDepositorServo.setPosition(.5);
+        backDepositorServo.setPosition(.5);
     }
     }
     public void intakeCancel(){
         pattern = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
-        intakeMotor.setPower(-0.7);
-        transferMotor.setPower(-0.6);
+        intakeMotor.setPower(-0.9);
+        transferMotor.setPower(-1);
         if (stateMachineTimer <= getRuntime() - 1) {
             currentState = idle;
             intakeMotor.setPower(0);
@@ -302,7 +302,7 @@ public void idleCode(){
     public void intakeManual(){
         pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LARSON_SCANNER;
         if (gamepad2.left_trigger >= 0.3){ intakeMotor.setPower(0.6);} else intakeMotor.setPower(1);
-        transferMotor.setPower(0.6);
+        transferMotor.setPower(1);
 
         if (gamepad2.a) {
             currentState = intakeCancel;
@@ -313,9 +313,9 @@ public void idleCode(){
 
     public void intakeDone() {
         pattern = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
-        intakeMotor.setPower(-0.7);
-        transferMotor.setPower(-0.6);
-        if (stateMachineTimer <= getRuntime() - 1) {
+        intakeMotor.setPower(-0.8);
+        transferMotor.setPower(-1);
+        if (stateMachineTimer <= getRuntime() - 2) {
             currentState = scoreIdle;
             intakeMotor.setPower(0);
             transferMotor.setPower(0);
@@ -330,7 +330,7 @@ public void idleCode(){
         if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight - 1) currentState = extendBar;
     }
     public void extendFourBar(){
-        fourBarServo.setPosition(1);
+        fourBarServo.setPosition(0.35);
         if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight - 1) currentState = liftOut;
     }
     public void liftOut(){
@@ -350,27 +350,28 @@ public void idleCode(){
     }
     public void scoreFinished(){
         if (ColorSensorCheck(backColorSensor) != "None"){
+            currentState = depoTransition;
+        }else{
+
             currentState = fourBarWait;
             stateMachineTimer = getRuntime();
-        }else{
-            currentState = depoTransition;
         }
     }
     public void depositorTransition(){
         frontDepositorServo.setPosition(1);
-        backDepositorServo.setPosition(1);
+        backDepositorServo.setPosition(-1);
         if (ColorSensorCheck(frontColorSensor) != "None"){
             currentState = liftOut;
-            frontDepositorServo.setPosition(0);
-            frontDepositorServo.setPosition(0);
+            frontDepositorServo.setPosition(0.5);
+            frontDepositorServo.setPosition(0.5);
         }
 
     }
     public void fourBarWait(){
-        if (stateMachineTimer <= getRuntime() - 0.6) currentState = fourBarDock;
+        if (stateMachineTimer <= getRuntime() - 2) currentState = fourBarDock;
     }
     public void fourBarDock(){
-        fourBarServo.setPosition(0);
+        fourBarServo.setPosition(.83);
         if (gamepad2.dpad_down) currentState = liftDock;
     }
     public void liftDock(){

@@ -8,6 +8,7 @@ import android.view.View;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -124,25 +125,12 @@ public abstract class Robot extends LinearOpMode {
 
 
     public void LightsInit(){
-        //Commented out so when you use code without the blinkin hooked up to the robot, the robot does not scream at you LOL
-//        blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver .class, "blinkin");
-//        pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
-//        blinkinLedDriver.setPattern(pattern);
+        blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver .class, "blinkin");
+        pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
+        blinkinLedDriver.setPattern(pattern);
     }
 public void lightsUpdate(){
-        //Commented out because the buttons are just for debug :)
-//    if (gamepad1.dpad_up) pattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE;
-//    if (gamepad1.dpad_down) pattern = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
-//    if (gamepad1.dpad_left) pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
-//    if (gamepad1.dpad_right) pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LARSON_SCANNER;
-//    if (gamepad1.a)  pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
-//
-//    if (gamepad1.x)      pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET;
-//
-//    if (gamepad1.b) pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
-//
-//    if (gamepad1.y)  pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
-//    blinkinLedDriver.setPattern(pattern);
+        blinkinLedDriver.setPattern(pattern);
 }
     public void straferAlgorithm(){
         DriverOrientationDriveMode = false;
@@ -203,6 +191,8 @@ public void lightsUpdate(){
     public void Init() {
         //telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 //TODO:FIX THIS
+        colorSenseInit();
+        LightsInit();
         imu = hardwareMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
         RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
@@ -218,10 +208,11 @@ public void lightsUpdate(){
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
         transferMotor = hardwareMap.get(DcMotor.class, "TransferMotor");
-        leftFrontMotor = hardwareMap.get(DcMotor.class, "left_Front");
-        leftBackMotor = hardwareMap.get(DcMotor.class, "left_Back");
-        rightFrontMotor = hardwareMap.get(DcMotor.class, "right_Front");
-        rightBackMotor = hardwareMap.get(DcMotor.class, "right_Back");
+        //TODO:make this work again
+//        leftFrontMotor = hardwareMap.get(DcMotor.class, "left_Front");
+//        leftBackMotor = hardwareMap.get(DcMotor.class, "left_Back");
+//        rightFrontMotor = hardwareMap.get(DcMotor.class, "right_Front");
+//        rightBackMotor = hardwareMap.get(DcMotor.class, "right_Back");
         climberMotor = hardwareMap.get(DcMotor.class, "climber");
         pixelLiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
         intakeServo = hardwareMap.get(Servo.class, "IntakeServo");
@@ -229,13 +220,19 @@ public void lightsUpdate(){
         backDepositorServo = hardwareMap.get(Servo.class, "backDepo");
         frontDepositorServo = hardwareMap.get(Servo.class, "frontDepo");
         droneTrigger = hardwareMap.get(Servo.class, "DroneTrigger");
-        pixelLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        pixelLiftMotor.setTargetPosition(1);
         transferMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        pixelLiftMotor.setTargetPosition(1);
+        pixelLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         pixelLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         climberMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        pixelLiftMotor.setPower(0.4);
+fourBarServo.setPosition(0.83);
 
         droneTrigger.setPosition(0.9);
         intakeServo.setPosition(1);
@@ -243,13 +240,11 @@ public void lightsUpdate(){
         //ClimberLimitSwitchBottom = hardwareMap.get(DigitalChannel.class, "Climber_Limit_Switch_Bottom");
         //ClimberLimitSwitchBottom.setMode(DigitalChannel.Mode.INPUT);
 
-        // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
-        // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
-        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
-        leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
-        rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
+       //        leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
+//        leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
+//        rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
+//        rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
+        //TODO:uncomment this ^
         imu.resetYaw();
     }
 
