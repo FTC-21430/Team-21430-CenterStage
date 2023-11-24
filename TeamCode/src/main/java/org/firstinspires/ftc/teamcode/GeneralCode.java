@@ -24,8 +24,8 @@ public abstract class GeneralCode extends Robot {
     boolean calabrate_Lift = false;
 
 
-    int LiftMAX = 1000;
-    int LiftSafe = 500;
+    int LiftMAX = 2000;
+
 
     boolean leftTurnold = false;
     boolean rightTurnold = false;
@@ -33,6 +33,8 @@ public abstract class GeneralCode extends Robot {
     double intakeHeight = 0;
 
     boolean endGameMode = false;
+
+
 
     boolean hasDroneLaunched = false;
     double stateMachineTimer;
@@ -50,8 +52,7 @@ public abstract class GeneralCode extends Robot {
     boolean TurnRight;
     boolean bumper_old;
     float IntakeInput;
-    int safeLiftHeight = 500;
-    //TODO: combine both safe lift heights
+    int safeLiftHeight = 700;
 
 
 float communicationMode;
@@ -255,6 +256,7 @@ switch (currentState){
 }}
 
 public void idleCode(){
+        backDepositorServo.setPosition(0.5);
     pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
         if (gamepad2.left_bumper) {
             currentState = intaking;
@@ -266,9 +268,9 @@ public void idleCode(){
     }
     public void intake(){
         if (gamepad2.left_trigger >= 0.5){
-            intakeMotor.setPower(0.7);
+            intakeMotor.setPower(-0.7);
         }else{
-            intakeMotor.setPower(1);
+            intakeMotor.setPower(-1);
 
         }
         transferMotor.setPower(1);
@@ -289,10 +291,12 @@ public void idleCode(){
     }
     }
     public void intakeCancel(){
+        frontDepositorServo.setPosition(0.5);
+        backDepositorServo.setPosition(0.5);
         pattern = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
-        intakeMotor.setPower(-0.9);
+        intakeMotor.setPower(0.9);
         transferMotor.setPower(-1);
-        if (stateMachineTimer <= getRuntime() - 1) {
+        if (stateMachineTimer <= getRuntime() - 3) {
             currentState = idle;
             intakeMotor.setPower(0);
             transferMotor.setPower(0);
@@ -324,20 +328,27 @@ public void idleCode(){
     public void scoreIdle() {
         if (gamepad2.dpad_up || gamepad2.dpad_down || gamepad2.dpad_left || gamepad2.dpad_right)
             currentState = extendLift;
+        stateMachineTimer = getRuntime();
     }
     public void extendLift(){
+
         pixelLiftMotor.setTargetPosition(safeLiftHeight);
-        if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight - 1) currentState = extendBar;
+
+        if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight - 1 && stateMachineTimer <= getRuntime() - 1)  currentState = extendBar;
     }
     public void extendFourBar(){
         fourBarServo.setPosition(0.35);
-        if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight - 1) currentState = liftOut;
+        if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight - 1) {
+            liftPosition = safeLiftHeight;
+            currentState = liftOut;
+        }
+
     }
     public void liftOut(){
-        int liftPosition = pixelLiftMotor.getCurrentPosition();
+
         liftPosition += gamepad2.left_stick_y * 3;
         if (liftPosition >= LiftMAX) liftPosition = LiftMAX;
-        if (liftPosition <= LiftSafe) liftPosition = LiftSafe;
+        if (liftPosition <= safeLiftHeight) liftPosition = safeLiftHeight;
         pixelLiftMotor.setTargetPosition(liftPosition);
         if(gamepad2.b) currentState = score;
         if(gamepad2.a) currentState = fourBarDock;
@@ -345,10 +356,12 @@ public void idleCode(){
     public void score(){
         frontDepositorServo.setPosition(1);
         if (ColorSensorCheck(frontColorSensor) == "None"){
+            frontDepositorServo.setPosition(0.5);
             currentState = scoreFinished;
         }
     }
     public void scoreFinished(){
+        frontDepositorServo.setPosition(0.5);
         if (ColorSensorCheck(backColorSensor) != "None"){
             currentState = depoTransition;
         }else{

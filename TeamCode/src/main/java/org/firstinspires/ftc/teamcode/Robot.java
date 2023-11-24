@@ -43,6 +43,7 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor rightFrontMotor = null;
     public DcMotor rightBackMotor = null;
     public float controlHubChange = 51;
+    int liftPosition;
     enum operatorState
     {
         idle,
@@ -83,7 +84,7 @@ public abstract class Robot extends LinearOpMode {
     float startingangle;
 
 
-    float gain = 2;
+    float gain = 50;
     final float[] hsvValues = new float[3];
 
     NormalizedColorSensor backColorSensor;
@@ -113,7 +114,7 @@ public abstract class Robot extends LinearOpMode {
         backColorSensor = hardwareMap.get(NormalizedColorSensor.class, "backColorSensor");
     }
     public void updateColorSensors(){
-        gain += 0.005;
+
         frontColorSensor.setGain(gain);
         backColorSensor.setGain(gain);
         }
@@ -208,11 +209,10 @@ public void lightsUpdate(){
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
         transferMotor = hardwareMap.get(DcMotor.class, "TransferMotor");
-        //TODO:make this work again
-//        leftFrontMotor = hardwareMap.get(DcMotor.class, "left_Front");
-//        leftBackMotor = hardwareMap.get(DcMotor.class, "left_Back");
-//        rightFrontMotor = hardwareMap.get(DcMotor.class, "right_Front");
-//        rightBackMotor = hardwareMap.get(DcMotor.class, "right_Back");
+        leftFrontMotor = hardwareMap.get(DcMotor.class, "left_Front");
+        leftBackMotor = hardwareMap.get(DcMotor.class, "left_Back");
+        rightFrontMotor = hardwareMap.get(DcMotor.class, "right_Front");
+        rightBackMotor = hardwareMap.get(DcMotor.class, "right_Back");
         climberMotor = hardwareMap.get(DcMotor.class, "climber");
         pixelLiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
         intakeServo = hardwareMap.get(Servo.class, "IntakeServo");
@@ -240,12 +240,15 @@ fourBarServo.setPosition(0.83);
         //ClimberLimitSwitchBottom = hardwareMap.get(DigitalChannel.class, "Climber_Limit_Switch_Bottom");
         //ClimberLimitSwitchBottom.setMode(DigitalChannel.Mode.INPUT);
 
-       //        leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
-//        leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
-//        rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
-//        rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
-        //TODO:uncomment this ^
+               leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
+        rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
+
+      //  pixelLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
         imu.resetYaw();
+       liftPosition = pixelLiftMotor.getCurrentPosition();
     }
 
 

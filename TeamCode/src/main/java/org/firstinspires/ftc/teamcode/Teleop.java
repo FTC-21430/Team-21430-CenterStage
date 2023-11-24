@@ -31,9 +31,8 @@ public class Teleop extends OdometryCode{
 
             speedControl();
 
-           // setMotorPower();
-            //telemetry.addData("Status", "Run Time: " + runtime.toString());
-            //telemetry.addData("robotAngle", robotHeading);
+            setMotorPower();
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Operator Current State", currentState);
 
             telemetry.update();
