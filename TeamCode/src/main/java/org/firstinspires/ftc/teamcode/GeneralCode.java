@@ -252,7 +252,7 @@ public void idleCode(){
     public void intakeCancel(){
         // add lights for spitting out pixels
         intakeMotor.setPower(-0.7);
-        transferMotor.setPower(-0.6);
+        transferMotor.setPower(-1);
         if (stateMachineTimer <= getRuntime() - 1) {
             currentState = idle;
             intakeMotor.setPower(0);
@@ -275,7 +275,7 @@ public void idleCode(){
     public void intakeDone() {
         // add lights for spitting out pixels
         intakeMotor.setPower(-0.7);
-        transferMotor.setPower(-0.6);
+        transferMotor.setPower(-1);
         if (stateMachineTimer <= getRuntime() - 1) {
             currentState = scoreIdle;
             intakeMotor.setPower(0);
