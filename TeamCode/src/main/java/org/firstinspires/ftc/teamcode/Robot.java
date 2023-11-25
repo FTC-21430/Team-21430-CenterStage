@@ -84,7 +84,7 @@ public abstract class Robot extends LinearOpMode {
     float startingangle;
 
 
-    float gain = 50;
+    float gain = 5;
     final float[] hsvValues = new float[3];
 
     NormalizedColorSensor backColorSensor;
@@ -145,16 +145,22 @@ public void lightsUpdate(){
             drive = temp;
         }
 
+        if (currentState == operatorState.score || currentState == operatorState.scoreIdle || currentState == operatorState.extendBar || currentState == operatorState.extendLift || currentState == operatorState.liftOut)
+        {
+            drive = drive * -1;
+            slide = slide * -1;
+        }
+
         leftFrontPower = Range.clip(drive + slide + turn, -1.0, 1.0);
         leftBackPower  =Range.clip(drive - slide + turn,-1.0, 1.0 );
         rightFrontPower=Range.clip(drive - slide - turn, -1.0, 1.0);
         rightBackPower =Range.clip(drive + slide - turn, -1.0, 1.0);
 
     }
-    public void IMUstuffs(){
+    public void IMU_Update(){
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
-        current = orientation.getYaw(AngleUnit.DEGREES) + startingangle;
+        current = orientation.getYaw(AngleUnit.DEGREES);
         telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
     robotHeading = orientation.getYaw(AngleUnit.RADIANS) ;
 
@@ -166,6 +172,8 @@ public void lightsUpdate(){
     }
 
     public void ProportionalFeedbackControl(){
+        telemetry.addData("angle", current);
+        telemetry.addData("target", Target);
         error = Wrap((Target - current));
         if (gamepad1.right_stick_x != 0){
             Target = current;
@@ -195,8 +203,8 @@ public void lightsUpdate(){
         colorSenseInit();
         LightsInit();
         imu = hardwareMap.get(IMU.class, "imu");
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.UP;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -226,19 +234,22 @@ public void lightsUpdate(){
         pixelLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         pixelLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         climberMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         pixelLiftMotor.setPower(0.4);
-fourBarServo.setPosition(0.83);
+fourBarServo.setPosition(0.78);
 
-        droneTrigger.setPosition(0.9);
+
+climberMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        droneTrigger.setPosition(0.4);
         intakeServo.setPosition(1);
 
-        //ClimberLimitSwitchBottom = hardwareMap.get(DigitalChannel.class, "Climber_Limit_Switch_Bottom");
-        //ClimberLimitSwitchBottom.setMode(DigitalChannel.Mode.INPUT);
+        ClimberLimitSwitchBottom = hardwareMap.get(DigitalChannel.class, "Climber_Limit_Switch_Bottom");
+        ClimberLimitSwitchBottom.setMode(DigitalChannel.Mode.INPUT);
 
                leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -265,9 +276,9 @@ fourBarServo.setPosition(0.83);
                 relativeLayout.setBackgroundColor(Color.HSVToColor(hsvValues));
             }
         });
-        telemetry.addData("Color Data:H", hsvValues[0]);
-        telemetry.addData("Color Data:S", hsvValues[1]);
-        telemetry.addData("Color Data:V", hsvValues[2]);
+//        telemetry.addData("Color Data:H", hsvValues[0]);
+//        telemetry.addData("Color Data:S", hsvValues[1]);
+//        telemetry.addData("Color Data:V", hsvValues[2]);
         if (((DistanceSensor) sensor).getDistance(DistanceUnit.CM) <= 3) {
             if (hsvValues[2] > .13) {
                 //white pixel

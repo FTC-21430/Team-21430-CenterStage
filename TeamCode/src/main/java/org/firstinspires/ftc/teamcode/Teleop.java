@@ -9,15 +9,19 @@ public class Teleop extends OdometryCode{
         Init();
         //TODO: Add centerstage specific init
         waitForStart();
+        IMUReset();
         runtime.reset();
         while (opModeIsActive()){
             CenterStageUpdateControls();
             UpdateControls();
-            IMUstuffs();
+            IMU_Update();
             if (gamepad1.y) {
                 IMUReset();
             }
-           // ProportionalFeedbackControl();
+            telemetry.addData("endGameMode:", endGameMode);
+
+
+           ProportionalFeedbackControl();
             GridRunner();
             straferAlgorithm();
 
@@ -25,6 +29,12 @@ public class Teleop extends OdometryCode{
             updateCommunication();
             updateColorSensors();
             lightsUpdate();
+            endGameThings();
+            if (endGameMode){
+                intakeServo.setPosition(0.5);
+            }else{
+                intakeServo.setPosition(1);
+            }
 
 
             stateControl();
@@ -36,6 +46,7 @@ public class Teleop extends OdometryCode{
             telemetry.addData("Operator Current State", currentState);
 
             telemetry.update();
+
         }
 
     }

@@ -79,7 +79,7 @@ public abstract class OdometryCode extends GeneralCode {
 //            slide = gamepad1.left_stick_x;
             turn = 0;
 
-            IMUstuffs();
+            IMU_Update();
 
             RobotAngles();
             ProportionalFeedbackControl();

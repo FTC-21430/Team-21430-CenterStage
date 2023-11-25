@@ -24,7 +24,7 @@ public abstract class GeneralCode extends Robot {
     boolean calabrate_Lift = false;
 
 
-    int LiftMAX = 2000;
+    int LiftMAX = 1590;
 
 
     boolean leftTurnold = false;
@@ -130,44 +130,44 @@ float communicationMode;
         fastMode = gamepad1.right_trigger;
         IntakeInput = gamepad2.left_stick_y/ 1;
     }
-//ClimberLimitSwitchBottom.getState() == false
-// && climberMotor.getCurrentPosition()<=100
+
     public void Climber() {
-        if (hasDroneLaunched){
-            if (gamepad2.dpad_down) {
+
+//        if (hasDroneLaunched){
+            telemetry.addData("encoderCount:", climberMotor.getCurrentPosition());
+//
+// && climberMotor.getCurrentPosition() >= -4630
+//        ClimberLimitSwitchBottom.getState() == false && climberMotor.getCurrentPosition()<=100
+            if (gamepad2.dpad_down  && !ClimberLimitSwitchBottom.getState()) {
                 climberMotor.setPower(1);
-            } else if (gamepad2.dpad_up) {
+            } else if (gamepad2.dpad_up && climberMotor.getCurrentPosition() >= -5470) {
+
                 climberMotor.setPower(-0.9);
             } else {
                 climberMotor.setPower(0);
             }
         }
-        else {
-            climberMotor.setPower(0);
-        }
 
-    }
+
+//    }
 public void LaunchDrone(){
         hasDroneLaunched = true;
-        droneTrigger.setPosition(0.1);
+        droneTrigger.setPosition(0.62);
     // line 131, this is a temporary number. TUNE WHEN YOU CAN TEST;
 }
 
     public void endGameThings(){
-        if (gamepad2.back) toggleEndgame();
-        oldEndGameMode = endGameMode;
+        if (gamepad2.back == true && oldEndGameMode == false){
+            if (!endGameMode){
+                endGameMode = true;
+            } else{
+                endGameMode = false;
+            }
+        }
+        oldEndGameMode = gamepad2.back;
         if (endGameMode && gamepad2.right_trigger >= 0.5) LaunchDrone();
         if (endGameMode){
             Climber();
-        }
-    }
-    public void toggleEndgame(){
-        if (gamepad2.back == true && oldEndGameMode == false){
-            if (endGameMode){
-                endGameMode = false;
-            }else{
-                endGameMode = true;
-            }
         }
     }
 
@@ -186,6 +186,7 @@ public void LaunchDrone(){
                 pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET;
             }
         }
+        if (endGameMode) pattern = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
 
         if (communicationMode >= 0.2){
             if (gamepad2.a){
@@ -205,6 +206,14 @@ public void LaunchDrone(){
                 pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET;
             }
         }}
+
+    public void liftPowerControl(){
+        if (pixelLiftMotor.getCurrentPosition() <= safeLiftHeight){
+            pixelLiftMotor.setPower(0.4);
+        }else{
+            pixelLiftMotor.setPower(0.95);
+        }
+    }
 
     public void stateControl() {
 switch (currentState){
@@ -258,13 +267,13 @@ switch (currentState){
 public void idleCode(){
         backDepositorServo.setPosition(0.5);
     pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
-        if (gamepad2.left_bumper) {
+        if (gamepad2.left_bumper && !endGameMode) {
             currentState = intaking;
             frontDepositorServo.setPosition(1);
             backDepositorServo.setPosition(-1);
         }
-        if (gamepad2.right_bumper) currentState = intakeManaul;
-        if (gamepad2.dpad_up) currentState = extendLift;
+      //  if (gamepad2.right_bumper) currentState = intakeManaul;
+        if (gamepad2.dpad_up && !endGameMode) currentState = extendLift;
     }
     public void intake(){
         if (gamepad2.left_trigger >= 0.5){
@@ -276,7 +285,7 @@ public void idleCode(){
         transferMotor.setPower(1);
 
         pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LARSON_SCANNER;
-        if (gamepad2.a) {
+        if (!gamepad2.left_bumper || endGameMode) {
             currentState = intakeCancel;
             stateMachineTimer = getRuntime();
         }
@@ -326,9 +335,14 @@ public void idleCode(){
         }
     }
     public void scoreIdle() {
-        if (gamepad2.dpad_up || gamepad2.dpad_down || gamepad2.dpad_left || gamepad2.dpad_right)
-            currentState = extendLift;
-        stateMachineTimer = getRuntime();
+        if (endGameMode){
+            currentState = idle;
+        }else{
+            if (gamepad2.dpad_up || gamepad2.dpad_down || gamepad2.dpad_left || gamepad2.dpad_right){
+                currentState = extendLift;
+                stateMachineTimer = getRuntime();
+            }
+        }
     }
     public void extendLift(){
 
@@ -346,12 +360,14 @@ public void idleCode(){
     }
     public void liftOut(){
 
-        liftPosition += gamepad2.left_stick_y * 3;
+
+        liftPosition += gamepad2.left_stick_y * -30;
         if (liftPosition >= LiftMAX) liftPosition = LiftMAX;
         if (liftPosition <= safeLiftHeight) liftPosition = safeLiftHeight;
+        telemetry.addData("liftPosition", liftPosition);
         pixelLiftMotor.setTargetPosition(liftPosition);
         if(gamepad2.b) currentState = score;
-        if(gamepad2.a) currentState = fourBarDock;
+        if(gamepad2.dpad_down || endGameMode) currentState = fourBarDock;
     }
     public void score(){
         frontDepositorServo.setPosition(1);
@@ -376,18 +392,19 @@ public void idleCode(){
         if (ColorSensorCheck(frontColorSensor) != "None"){
             currentState = liftOut;
             frontDepositorServo.setPosition(0.5);
-            frontDepositorServo.setPosition(0.5);
+            backDepositorServo.setPosition(0.5);
         }
 
     }
     public void fourBarWait(){
-        if (stateMachineTimer <= getRuntime() - 2) currentState = fourBarDock;
+        if (stateMachineTimer <= getRuntime() - 0.3) currentState = fourBarDock;
     }
     public void fourBarDock(){
-        fourBarServo.setPosition(.83);
-        if (gamepad2.dpad_down) currentState = liftDock;
+        fourBarServo.setPosition(0.78);
+        if (gamepad2.dpad_down || endGameMode) currentState = liftDock;
     }
     public void liftDock(){
+        pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
         pixelLiftMotor.setTargetPosition(0);
         if (pixelLiftMotor.getCurrentPosition() <= 2) currentState = idle;
     }
