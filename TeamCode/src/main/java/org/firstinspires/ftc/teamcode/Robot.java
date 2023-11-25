@@ -1,31 +1,28 @@
 package org.firstinspires.ftc.teamcode;
-
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.SwitchableLight;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvWebcam;
-import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvPipeline;
-import org.openftc.easyopencv.OpenCvWebcam;
+
 public abstract class Robot extends LinearOpMode {
     IMU imu;
     // Declare OpMode members.
@@ -43,6 +40,37 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor leftBackMotor = null;
     public DcMotor rightFrontMotor = null;
     public DcMotor rightBackMotor = null;
+    public float controlHubChange = 51;
+    enum operatorState
+    {
+        idle,
+        intaking,
+        intakeManaul,
+        intakeDone,
+        intakeCancel,
+        scoreIdle,
+        extendLift,
+        extendBar,
+        liftOut,
+        score,
+        scoreFinished,
+        depoTransition,
+        fourBarWait,
+        fourBarDock,
+        liftDock,
+    }
+    public operatorState currentState = operatorState.idle;
+
+    public DcMotor climberMotor = null;
+    public DcMotor intakeMotor = null;
+    public DcMotor pixelLiftMotor = null;
+    public Servo intakeServo = null;
+    public Servo fourBarServo = null;
+    public Servo backDepositorServo = null;
+    public Servo frontDepositorServo = null;
+    public DcMotor transferMotor = null;
+    public Servo droneTrigger = null;
+
     public double robotHeading;
     double leftFrontPower;
     double leftBackPower;
@@ -50,9 +78,73 @@ public abstract class Robot extends LinearOpMode {
     double rightBackPower;
     boolean DriverOrientationDriveMode = true;
     boolean Driver1Leftbumper;
+    float startingangle;
 
 
+    float gain = 2;
+    final float[] hsvValues = new float[3];
+
+    NormalizedColorSensor backColorSensor;
+    NormalizedColorSensor frontColorSensor;
+
+    View relativeLayout;
+
+
+    public void colorSenseInit(){
+        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+
+        try {
+            runSample(); // actually execute the sample
+        } finally {
+
+            relativeLayout.post(new Runnable() {
+                public void run() {
+                    relativeLayout.setBackgroundColor(Color.WHITE);
+                }
+            });
+        }
+    }
+
+    protected void runSample() {
+        frontColorSensor = hardwareMap.get(NormalizedColorSensor.class, "frontColorSensor");
+        backColorSensor = hardwareMap.get(NormalizedColorSensor.class, "backColorSensor");
+    }
+    public void updateColorSensors(){
+        gain += 0.005;
+        frontColorSensor.setGain(gain);
+        backColorSensor.setGain(gain);
+        }
+
+    RevBlinkinLedDriver blinkinLedDriver;
+    RevBlinkinLedDriver.BlinkinPattern pattern;
+
+    public DigitalChannel ClimberLimitSwitchBottom;
+
+
+    public void LightsInit(){
+        //Commented out so when you use code without the blinkin hooked up to the robot, the robot does not scream at you LOL
+//        blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver .class, "blinkin");
+//        pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
+//        blinkinLedDriver.setPattern(pattern);
+    }
+public void lightsUpdate(){
+        //Commented out because the buttons are just for debug :)
+//    if (gamepad1.dpad_up) pattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE;
+//    if (gamepad1.dpad_down) pattern = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
+//    if (gamepad1.dpad_left) pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
+//    if (gamepad1.dpad_right) pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LARSON_SCANNER;
+//    if (gamepad1.a)  pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
+//
+//    if (gamepad1.x)      pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET;
+//
+//    if (gamepad1.b) pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
+//
+//    if (gamepad1.y)  pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
+//    blinkinLedDriver.setPattern(pattern);
+}
     public void straferAlgorithm(){
+        DriverOrientationDriveMode = false;
         if(DriverOrientationDriveMode == true){
 //            slide = (slide * Math.cos(robotHeading)) - (drive * Math.sin(robotHeading));
 //            drive = (slide * Math.sin(robotHeading)) + (drive * Math.cos(robotHeading));
@@ -72,9 +164,9 @@ public abstract class Robot extends LinearOpMode {
     public void IMUstuffs(){
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
-        current = orientation.getYaw(AngleUnit.DEGREES);
+        current = orientation.getYaw(AngleUnit.DEGREES) + startingangle;
         telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
-    robotHeading = orientation.getYaw(AngleUnit.RADIANS);
+    robotHeading = orientation.getYaw(AngleUnit.RADIANS) ;
 
     }
     public void IMUReset(){
@@ -108,6 +200,7 @@ public abstract class Robot extends LinearOpMode {
 //        time -= 1;
 //        }
     public void Init() {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         imu = hardwareMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
@@ -123,10 +216,31 @@ public abstract class Robot extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
+        transferMotor = hardwareMap.get(DcMotor.class, "TransferMotor");
         leftFrontMotor = hardwareMap.get(DcMotor.class, "left_Front");
         leftBackMotor = hardwareMap.get(DcMotor.class, "left_Back");
         rightFrontMotor = hardwareMap.get(DcMotor.class, "right_Front");
         rightBackMotor = hardwareMap.get(DcMotor.class, "right_Back");
+        climberMotor = hardwareMap.get(DcMotor.class, "climber");
+        pixelLiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
+        intakeServo = hardwareMap.get(Servo.class, "IntakeServo");
+        fourBarServo = hardwareMap.get(Servo.class, "fourBarServo");
+        backDepositorServo = hardwareMap.get(Servo.class, "backDepo");
+        frontDepositorServo = hardwareMap.get(Servo.class, "frontDepo");
+        droneTrigger = hardwareMap.get(Servo.class, "DroneTrigger");
+        pixelLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        transferMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        pixelLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        climberMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
+        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        droneTrigger.setPosition(0.9);
+        intakeServo.setPosition(1);
+
+        //ClimberLimitSwitchBottom = hardwareMap.get(DigitalChannel.class, "Climber_Limit_Switch_Bottom");
+        //ClimberLimitSwitchBottom.setMode(DigitalChannel.Mode.INPUT);
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
@@ -137,5 +251,42 @@ public abstract class Robot extends LinearOpMode {
         rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
         imu.resetYaw();
     }
+
+
+    public String ColorSensorCheck(NormalizedColorSensor sensor) {
+
+
+
+        NormalizedRGBA colors = sensor.getNormalizedColors();
+
+        Color.colorToHSV(colors.toColor(), hsvValues);
+
+        relativeLayout.post(new Runnable() {
+            public void run() {
+                relativeLayout.setBackgroundColor(Color.HSVToColor(hsvValues));
+            }
+        });
+        telemetry.addData("Color Data:H", hsvValues[0]);
+        telemetry.addData("Color Data:S", hsvValues[1]);
+        telemetry.addData("Color Data:V", hsvValues[2]);
+        if (((DistanceSensor) sensor).getDistance(DistanceUnit.CM) <= 3) {
+            if (hsvValues[2] > .13) {
+                //white pixel
+                return "White";
+            } else if (170 < hsvValues[0]) {
+                //purple pixel
+                return "Purple";
+            } else if (120 > hsvValues[0]) {
+                //yellow pixel
+                return "Yellow";
+            } else {
+                //green pixel
+                return "Green";
+            }
+        } else {
+            return "None";
+        }
+    }
+
 }
 
