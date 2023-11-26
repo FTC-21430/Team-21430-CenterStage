@@ -61,6 +61,10 @@ public abstract class Robot extends LinearOpMode {
         fourBarWait,
         fourBarDock,
         liftDock,
+        scoreDocked,
+        transferDocked,
+        dockedScoreFinished,
+        highFourBarExtend,
     }
     public operatorState currentState = operatorState.idle;
 
@@ -73,6 +77,9 @@ public abstract class Robot extends LinearOpMode {
     public Servo frontDepositorServo = null;
     public DcMotor transferMotor = null;
     public Servo droneTrigger = null;
+
+    public double scoringAngle = 0;
+
 
     public double robotHeading;
     double leftFrontPower;
@@ -145,10 +152,9 @@ public void lightsUpdate(){
             drive = temp;
         }
 
-        if (currentState == operatorState.score || currentState == operatorState.scoreIdle || currentState == operatorState.extendBar || currentState == operatorState.extendLift || currentState == operatorState.liftOut)
-        {
-            drive = drive * -1;
-            slide = slide * -1;
+        if (gamepad1.a) {
+            drive *= -1;
+            slide *= -1;
         }
 
         leftFrontPower = Range.clip(drive + slide + turn, -1.0, 1.0);

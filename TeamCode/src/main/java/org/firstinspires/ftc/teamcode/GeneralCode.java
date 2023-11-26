@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
 import static org.firstinspires.ftc.teamcode.Robot.operatorState.depoTransition;
+import static org.firstinspires.ftc.teamcode.Robot.operatorState.dockedScoreFinished;
 import static org.firstinspires.ftc.teamcode.Robot.operatorState.extendBar;
 import static org.firstinspires.ftc.teamcode.Robot.operatorState.extendLift;
 import static org.firstinspires.ftc.teamcode.Robot.operatorState.fourBarDock;
 import static org.firstinspires.ftc.teamcode.Robot.operatorState.fourBarWait;
+import static org.firstinspires.ftc.teamcode.Robot.operatorState.highFourBarExtend;
 import static org.firstinspires.ftc.teamcode.Robot.operatorState.idle;
 import static org.firstinspires.ftc.teamcode.Robot.operatorState.intakeCancel;
 import static org.firstinspires.ftc.teamcode.Robot.operatorState.intakeDone;
@@ -13,8 +15,10 @@ import static org.firstinspires.ftc.teamcode.Robot.operatorState.intaking;
 import static org.firstinspires.ftc.teamcode.Robot.operatorState.liftDock;
 import static org.firstinspires.ftc.teamcode.Robot.operatorState.liftOut;
 import static org.firstinspires.ftc.teamcode.Robot.operatorState.score;
+import static org.firstinspires.ftc.teamcode.Robot.operatorState.scoreDocked;
 import static org.firstinspires.ftc.teamcode.Robot.operatorState.scoreFinished;
 import static org.firstinspires.ftc.teamcode.Robot.operatorState.scoreIdle;
+import static org.firstinspires.ftc.teamcode.Robot.operatorState.transferDocked;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -53,7 +57,7 @@ public abstract class GeneralCode extends Robot {
     boolean bumper_old;
     float IntakeInput;
     int safeLiftHeight = 700;
-
+    boolean barHeightHigh = false;
 
 float communicationMode;
     public void UpdateControls() {
@@ -76,6 +80,7 @@ float communicationMode;
 
 
     public void GridRunner() {
+        if (gamepad1.a) Target = scoringAngle;
         if (gamepad1.dpad_up) {
             drive = 1;
             slide = 0;
@@ -95,21 +100,18 @@ float communicationMode;
     }
 
     public void speedControl() {
-        leftFrontPower = leftFrontPower / 2;
-        leftBackPower = leftBackPower / 2;
-        rightFrontPower = rightFrontPower / 2;
-        rightBackPower = rightBackPower / 2;
+        drive /= 2;
+        slide /= 2;
+        turn /= 2;
         if (fastMode == 1) {
-            leftFrontPower = leftFrontPower * 2;
-            leftBackPower = leftBackPower * 2;
-            rightFrontPower = rightFrontPower * 2;
-            rightBackPower = rightBackPower * 2;
+        drive *= 2;
+        slide *= 2;
+        turn *=2;
         }
         if (slowMode) {
-            leftFrontPower = leftFrontPower / 2;
-            leftBackPower = leftBackPower / 2;
-            rightFrontPower = rightFrontPower / 2;
-            rightBackPower = rightBackPower / 2;
+            drive /= 2;
+            slide /= 2;
+
         }
     }
 
@@ -132,7 +134,7 @@ float communicationMode;
     }
 
     public void Climber() {
-
+        telemetry.addData("climber power", climberMotor.getPower());
 //        if (hasDroneLaunched){
             telemetry.addData("encoderCount:", climberMotor.getCurrentPosition());
 //
@@ -140,7 +142,7 @@ float communicationMode;
 //        ClimberLimitSwitchBottom.getState() == false && climberMotor.getCurrentPosition()<=100
             if (gamepad2.dpad_down  && !ClimberLimitSwitchBottom.getState()) {
                 climberMotor.setPower(1);
-            } else if (gamepad2.dpad_up && climberMotor.getCurrentPosition() >= -5470) {
+            } else if (gamepad2.dpad_up && climberMotor.getCurrentPosition() >= -20000) {
 
                 climberMotor.setPower(-0.9);
             } else {
@@ -193,7 +195,7 @@ public void LaunchDrone(){
 
             pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
             }
-            if (gamepad2.b){
+            if (gamepad2.x){
 
                 pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
             }
@@ -201,7 +203,7 @@ public void LaunchDrone(){
 
                 pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
             }
-            if (gamepad2.x){
+            if (gamepad2.b){
                 
                 pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET;
             }
@@ -262,9 +264,55 @@ switch (currentState){
     case liftDock:
         liftDock();
         break;
+    case scoreDocked:
+        scoreDocked();
+        break;
+    case transferDocked:
+        transferDocked();
+        break;
+    case dockedScoreFinished:
+        dockedScoreFinished();
+        break;
+
+    case highFourBarExtend:
+        extendFourBarHigh();
+        break;
 }}
 
+
+
+    public void scoreDocked(){
+        frontDepositorServo.setPosition(1);
+        if (ColorSensorCheck(frontColorSensor) == "None"){
+            frontDepositorServo.setPosition(0.5);
+            currentState = dockedScoreFinished;
+        }
+    }
+
+    public void dockedScoreFinished(){
+        frontDepositorServo.setPosition(0.5);
+        if (ColorSensorCheck(backColorSensor) != "None"){
+            currentState = transferDocked;
+        }else{
+
+            currentState = idle;
+            stateMachineTimer = getRuntime();
+        }
+    }
+
+    public void transferDocked(){
+        frontDepositorServo.setPosition(1);
+        backDepositorServo.setPosition(-1);
+        if (ColorSensorCheck(frontColorSensor) != "None"){
+            currentState = idle;
+            frontDepositorServo.setPosition(0.5);
+            backDepositorServo.setPosition(0.5);
+        }
+    }
+
+
 public void idleCode(){
+        if (gamepad2.b) currentState = scoreDocked;
         backDepositorServo.setPosition(0.5);
     pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
         if (gamepad2.left_bumper && !endGameMode) {
@@ -277,9 +325,9 @@ public void idleCode(){
     }
     public void intake(){
         if (gamepad2.left_trigger >= 0.5){
-            intakeMotor.setPower(-0.7);
+            intakeMotor.setPower(-0.5);
         }else{
-            intakeMotor.setPower(-1);
+            intakeMotor.setPower(-0.7);
 
         }
         transferMotor.setPower(1);
@@ -305,7 +353,7 @@ public void idleCode(){
         pattern = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
         intakeMotor.setPower(0.9);
         transferMotor.setPower(-1);
-        if (stateMachineTimer <= getRuntime() - 3) {
+        if (stateMachineTimer <= getRuntime() - 1) {
             currentState = idle;
             intakeMotor.setPower(0);
             transferMotor.setPower(0);
@@ -328,7 +376,7 @@ public void idleCode(){
         pattern = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
         intakeMotor.setPower(-0.8);
         transferMotor.setPower(-1);
-        if (stateMachineTimer <= getRuntime() - 2) {
+        if (stateMachineTimer <= getRuntime() - 1) {
             currentState = scoreIdle;
             intakeMotor.setPower(0);
             transferMotor.setPower(0);
@@ -340,6 +388,9 @@ public void idleCode(){
         }else{
             if (gamepad2.dpad_up || gamepad2.dpad_down || gamepad2.dpad_left || gamepad2.dpad_right){
                 currentState = extendLift;
+                if (gamepad2.dpad_left || gamepad2.dpad_right) barHeightHigh = false;
+                if (gamepad2.dpad_up) barHeightHigh = true;
+
                 stateMachineTimer = getRuntime();
             }
         }
@@ -348,9 +399,25 @@ public void idleCode(){
 
         pixelLiftMotor.setTargetPosition(safeLiftHeight);
 
-        if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight - 1 && stateMachineTimer <= getRuntime() - 1)  currentState = extendBar;
+        if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight - 1 && stateMachineTimer <= getRuntime() - 1){
+
+            if (barHeightHigh){
+                currentState = highFourBarExtend;
+            }else{
+                currentState = extendBar;
+            }
+        }
+    }
+    public void extendFourBarHigh(){
+        barHeightHigh = true;
+        fourBarServo.setPosition(0);
+        if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight - 1) {
+            liftPosition = safeLiftHeight;
+            currentState = liftOut;
+        }
     }
     public void extendFourBar(){
+        barHeightHigh = false;
         fourBarServo.setPosition(0.35);
         if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight - 1) {
             liftPosition = safeLiftHeight;
@@ -359,8 +426,8 @@ public void idleCode(){
 
     }
     public void liftOut(){
-
-
+        if (barHeightHigh && gamepad2.dpad_right || gamepad2.dpad_left) currentState = highFourBarExtend;
+        if (!barHeightHigh && gamepad2.dpad_up) currentState = extendBar;
         liftPosition += gamepad2.left_stick_y * -30;
         if (liftPosition >= LiftMAX) liftPosition = LiftMAX;
         if (liftPosition <= safeLiftHeight) liftPosition = safeLiftHeight;

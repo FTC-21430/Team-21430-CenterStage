@@ -15,6 +15,7 @@ public class Teleop extends OdometryCode{
             CenterStageUpdateControls();
             UpdateControls();
             IMU_Update();
+            if (gamepad1.b) scoringAngle = current;
             if (gamepad1.y) {
                 IMUReset();
             }
@@ -23,6 +24,7 @@ public class Teleop extends OdometryCode{
 
            ProportionalFeedbackControl();
             GridRunner();
+            speedControl();
             straferAlgorithm();
 
 
@@ -39,7 +41,7 @@ public class Teleop extends OdometryCode{
 
             stateControl();
 
-            speedControl();
+
 
             setMotorPower();
             telemetry.addData("Status", "Run Time: " + runtime.toString());
