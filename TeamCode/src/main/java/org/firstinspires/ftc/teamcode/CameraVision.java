@@ -49,7 +49,7 @@ import java.util.List;
  */
 //@TeleOp(name = "CameraVision", group = "Concept")
 
-public abstract class CameraVision extends OldCodeForPowerPlay {
+public abstract class CameraVision extends OdometryCode {
 public float camBarrierONE=200;
 public float camBarrierTwo=400;
 public double x;
@@ -189,12 +189,11 @@ public void CamEnd(){
             return 1;
         }else if(x >= camBarrierONE && x <=camBarrierTwo){
             return 2;
-        }else if(x>= camBarrierTwo){
+        }else if(x >= camBarrierTwo){
             return 3;
         }else{
             return 2;
         }
-
     }
     private void telemetryTfod() {
 

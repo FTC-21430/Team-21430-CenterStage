@@ -35,7 +35,7 @@ public class backUpAutoBlueLeft extends CameraVision {
         leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         IMUReset();
-        PowerplayInit();
+//        PowerplayInit();
 
 //        RobotX = -65;
 //        RobotY = 61;
@@ -46,7 +46,7 @@ public class backUpAutoBlueLeft extends CameraVision {
 // put autoPather Output here
         //purple pixcel placement for zone 2
 
-        IntakeClose();
+//        IntakeClose();
 
         CamRun(5);
 
@@ -55,19 +55,19 @@ public class backUpAutoBlueLeft extends CameraVision {
 
         if (Zone==1) {
             RunToPoint(-14, 21);
-            IntakeOpen();}
+//            IntakeOpen();}
 
         if (Zone==2) {
             RunToPoint(-2, 5);
             RunToPoint(0, 35);
-            IntakeOpen();}
+//            IntakeOpen();}
 
         if (Zone==3) {
             RunToPoint(0, 5);
             Target = -90;
             RunToPoint(0, 29);
             RunToPoint(4, 29);
-            IntakeOpen();
+//            IntakeOpen();
             RunToPoint(-2, 29);
         }
         //if statments stop
@@ -97,9 +97,5 @@ public class backUpAutoBlueLeft extends CameraVision {
         telemetry.update();
 
 
-
-
-    }
-}
-
-
+        }
+}}}
