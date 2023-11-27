@@ -15,6 +15,7 @@ public class Teleop extends OdometryCode{
             CenterStageUpdateControls();
             UpdateControls();
             IMU_Update();
+            liftPowerControl();
             if (gamepad1.b) scoringAngle = current;
             if (gamepad1.y) {
                 IMUReset();

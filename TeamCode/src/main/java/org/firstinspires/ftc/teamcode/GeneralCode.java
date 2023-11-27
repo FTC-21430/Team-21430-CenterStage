@@ -28,7 +28,7 @@ public abstract class GeneralCode extends Robot {
     boolean calabrate_Lift = false;
 
 
-    int LiftMAX = 1590;
+    int LiftMAX = 1400;
 
 
     boolean leftTurnold = false;
@@ -56,10 +56,20 @@ public abstract class GeneralCode extends Robot {
     boolean TurnRight;
     boolean bumper_old;
     float IntakeInput;
-    int safeLiftHeight = 700;
+    int safeLiftHeight = 400;
     boolean barHeightHigh = false;
 
 float communicationMode;
+
+double liftTimeOut;
+public void pixelLiftRunToPosition(int encoderTick){
+
+    pixelLiftMotor.setTargetPosition(encoderTick);
+    if (liftTimeOut <= getRuntime()-5){
+        pixelLiftMotor.setTargetPosition(pixelLiftMotor.getCurrentPosition());
+        currentState = idle;
+    }
+}
     public void UpdateControls() {
         drive = -gamepad1.left_stick_y;
         slide = gamepad1.left_stick_x;
@@ -80,7 +90,8 @@ float communicationMode;
 
 
     public void GridRunner() {
-        if (gamepad1.a) Target = scoringAngle;
+    // TODO: make it easy to not break the robot. :(
+       // if (gamepad1.a) Target = scoringAngle;
         if (gamepad1.dpad_up) {
             drive = 1;
             slide = 0;
@@ -383,6 +394,10 @@ public void idleCode(){
         }
     }
     public void scoreIdle() {
+        if (gamepad2.b) currentState = scoreDocked;
+
+        if(gamepad2.a) currentState = idle;
+
         if (endGameMode){
             currentState = idle;
         }else{
@@ -434,7 +449,11 @@ public void idleCode(){
         telemetry.addData("liftPosition", liftPosition);
         pixelLiftMotor.setTargetPosition(liftPosition);
         if(gamepad2.b) currentState = score;
-        if(gamepad2.dpad_down || endGameMode) currentState = fourBarDock;
+        if(gamepad2.dpad_down || endGameMode) {
+            currentState = fourBarWait;
+            fourBarServo.setPosition(0.78);
+            stateMachineTimer = getRuntime();
+        }
     }
     public void score(){
         frontDepositorServo.setPosition(1);
@@ -447,8 +466,9 @@ public void idleCode(){
         frontDepositorServo.setPosition(0.5);
         if (ColorSensorCheck(backColorSensor) != "None"){
             currentState = depoTransition;
-        }else{
-
+        }
+        if (gamepad2.dpad_down){
+            fourBarServo.setPosition(0.78);
             currentState = fourBarWait;
             stateMachineTimer = getRuntime();
         }
@@ -464,16 +484,20 @@ public void idleCode(){
 
     }
     public void fourBarWait(){
-        if (stateMachineTimer <= getRuntime() - 0.3) currentState = fourBarDock;
+        if (stateMachineTimer <= getRuntime() - 0.7) currentState = fourBarDock;
     }
     public void fourBarDock(){
         fourBarServo.setPosition(0.78);
-        if (gamepad2.dpad_down || endGameMode) currentState = liftDock;
+        if (gamepad2.dpad_down || endGameMode){
+            currentState = liftDock;
+            stateMachineTimer = getRuntime();
+            liftTimeOut = getRuntime();
+        }
     }
     public void liftDock(){
         pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
-        pixelLiftMotor.setTargetPosition(0);
-        if (pixelLiftMotor.getCurrentPosition() <= 2) currentState = idle;
+        pixelLiftRunToPosition(0);
+        if (pixelLiftMotor.getCurrentPosition() <= 5) currentState = idle;
     }
 }
 
