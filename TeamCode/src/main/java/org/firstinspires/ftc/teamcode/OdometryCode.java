@@ -95,7 +95,7 @@ public void setTurn(float angle){
 //            slide = gamepad1.left_stick_x;
             turn = 0;
 
-            IMUstuffs();
+            IMU_Update();
 
             RobotAngles();
             ProportionalFeedbackControlAuto();
@@ -161,11 +161,6 @@ public void setTurn(float angle){
         BackLeft *= correctionFactor;
 
     }
-
-
-
-
-
 
     YawPitchRollAngles orientation;
     AngularVelocity angularVelocity;

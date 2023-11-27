@@ -25,7 +25,7 @@ public class OldRobotTeleop extends OldCodeForPowerPlay {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             UpdateControls();
-            IMUstuffs();
+            IMU_Update();
             if (gamepad1.y) {
                 IMUReset();
             }
