@@ -92,7 +92,7 @@ public int Zone = 0;
     }
 public void CamRun(int timeoutS) {
     resetRuntime();
-   while(timeoutS <= runtime.seconds() && opModeIsActive()){
+   while(timeoutS >= getRuntime() && opModeIsActive()){
     telemetryTfod();
 Zone = findZone();
 
@@ -110,7 +110,7 @@ telemetry.addData("Zone: ", Zone);
     }
 
     // Share the CPU.
-    sleep(20);
+   // sleep(20);
 
 }}
 public void CamEnd(){

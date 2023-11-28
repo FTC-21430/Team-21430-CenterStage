@@ -81,6 +81,7 @@ public void setTurn(float angle){
 
         while(distanceCircle(TargetX,TargetY) > 0.2 & opModeIsActive())
         {
+            telemetry.addData("zone", Zone);
             telemetry.addData("distance",distanceCircle(TargetX,TargetY));
             telemetry.addData("Y", RobotY);
             telemetry.addData("X", RobotX);
