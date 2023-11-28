@@ -96,6 +96,9 @@ public void CamRun(int timeoutS) {
     telemetryTfod();
 Zone = findZone();
 
+telemetry.addData("Zone: ", Zone);
+
+
     // Push telemetry to the Driver Station.
     telemetry.update();
 
@@ -186,6 +189,7 @@ public void CamEnd(){
      */
     public int findZone(){
         if (x <= camBarrierONE){
+            telemetry.addData("Working:","Yes");
             return 1;
         }else if(x >= camBarrierONE && x <=camBarrierTwo){
             return 2;

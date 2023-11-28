@@ -8,6 +8,7 @@ public class RedLeftJellyfish extends AutonomousFunction {
     @Override
     public void runOpMode() {
         Init();
+        CamInit();
         startOfsetRadians = 0;
         waitForStart();
         runtime.reset();
@@ -26,10 +27,11 @@ public class RedLeftJellyfish extends AutonomousFunction {
         leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         IMUReset();
-        //RobotX = -65;
-        //RobotY = 61;
-        //InitX= -65;
-        //InitY = 61;
+        RobotX = -37;
+        RobotY = -60;
+        InitX= -37;
+        InitY = -60;
+        CamRun(1);
 
         PurplePixel();
         //YellowPixel();
