@@ -3,15 +3,14 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name = "RedLeftJellyfish" , group = "CenterStage")
-public class RedLeftJellyfish extends AutonomousFunction {
+@Autonomous(name = "BlueRightJellyfish" , group = "CenterStage")
+public class BlueRightJellyfish extends AutonomousFunction {
     @Override
     public void runOpMode() {
         Init();
         CamInit();
-        robotHeading = 0;
-        Target = 0;
-        startOfsetRadians = 0;
+        robotHeading = 180;
+        startOfsetRadians = Math.PI;
         waitForStart();
         runtime.reset();
         leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -29,15 +28,16 @@ public class RedLeftJellyfish extends AutonomousFunction {
         leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         IMUReset();
-        RobotX = -32;
-        RobotY = -60;
-        InitX= -37;
-        InitY = -60;
+        Target = 180;
+        RobotX = -29;
+        RobotY = 60;
+        InitX= -34;
+        InitY = 60;
         CamRun(3);
 
-        PurplePixelRed();
+        PurplePixelBlue();
         //YellowPixel();
         //Park();
 
-        }
     }
+}

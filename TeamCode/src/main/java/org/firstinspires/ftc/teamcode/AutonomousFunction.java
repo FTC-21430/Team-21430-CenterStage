@@ -2,35 +2,71 @@ package org.firstinspires.ftc.teamcode;
 
 public abstract class AutonomousFunction extends CameraVision {
 
-    public void PurplePixel() {
+    public void PurplePixelRed() {
         if (Zone == 1) {
-            RunToPoint(-37,-37);
-            setTurn(90);
-            RunToPoint(-37,-34);
-            RunToPoint(-35,-34);
-            intakeServo.setPosition(0);
-            RunToPoint(-32,-34);
-            RunToPoint(-37,-60);
-            intakeMotor.setPower(0);
-            setTurn(0);
+
+            RunToPoint(-46,-42);
+            intakeMotor.setPower(0.4);
+            resetRuntime();
+            while (3 >= getRuntime() && opModeIsActive()){
+                ProportionalFeedbackControl();
+            }
             //Remember to turn off
         } else if (Zone == 2) {
             RunToPoint(-37, -35);
 
-            intakeMotor.setPower(0.6);
+            intakeMotor.setPower(0.4);
             resetRuntime();
-            while (3 >= getRuntime()){
+            while (3 >= getRuntime() && opModeIsActive()){
                 ProportionalFeedbackControl();
             }
             RunToPoint(-37,-40);
 
+
         }else{
         if (Zone == 3) {
-            RunToPoint(-37, -36);
-            RunToPoint(-26, -41);
-            intakeMotor.setPower(0.5);
+            RunToPoint(-38,-34);
+            RunToPoint(-24,-34);
+            intakeMotor.setPower(0.4);
+            resetRuntime();
+            while (0.3 >= getRuntime() && opModeIsActive()){
+                ProportionalFeedbackControl();
+            }
             //Remember to turn off
         }}
+    }
+    public void PurplePixelBlue() {
+        if (Zone == 3) {
+
+            RunToPoint(-46,42);
+            intakeMotor.setPower(0.4);
+            resetRuntime();
+            while (3 >= getRuntime() && opModeIsActive()){
+                ProportionalFeedbackControl();
+            }
+            //Remember to turn off
+        } else if (Zone == 2) {
+            RunToPoint(-37, 35);
+
+            intakeMotor.setPower(0.4);
+            resetRuntime();
+            while (3 >= getRuntime() && opModeIsActive()){
+                ProportionalFeedbackControl();
+            }
+            RunToPoint(-37,40);
+
+
+        }else{
+            if (Zone == 1) {
+                RunToPoint(-38,34);
+                RunToPoint(-24,34);
+                intakeMotor.setPower(0.4);
+                resetRuntime();
+                while (0.3 >= getRuntime() && opModeIsActive()){
+                    ProportionalFeedbackControl();
+                }
+                //Remember to turn off
+            }}
     }
             public void YellowPixel () {
                 Target = 0;
