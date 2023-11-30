@@ -9,39 +9,47 @@ public class Teleop extends OdometryCode{
         Init();
         //TODO: Add centerstage specific init
         waitForStart();
+        IMUReset();
         runtime.reset();
         while (opModeIsActive()){
             CenterStageUpdateControls();
-            IMUstuffs();
+            UpdateControls();
+            IMU_Update();
+            liftPowerControl();
+            if (gamepad1.b) scoringAngle = current;
             if (gamepad1.y) {
                 IMUReset();
             }
-           // ProportionalFeedbackControl();
-            GridRunner();
-            straferAlgorithm();
-            Climber();
+            telemetry.addData("endGameMode:", endGameMode);
 
-            intakeMotor.setPower(gamepad2.left_stick_y);
-            intakeServo.setPosition(gamepad2.left_stick_x);
-            transferMotor.setPower(gamepad2.right_stick_y);
-            if (gamepad2.dpad_up){
-                frontDepositorServo.setPosition(1);
-                backDepositorServo.setPosition(1);
-            }
-            if (gamepad2.dpad_down){
-                frontDepositorServo.setPosition(-1);
-                backDepositorServo.setPosition(-1);
-            }
-            telemetry.addData("error", error);
-            telemetry.addData("turn", turn);
-            if (gamepad1.y) {
-                IMUReset();
-            }
+
+           ProportionalFeedbackControl();
+            GridRunner();
             speedControl();
+            straferAlgorithm();
+
+
+            updateCommunication();
+            updateColorSensors();
+            lightsUpdate();
+            endGameThings();
+            if (endGameMode){
+                intakeServo.setPosition(0.5);
+            }else{
+                intakeServo.setPosition(1);
+            }
+
+
+            stateControl();
+
+
+
             setMotorPower();
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("robotAngle", robotHeading);
+            telemetry.addData("Operator Current State", currentState);
+
             telemetry.update();
+
         }
 
     }

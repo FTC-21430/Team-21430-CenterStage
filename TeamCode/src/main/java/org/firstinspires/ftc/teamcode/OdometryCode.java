@@ -19,8 +19,25 @@ public abstract class OdometryCode extends GeneralCode {
     public double FrontLeftOld,FrontRightOld,BackLeftOld,BackRightOld;
     public float TESTfLeft, TESTfRight, TESTbLeft, TESTbRight;
 
+    public void ProportionalFeedbackControlAuto(){
+        error = Wrap(((Target - ((180 * startOfsetRadians) /Math.PI)) - current));
+        turn -= error/20;
+    }
 
 
+public void setTurn(float angle){
+    Target = angle;
+}
+
+    public void OdometryInit(float x, float y){
+        RobotX = x;
+        RobotY = y;
+        InitX = x;
+        InitY = y;
+    }
+
+
+    public int Zone = 0;
     public double startOfsetRadians = 0;
     public void RobotAngles(){
 
@@ -64,6 +81,7 @@ public abstract class OdometryCode extends GeneralCode {
 
         while(distanceCircle(TargetX,TargetY) > 0.2 & opModeIsActive())
         {
+            telemetry.addData("zone", Zone);
             telemetry.addData("distance",distanceCircle(TargetX,TargetY));
             telemetry.addData("Y", RobotY);
             telemetry.addData("X", RobotX);
@@ -79,10 +97,10 @@ public abstract class OdometryCode extends GeneralCode {
 //            slide = gamepad1.left_stick_x;
             turn = 0;
 
-            IMUstuffs();
+            IMU_Update();
 
             RobotAngles();
-            ProportionalFeedbackControl();
+            ProportionalFeedbackControlAuto();
             UpdateEncoders();
 
             UpdateOdometry();
@@ -149,4 +167,6 @@ public abstract class OdometryCode extends GeneralCode {
     YawPitchRollAngles orientation;
     AngularVelocity angularVelocity;
 
-}
+
+
+    }
