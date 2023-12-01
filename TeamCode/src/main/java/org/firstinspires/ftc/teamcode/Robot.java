@@ -246,13 +246,13 @@ public void lightsUpdate(){
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         pixelLiftMotor.setPower(0.4);
-fourBarServo.setPosition(0.78);
+        fourBarServo.setPosition(0.92);
 
 
 climberMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         droneTrigger.setPosition(0.4);
-        intakeServo.setPosition(1);
+        intakeServo.setPosition(0.8);
 
         ClimberLimitSwitchBottom = hardwareMap.get(DigitalChannel.class, "Climber_Limit_Switch_Bottom");
         ClimberLimitSwitchBottom.setMode(DigitalChannel.Mode.INPUT);
