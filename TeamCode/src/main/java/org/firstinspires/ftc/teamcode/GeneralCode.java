@@ -349,7 +349,7 @@ public void idleCode(){
             backDepositorServo.setPosition(-1);
         }
       //  if (gamepad2.right_bumper) currentState = intakeManaul;
-        if (gamepad2.dpad_up) currentState = extendLift;
+        if (gamepad2.dpad_up && !endGameMode) currentState = extendLift;
     if (gamepad2.x) {
         transferMotor.setPower(-1);
         intakeMotor.setPower(1);

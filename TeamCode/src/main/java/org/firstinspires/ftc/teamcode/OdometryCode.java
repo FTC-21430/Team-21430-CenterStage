@@ -20,8 +20,8 @@ public abstract class OdometryCode extends GeneralCode {
     public float TESTfLeft, TESTfRight, TESTbLeft, TESTbRight;
 
     public void ProportionalFeedbackControlAuto(){
-        error = Wrap(((Target - ((180 * startOfsetRadians) /Math.PI)) - current));
-        turn -= error/20;
+//        error = Wrap(((Target - ((180 * startOfsetRadians) /Math.PI)) - current));
+//        turn -= error/20;
     }
 
 
@@ -40,12 +40,13 @@ public void setTurn(float angle){
     public int Zone = 0;
     public double startOfsetRadians = 0;
     public void RobotAngles(){
-
-        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        RobotAngle = orientation.getYaw(AngleUnit.RADIANS);
-        RobotAngle += startOfsetRadians;
+//
+//        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+//        RobotAngle = orientation.getYaw(AngleUnit.RADIANS);
+//        RobotAngle += startOfsetRadians;
     }
     public void UpdateOdometry(){
+        RobotAngle = Math.PI;
 
         DForward = (FrontRight + FrontLeft + BackRight + BackLeft)/4;
         DSideways = (-FrontRight + FrontLeft + BackRight - BackLeft)/4/1.2;
@@ -97,10 +98,10 @@ public void setTurn(float angle){
 //            slide = gamepad1.left_stick_x;
             turn = 0;
 
-            IMU_Update();
+          //  IMU_Update();
 
             RobotAngles();
-            ProportionalFeedbackControlAuto();
+          //  ProportionalFeedbackControlAuto();
             UpdateEncoders();
 
             UpdateOdometry();

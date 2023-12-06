@@ -9,7 +9,7 @@ public abstract class AutonomousFunction extends CameraVision {
             intakeMotor.setPower(0.4);
             resetRuntime();
             while (3 >= getRuntime() && opModeIsActive()){
-                ProportionalFeedbackControl();
+               // ProportionalFeedbackControl();
             }
             //Remember to turn off
         } else if (Zone == 2) {
@@ -18,7 +18,7 @@ public abstract class AutonomousFunction extends CameraVision {
             intakeMotor.setPower(0.4);
             resetRuntime();
             while (3 >= getRuntime() && opModeIsActive()){
-                ProportionalFeedbackControl();
+                //ProportionalFeedbackControl();
             }
             RunToPoint(-37,-40);
 
@@ -30,7 +30,7 @@ public abstract class AutonomousFunction extends CameraVision {
             intakeMotor.setPower(0.4);
             resetRuntime();
             while (0.3 >= getRuntime() && opModeIsActive()){
-                ProportionalFeedbackControl();
+               // ProportionalFeedbackControl();
             }
             //Remember to turn off
         }}
@@ -38,32 +38,32 @@ public abstract class AutonomousFunction extends CameraVision {
     public void PurplePixelBlue() {
         if (Zone == 3) {
 
-            RunToPoint(-46,42);
+            RunToPoint(-46 + 2,42);
             intakeMotor.setPower(0.4);
             resetRuntime();
             while (3 >= getRuntime() && opModeIsActive()){
-                ProportionalFeedbackControl();
+             //   ProportionalFeedbackControl();
             }
             //Remember to turn off
         } else if (Zone == 2) {
-            RunToPoint(-37, 35);
+            RunToPoint(-37 -1, 35);
 
             intakeMotor.setPower(0.4);
             resetRuntime();
             while (3 >= getRuntime() && opModeIsActive()){
-                ProportionalFeedbackControl();
+//                ProportionalFeedbackControl();
             }
-            RunToPoint(-37,40);
+            RunToPoint(-37 -1,40);
 
 
         }else{
             if (Zone == 1) {
-                RunToPoint(-38,34);
-                RunToPoint(-24,34);
+                RunToPoint(-38+2,34);
+                RunToPoint(-24+2,34);
                 intakeMotor.setPower(0.4);
                 resetRuntime();
                 while (0.3 >= getRuntime() && opModeIsActive()){
-                    ProportionalFeedbackControl();
+//                    ProportionalFeedbackControl();
                 }
                 //Remember to turn off
             }}
