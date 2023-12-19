@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
-public abstract class OdometryCode extends GeneralCode {
+public abstract class OdometryCode extends CameraVision {
     public double InitX, InitY;
     public double DForward, DSideways;
     public double correctionFactor = 1.016723060905778;
@@ -20,10 +22,17 @@ public abstract class OdometryCode extends GeneralCode {
     public float TESTfLeft, TESTfRight, TESTbLeft, TESTbRight;
 
     public void ProportionalFeedbackControlAuto(){
-//        error = Wrap(((Target - ((180 * startOfsetRadians) /Math.PI)) - current));
-//        turn -= error/20;
+        error = Wrap(((Target - ((180 * startOfsetRadians) /Math.PI)) - current));
+        turn -= error/20;
     }
-
+    public static void rotatePoints(double[] xPoints, double[] yPoints, double angle){
+        for (int i = 0; i < xPoints.length; i++) {
+            double x = xPoints[i];
+            double y = yPoints[i];
+            xPoints[i] = x * Math.cos(angle) - y * Math.sin(angle);
+            yPoints[i] = x * Math.sin(angle) + y * Math.cos(angle);
+        }
+    }
 
 public void setTurn(float angle){
     Target = angle;
@@ -80,6 +89,40 @@ public void setTurn(float angle){
 
         while(distanceCircle(TargetX,TargetY) > 0.2 & opModeIsActive())
         {
+            TESTfLeft = leftFrontMotor.getCurrentPosition();
+            TESTfRight = rightFrontMotor.getCurrentPosition();
+            TESTbLeft = leftBackMotor.getCurrentPosition();
+            TESTbRight = rightBackMotor.getCurrentPosition();
+            RobotAngles();
+            UpdateEncoders();
+            UpdateOdometry();
+            float[] arrayOutput = aprilTagFindRobotPosition();
+            if (arrayOutput[0] != 0 && arrayOutput[1] != 0 && arrayOutput[2] != 0) {
+                RobotX = arrayOutput[0];
+            RobotY = arrayOutput[1];
+            InitX = arrayOutput[0];
+            InitY = arrayOutput[1];
+            startOfsetRadians -= RobotAngle - arrayOutput[2];
+            }
+            telemetry.update();
+            double l = 17.5/2;
+            double[] bxPoints = {l,-l,-l,l};
+            double[] byPoints = {l,l,-l,-l};
+            rotatePoints(bxPoints, byPoints, RobotAngle);
+            for (int i = 0; i < 4; i++){
+                bxPoints[i] += RobotX;
+                byPoints[i] += RobotY;
+            }
+            TelemetryPacket packet = new TelemetryPacket();
+            packet.fieldOverlay()
+                    .setStrokeWidth(1)
+                    .setStroke("goldenrod")
+                    .setFill("black")
+                    .fillPolygon(bxPoints, byPoints);
+            dashboard.sendTelemetryPacket(packet);
+            telemetry.addData("RobotX:", RobotX);
+            telemetry.addData("Angle:", RobotAngle);
+            telemetry.addData("RobotY:", RobotY);
             telemetry.addData("zone", Zone);
             telemetry.addData("distance",distanceCircle(TargetX,TargetY));
             telemetry.addData("Y", RobotY);
@@ -96,10 +139,10 @@ public void setTurn(float angle){
 //            slide = gamepad1.left_stick_x;
             turn = 0;
 
-          //  IMU_Update();
+            IMU_Update();
 
             RobotAngles();
-          //  ProportionalFeedbackControlAuto();
+            ProportionalFeedbackControlAuto();
             UpdateEncoders();
 
             UpdateOdometry();

@@ -56,7 +56,7 @@ import java.util.List;
  */
 //@TeleOp(name = "CameraVision", group = "Concept")
 
-public abstract class CameraVision extends OdometryCode {
+public abstract class CameraVision extends GeneralCode {
 public float camBarrierONE=200;
 public float camBarrierTwo=400;
 public double x;
@@ -96,7 +96,8 @@ public int Zone = 0;
         AprilTagVisionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 2"), ATProcessor);
     }
 
-    public void aprilTagFindRobotPosition(){
+    public float[] aprilTagFindRobotPosition(){
+        float[] returnArray = {0, 0, 0};
 
         List<AprilTagDetection> detections = ATProcessor.getDetections();
         for (AprilTagDetection detection : detections){
@@ -154,12 +155,15 @@ public int Zone = 0;
             float robotInFieldPitch = robotInFieldOrientation.secondAngle;
             float robotInFieldYaw = robotInFieldOrientation.thirdAngle;
 
-            RobotX = robotInFieldX;
-            RobotY = robotInFieldY;
-            InitX = robotInFieldX;
-            InitY = robotInFieldY;
+            returnArray[0] = robotInFieldX;
+            returnArray[1] = robotInFieldY;
+            returnArray[2] = robotInFieldYaw * ((float)Math.PI/180);
+//            RobotX = robotInFieldX;
+//            RobotY = robotInFieldY;
+//            InitX = robotInFieldX;
+//            InitY = robotInFieldY;
            // RobotAngle = robotInFieldYaw * (Math.PI/180);
-            startOfsetRadians -= RobotAngle - robotInFieldYaw * (Math.PI/180);
+//            startOfsetRadians -= RobotAngle - robotInFieldYaw * (Math.PI/180);
 
 
             telemetry.addData("robotX",robotInFieldX);
@@ -174,6 +178,7 @@ public int Zone = 0;
 
             break;
         }
+        return returnArray;
     }
 
 

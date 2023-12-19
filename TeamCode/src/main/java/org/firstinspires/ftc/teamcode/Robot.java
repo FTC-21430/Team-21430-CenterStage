@@ -5,6 +5,8 @@ import android.view.View;
 //TODO:fix this
 //import com.acmerobotics.dashboard.FtcDashboard;
 //import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -23,6 +25,7 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public abstract class Robot extends LinearOpMode {
@@ -79,7 +82,7 @@ public abstract class Robot extends LinearOpMode {
     public Servo droneTrigger = null;
 
     public double scoringAngle = 0;
-
+    FtcDashboard dashboard;
 
     public double robotHeading;
     double leftFrontPower;
@@ -165,10 +168,17 @@ public void lightsUpdate(){
     }
     public void IMU_Update(){
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        if(orientation.getRoll(AngleUnit.DEGREES) == 0 && orientation.getPitch(AngleUnit.DEGREES) == 0 && orientation.getYaw(AngleUnit.DEGREES) == 0) {
+            telemetry.addData("IMU failed?", "Re-initializing!");
+            RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+            RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.UP;
+            RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+            imu.initialize(new IMU.Parameters(orientationOnRobot));
+        }
         AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
         current = orientation.getYaw(AngleUnit.DEGREES);
         telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
-    robotHeading = orientation.getYaw(AngleUnit.RADIANS) ;
+        robotHeading = orientation.getYaw(AngleUnit.RADIANS) ;
 
     }
     public void IMUReset(){
@@ -204,6 +214,8 @@ public void lightsUpdate(){
 //        time -= 1;
 //        }
     public void Init() {
+        dashboard = FtcDashboard.getInstance();
+        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
        //telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 //TODO:FIX THIS
         colorSenseInit();

@@ -23,7 +23,7 @@ public class Teleop extends OdometryCode{
             telemetry.addData("endGameMode:", endGameMode);
 
 
-          // ProportionalFeedbackControl();
+           ProportionalFeedbackControl();
             GridRunner();
             speedControl();
             straferAlgorithm();

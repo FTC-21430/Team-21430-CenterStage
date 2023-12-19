@@ -6,19 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.acmerobotics.dashboard.FtcDashboard;
 
 @TeleOp(name="AprilTagTesting", group="Linear Opmode")
-public class AprilTagTesting extends CameraVision{
-private static void rotatePoints(double[] xPoints, double[] yPoints, double angle){
-    for (int i = 0; i < xPoints.length; i++) {
-        double x = xPoints[i];
-        double y = yPoints[i];
-        xPoints[i] = x * Math.cos(angle) - y * Math.sin(angle);
-        yPoints[i] = x * Math.sin(angle) + y * Math.cos(angle);
-    }
-}
+public class AprilTagTesting extends OdometryCode{
+
     @Override
     public void runOpMode() throws InterruptedException {
-        FtcDashboard dashboard = FtcDashboard.getInstance();
-        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+
         AprilTagInit();
         Init();
         waitForStart();

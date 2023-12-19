@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.sun.tools.javac.jvm.Gen;
 @Autonomous(name = "backUpAutoBlueLeft" , group = "CenterStage")
 @Disabled
-public class backUpAutoBlueLeft extends CameraVision {
+public class backUpAutoBlueLeft extends OdometryCode {
     @Override
     public void runOpMode() throws InterruptedException {
         Init();

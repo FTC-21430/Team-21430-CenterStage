@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-public abstract class AutonomousFunction extends CameraVision {
+public abstract class AutonomousFunction extends OdometryCode {
 
     public void PurplePixelRed() {
         if (Zone == 1) {
