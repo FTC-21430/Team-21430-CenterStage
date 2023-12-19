@@ -245,7 +245,7 @@ public void lightsUpdate(){
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        pixelLiftMotor.setPower(0.4);
+        pixelLiftMotor.setPower(0.8);
         fourBarServo.setPosition(0.92);
 
 
@@ -264,7 +264,7 @@ climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
       //  pixelLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        imu.resetYaw();
+       imu.resetYaw();
        liftPosition = pixelLiftMotor.getCurrentPosition();
     }
 
