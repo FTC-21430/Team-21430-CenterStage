@@ -28,7 +28,7 @@ public class RedLeftJellyfish extends AutonomousFunction {
         rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //IMUReset();
+        IMUReset();
         RobotX = -32;
         RobotY = -60;
         InitX= -37;

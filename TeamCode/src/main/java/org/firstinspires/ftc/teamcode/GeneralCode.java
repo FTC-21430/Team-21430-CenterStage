@@ -26,7 +26,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public abstract class GeneralCode extends Robot {
     int LiftManual = 0;
     boolean calabrate_Lift = false;
-
+    boolean firstLoop = false;
 
     int LiftMAX = 1400;
 
@@ -58,7 +58,7 @@ public abstract class GeneralCode extends Robot {
     boolean TurnRight;
     boolean bumper_old;
     float IntakeInput;
-    int safeLiftHeight = 250;
+    int safeLiftHeight = 350;
     boolean barHeightHigh = false;
 
 float communicationMode;
@@ -168,7 +168,7 @@ public void pixelLiftRunToPosition(int encoderTick){
 public void LaunchDrone(){
         hasDroneLaunched = true;
         droneTrigger.setPosition(0.62);
-    // line 131, this is a temporary number. TUNE WHEN YOU CAN TEST;
+    // line 170, this is a temporary number. TUNE WHEN YOU CAN TEST;
 }
 
     public void endGameThings(){
@@ -187,7 +187,7 @@ public void LaunchDrone(){
     }
 
     public void updateCommunication(){
-        if (currentState == scoreIdle || currentState == score || currentState == liftOut){
+        if (currentState == scoreIdle || currentState == score || currentState == liftOut && ColorSensorCheck(frontColorSensor) != "None"){
             if (ColorSensorCheck(frontColorSensor) == "White"){
             pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
             }
@@ -537,7 +537,10 @@ public void idleCode(){
         if (liftPosition <= safeLiftHeight) liftPosition = safeLiftHeight;
         telemetry.addData("liftPosition", liftPosition);
         pixelLiftMotor.setTargetPosition(liftPosition);
-        if(gamepad2.b) currentState = score;
+        if(gamepad2.b){
+            firstLoop = true;
+            currentState = score;
+        }
         if(gamepad2.dpad_down || endGameMode) {
             currentState = fourBarWait;
             fourBarServo.setPosition(0.96);
@@ -545,16 +548,31 @@ public void idleCode(){
         }
     }
     public void score(){
-        frontDepositorServo.setPosition(1);
-        if (ColorSensorCheck(frontColorSensor) == "None"){
-            frontDepositorServo.setPosition(0.5);
+
+    if (firstLoop){
+        if (ColorSensorCheck(backColorSensor) == "None"){
+            frontDepositorServo.setPosition(0);
+            backDepositorServo.setPosition(1);
+            stateMachineTimer = runtime.seconds();
+        }else{
+            frontDepositorServo.setPosition(0);
+            backDepositorServo.setPosition(1);
+            stateMachineTimer = runtime.seconds();
+        }
+        firstLoop = false;
+    }else{
+        telemetry.addData("bkwd", "yay");
+        if (stateMachineTimer <= runtime.seconds() - 0.5){
             currentState = scoreFinished;
         }
     }
+
+    }
     public void scoreFinished(){
         frontDepositorServo.setPosition(0.5);
+        backDepositorServo.setPosition(0.5);
         if (ColorSensorCheck(backColorSensor) != "None"){
-            currentState = depoTransition;
+            currentState = liftOut;
         }
         if (gamepad2.dpad_down){
             fourBarServo.setPosition(0.92);
@@ -563,13 +581,13 @@ public void idleCode(){
         }
     }
     public void depositorTransition(){
-        frontDepositorServo.setPosition(1);
-        backDepositorServo.setPosition(-1);
-        if (ColorSensorCheck(frontColorSensor) != "None"){
-            currentState = liftOut;
-            frontDepositorServo.setPosition(0.5);
-            backDepositorServo.setPosition(0.5);
-        }
+//        frontDepositorServo.setPosition(1);
+//        backDepositorServo.setPosition(-1);
+//        if (ColorSensorCheck(frontColorSensor) != "None"){
+//            currentState = liftOut;
+//            frontDepositorServo.setPosition(0.5);
+//            backDepositorServo.setPosition(0.5);
+//        }
 
     }
     public void fourBarWait(){

@@ -9,7 +9,7 @@ public abstract class AutonomousFunction extends CameraVision {
             intakeMotor.setPower(0.4);
             resetRuntime();
             while (3 >= getRuntime() && opModeIsActive()){
-               // ProportionalFeedbackControl();
+                ProportionalFeedbackControl();
             }
             //Remember to turn off
         } else if (Zone == 2) {
@@ -18,7 +18,7 @@ public abstract class AutonomousFunction extends CameraVision {
             intakeMotor.setPower(0.4);
             resetRuntime();
             while (3 >= getRuntime() && opModeIsActive()){
-                //ProportionalFeedbackControl();
+                ProportionalFeedbackControl();
             }
             RunToPoint(-37,-40);
 
@@ -30,9 +30,9 @@ public abstract class AutonomousFunction extends CameraVision {
             intakeMotor.setPower(0.4);
             resetRuntime();
             while (0.3 >= getRuntime() && opModeIsActive()){
-               // ProportionalFeedbackControl();
+                ProportionalFeedbackControl();
             }
-            //Remember to turn off
+//            Remember to turn off
         }}
     }
     public void PurplePixelBlue() {
@@ -42,7 +42,7 @@ public abstract class AutonomousFunction extends CameraVision {
             intakeMotor.setPower(0.4);
             resetRuntime();
             while (3 >= getRuntime() && opModeIsActive()){
-             //   ProportionalFeedbackControl();
+                ProportionalFeedbackControl();
             }
             //Remember to turn off
         } else if (Zone == 2) {
@@ -51,7 +51,7 @@ public abstract class AutonomousFunction extends CameraVision {
             intakeMotor.setPower(0.4);
             resetRuntime();
             while (3 >= getRuntime() && opModeIsActive()){
-//                ProportionalFeedbackControl();
+                ProportionalFeedbackControl();
             }
             RunToPoint(-37 -1,40);
 
@@ -63,7 +63,7 @@ public abstract class AutonomousFunction extends CameraVision {
                 intakeMotor.setPower(0.4);
                 resetRuntime();
                 while (0.3 >= getRuntime() && opModeIsActive()){
-//                    ProportionalFeedbackControl();
+                    ProportionalFeedbackControl();
                 }
                 //Remember to turn off
             }}

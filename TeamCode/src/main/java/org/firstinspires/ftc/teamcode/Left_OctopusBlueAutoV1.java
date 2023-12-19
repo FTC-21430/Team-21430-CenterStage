@@ -24,7 +24,7 @@ public class Left_OctopusBlueAutoV1 extends OdometryCode {
         rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-       // IMUReset();
+        IMUReset();
         OdometryInit(-63, 9);
         startOfsetRadians = -Math.PI/2;
         RunToPoint(-63, 9);

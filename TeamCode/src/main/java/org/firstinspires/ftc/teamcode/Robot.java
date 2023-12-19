@@ -164,17 +164,17 @@ public void lightsUpdate(){
 
     }
     public void IMU_Update(){
-//        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-//        AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
-//        current = orientation.getYaw(AngleUnit.DEGREES);
-//        telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
-//    robotHeading = orientation.getYaw(AngleUnit.RADIANS) ;
+        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
+        current = orientation.getYaw(AngleUnit.DEGREES);
+        telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
+    robotHeading = orientation.getYaw(AngleUnit.RADIANS) ;
 
     }
     public void IMUReset(){
-       // telemetry.addData("Yaw", "Reset" + "ing\n");
-       // imu.resetYaw();
-      //  Target = 0;
+        telemetry.addData("Yaw", "Reset" + "ing\n");
+        imu.resetYaw();
+        Target = 0;
     }
 
     public void ProportionalFeedbackControl(){
@@ -208,7 +208,7 @@ public void lightsUpdate(){
 //TODO:FIX THIS
         colorSenseInit();
         LightsInit();
-     //   imu = hardwareMap.get(IMU.class, "imu");
+        imu = hardwareMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
         RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.UP;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
@@ -216,7 +216,7 @@ public void lightsUpdate(){
         telemetry.update();
         // get a reference to our digitalTouch object.
 
-       // imu.initialize(new IMU.Parameters(orientationOnRobot));
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
         // set the digital channel to input.
 
         // Initialize the hardware variables. Note that the strings used here as parameters
@@ -245,7 +245,7 @@ public void lightsUpdate(){
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        pixelLiftMotor.setPower(0.4);
+        pixelLiftMotor.setPower(0.8);
         fourBarServo.setPosition(0.92);
 
 
@@ -264,7 +264,7 @@ climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
       //  pixelLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
-      // imu.resetYaw();
+       imu.resetYaw();
        liftPosition = pixelLiftMotor.getCurrentPosition();
     }
 
