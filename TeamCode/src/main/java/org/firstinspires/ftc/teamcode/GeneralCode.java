@@ -440,11 +440,13 @@ public void idleCode(){
     }
 
     public void intakeCancel(){
+
     intakeServo.setPosition(1);
         frontDepositorServo.setPosition(0.5);
         backDepositorServo.setPosition(0.5);
         pattern = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
         intakeMotor.setPower(0.9);
+
         transferMotor.setPower(-1);
         if (stateMachineTimer <= getRuntime() - 1) {
             currentState = idle;
@@ -473,9 +475,11 @@ public void idleCode(){
         }
 
     public void intakeDone() {
+
     intakeServo.setPosition(1);
         pattern = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
         intakeMotor.setPower(-0.8);
+
         transferMotor.setPower(-1);
         if (stateMachineTimer <= getRuntime() - 1) {
             currentState = scoreIdle;

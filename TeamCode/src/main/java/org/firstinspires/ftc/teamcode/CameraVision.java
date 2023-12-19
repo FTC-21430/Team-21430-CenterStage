@@ -29,13 +29,20 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
+import org.firstinspires.ftc.vision.apriltag.AprilTagPoseRaw;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.List;
@@ -73,12 +80,96 @@ public int Zone = 0;
     /**
      * The variable to store our instance of the TensorFlow Object Detection processor.
      */
-    private TfodProcessor tfod;
+
 
     /**
      * The variable to store our instance of the vision portal.
      */
-    private VisionPortal visionPortal;
+
+    private VisionPortal TensorFlowVisionPortal;
+    private VisionPortal AprilTagVisionPortal;
+    private AprilTagProcessor ATProcessor;
+    private TfodProcessor tfod;
+
+    public void AprilTagInit(){
+        ATProcessor = AprilTagProcessor.easyCreateWithDefaults();
+        AprilTagVisionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 1"), ATProcessor);
+    }
+
+
+
+
+    public void aprilTagFindRobotPosition(){
+
+        List<AprilTagDetection> detections = ATProcessor.getDetections();
+        for (AprilTagDetection detection : detections){
+            AprilTagMetadata metaData = detection.metadata;
+            AprilTagPoseRaw rawpose = detection.rawPose;
+
+            float tagInFieldX = metaData.fieldPosition.get(0);
+            float tagInFieldY = metaData.fieldPosition.get(1);
+            float tagInFieldZ = metaData.fieldPosition.get(2);
+            OpenGLMatrix tagInFieldR = new OpenGLMatrix(metaData.fieldOrientation.toMatrix());
+
+            OpenGLMatrix tagInFieldFrame = OpenGLMatrix.identityMatrix()
+                    .translated(tagInFieldX, tagInFieldY, tagInFieldZ)
+                    .multiplied(tagInFieldR);
+
+            float tagInCameraX = (float) rawpose.x;
+            float tagInCameraY = (float) rawpose.y;
+            float tagInCameraZ = (float) rawpose.z;
+            OpenGLMatrix tagInCameraR = new OpenGLMatrix((rawpose.R));
+
+            OpenGLMatrix cameraInTagFrame = OpenGLMatrix.identityMatrix()
+                    .translated(tagInCameraX, tagInCameraY, tagInCameraZ)
+                    .multiplied(tagInCameraR)
+                    .inverted();
+                    //TODO:Make these values true to the robot THESE VALUES ARE ONLY TEMPORARY
+            float cameraInRobotX = 5;
+            float cameraInRobotY = -4;
+            float cameraInRobotZ = 11.5f;
+            OpenGLMatrix cameraInRobotR = new Orientation(AxesReference.INTRINSIC, AxesOrder.XYZ,
+                    AngleUnit.DEGREES,-105,0,0,0)
+                    .getRotationMatrix();
+
+            OpenGLMatrix robotInCameraFrame = OpenGLMatrix.identityMatrix()
+                    .translated(cameraInRobotX, cameraInRobotY,cameraInRobotZ)
+                    .multiplied(cameraInRobotR)
+                    .inverted();
+
+            OpenGLMatrix robotInFieldFrame =
+                    tagInFieldFrame
+                            .multiplied(cameraInTagFrame)
+                            .multiplied(robotInCameraFrame);
+
+            VectorF robotInFieldTranslation = robotInFieldFrame.getTranslation();
+
+            Orientation robotInFieldOrientation = Orientation.getOrientation(robotInFieldFrame,
+                    AxesReference.INTRINSIC, AxesOrder.YXZ, AngleUnit.DEGREES);
+
+            float robotInFieldX = robotInFieldTranslation.get(0);
+            float robotInFieldY = robotInFieldTranslation.get(1);
+            float robotInFieldZ = robotInFieldTranslation.get(2);
+
+
+
+            float robotInFieldRoll = robotInFieldOrientation.firstAngle;
+            float robotInFieldPitch = robotInFieldOrientation.secondAngle;
+            float robotInFieldYaw = robotInFieldOrientation.thirdAngle;
+
+            telemetry.addData("robotX",robotInFieldX);
+            telemetry.addData("robotY",robotInFieldY);
+            telemetry.addData("robotZ", robotInFieldZ);
+
+            telemetry.addData("robotRoll", robotInFieldRoll);
+            telemetry.addData("robotPitch", robotInFieldPitch);
+            telemetry.addData("robotYaw", robotInFieldYaw);
+
+            telemetry.addData("decision Margin", detection.decisionMargin);
+
+
+        }
+    }
 
 
     public void CamInit() {
@@ -104,9 +195,9 @@ telemetry.addData("Zone: ", Zone);
 
     // Save CPU resources; can resume streaming when needed.
     if (gamepad1.dpad_down) {
-        visionPortal.stopStreaming();
+        TensorFlowVisionPortal.stopStreaming();
     } else if (gamepad1.dpad_up) {
-        visionPortal.resumeStreaming();
+        TensorFlowVisionPortal.resumeStreaming();
     }
 
     // Share the CPU.
@@ -116,7 +207,7 @@ telemetry.addData("Zone: ", Zone);
 public void CamEnd(){
 
         // Save more CPU resources when camera is no longer needed.
-        visionPortal.close();
+        TensorFlowVisionPortal.close();
 
     }   // end runOpMode()
 
@@ -174,7 +265,7 @@ public void CamEnd(){
         builder.addProcessor(tfod);
 
         // Build the Vision Portal, using the above settings.
-        visionPortal = builder.build();
+        TensorFlowVisionPortal = builder.build();
 
         // Set confidence threshold for TFOD recognitions, at any time.
         //tfod.setMinResultConfidence(0.75f);
