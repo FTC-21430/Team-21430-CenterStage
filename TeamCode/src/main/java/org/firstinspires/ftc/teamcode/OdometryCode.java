@@ -40,14 +40,12 @@ public void setTurn(float angle){
     public int Zone = 0;
     public double startOfsetRadians = 0;
     public void RobotAngles(){
-//
-//        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-//        RobotAngle = orientation.getYaw(AngleUnit.RADIANS);
-//        RobotAngle += startOfsetRadians;
+
+        YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        RobotAngle = orientation.getYaw(AngleUnit.RADIANS);
+        RobotAngle += startOfsetRadians;
     }
     public void UpdateOdometry(){
-        RobotAngle = Math.PI;
-
         DForward = (FrontRight + FrontLeft + BackRight + BackLeft)/4;
         DSideways = (-FrontRight + FrontLeft + BackRight - BackLeft)/4/1.2;
         RobotX = (InitX - DForward * Math.sin(RobotAngle)+ DSideways * Math.cos(RobotAngle));

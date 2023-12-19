@@ -204,7 +204,7 @@ public void lightsUpdate(){
 //        time -= 1;
 //        }
     public void Init() {
-        //telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+       //telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 //TODO:FIX THIS
         colorSenseInit();
         LightsInit();

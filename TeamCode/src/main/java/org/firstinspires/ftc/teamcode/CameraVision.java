@@ -93,11 +93,8 @@ public int Zone = 0;
 
     public void AprilTagInit(){
         ATProcessor = AprilTagProcessor.easyCreateWithDefaults();
-        AprilTagVisionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 1"), ATProcessor);
+        AprilTagVisionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 2"), ATProcessor);
     }
-
-
-
 
     public void aprilTagFindRobotPosition(){
 
@@ -125,11 +122,11 @@ public int Zone = 0;
                     .multiplied(tagInCameraR)
                     .inverted();
                     //TODO:Make these values true to the robot THESE VALUES ARE ONLY TEMPORARY
-            float cameraInRobotX = 5;
-            float cameraInRobotY = -4;
-            float cameraInRobotZ = 11.5f;
+            float cameraInRobotX = 1;
+            float cameraInRobotY = -4.5f;
+            float cameraInRobotZ = 1.75f;
             OpenGLMatrix cameraInRobotR = new Orientation(AxesReference.INTRINSIC, AxesOrder.XYZ,
-                    AngleUnit.DEGREES,-105,0,0,0)
+                    AngleUnit.DEGREES,-90,180,0,0)
                     .getRotationMatrix();
 
             OpenGLMatrix robotInCameraFrame = OpenGLMatrix.identityMatrix()
@@ -157,6 +154,14 @@ public int Zone = 0;
             float robotInFieldPitch = robotInFieldOrientation.secondAngle;
             float robotInFieldYaw = robotInFieldOrientation.thirdAngle;
 
+            RobotX = robotInFieldX;
+            RobotY = robotInFieldY;
+            InitX = robotInFieldX;
+            InitY = robotInFieldY;
+           // RobotAngle = robotInFieldYaw * (Math.PI/180);
+            startOfsetRadians -= RobotAngle - robotInFieldYaw * (Math.PI/180);
+
+
             telemetry.addData("robotX",robotInFieldX);
             telemetry.addData("robotY",robotInFieldY);
             telemetry.addData("robotZ", robotInFieldZ);
@@ -167,7 +172,7 @@ public int Zone = 0;
 
             telemetry.addData("decision Margin", detection.decisionMargin);
 
-
+            break;
         }
     }
 

@@ -5,7 +5,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.acmerobotics.dashboard:dashboard:0.4.14'
+    implementation ('com.acmerobotics.dashboard:dashboard:0.4.14'){
+        exclude group: 'org.firstinspires.ftc'
+    }
     implementation 'org.firstinspires.ftc:Inspection:9.0.1'
     implementation 'org.firstinspires.ftc:Blocks:9.0.1'
     implementation 'org.firstinspires.ftc:Tfod:9.0.1'
