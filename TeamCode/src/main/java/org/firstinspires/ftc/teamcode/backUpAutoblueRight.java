@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.sun.tools.javac.jvm.Gen;
 @Autonomous(name = "backUpAutoBlueRight" , group = "CenterStage")
+@Disabled
 public class backUpAutoblueRight extends OldCodeForPowerPlay {
     @Override
     public void runOpMode() throws InterruptedException {

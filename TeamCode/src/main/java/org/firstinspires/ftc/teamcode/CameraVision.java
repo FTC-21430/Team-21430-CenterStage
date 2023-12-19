@@ -56,7 +56,7 @@ import java.util.List;
  */
 //@TeleOp(name = "CameraVision", group = "Concept")
 
-public abstract class CameraVision extends OldCodeForPowerPlay {
+public abstract class CameraVision extends OdometryCode {
 public float camBarrierONE=200;
 public float camBarrierTwo=400;
 public double x;
@@ -67,13 +67,14 @@ public int Zone = 0;
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
     // this is only used for Android Studio when using models in Assets.
-    private static final String TFOD_MODEL_ASSET = "model_20231014_120906.tflite";
+    private static final String TFOD_MODEL_ASSET = "Team_Props.tflite";
     // TFOD_MODEL_FILE points to a model file stored onboard the Robot Controller's storage,
     // this is used when uploading models directly to the RC using the model upload interface.
     private static final String TFOD_MODEL_FILE = "/sdcard/FIRST/tflitemodels/model_20231014_120906.tflite";
     // Define the labels recognized in the model for TFOD (must be in training order!)
     private static final String[] LABELS = {
-            "white pixel",
+            "blue-prop",
+            "red-prop",
     };
 
     /**
@@ -182,9 +183,12 @@ public int Zone = 0;
     }
 public void CamRun(int timeoutS) {
     resetRuntime();
-   while(timeoutS <= runtime.seconds() && opModeIsActive()){
+   while(timeoutS >= getRuntime() && opModeIsActive()){
     telemetryTfod();
 Zone = findZone();
+
+telemetry.addData("Zone: ", Zone);
+
 
     // Push telemetry to the Driver Station.
     telemetry.update();
@@ -197,7 +201,7 @@ Zone = findZone();
     }
 
     // Share the CPU.
-    sleep(20);
+   // sleep(20);
 
 }}
 public void CamEnd(){
@@ -276,15 +280,15 @@ public void CamEnd(){
      */
     public int findZone(){
         if (x <= camBarrierONE){
+            telemetry.addData("Working:","Yes");
             return 1;
         }else if(x >= camBarrierONE && x <=camBarrierTwo){
             return 2;
-        }else if(x>= camBarrierTwo){
+        }else if(x >= camBarrierTwo){
             return 3;
         }else{
             return 2;
         }
-
     }
     private void telemetryTfod() {
 

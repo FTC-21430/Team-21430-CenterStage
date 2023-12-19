@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode;
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+//TODO:fix this
+//import com.acmerobotics.dashboard.FtcDashboard;
+//import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -41,6 +43,7 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor rightFrontMotor = null;
     public DcMotor rightBackMotor = null;
     public float controlHubChange = 51;
+    int liftPosition;
     enum operatorState
     {
         idle,
@@ -58,6 +61,10 @@ public abstract class Robot extends LinearOpMode {
         fourBarWait,
         fourBarDock,
         liftDock,
+        scoreDocked,
+        transferDocked,
+        dockedScoreFinished,
+        highFourBarExtend,
     }
     public operatorState currentState = operatorState.idle;
 
@@ -71,6 +78,9 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor transferMotor = null;
     public Servo droneTrigger = null;
 
+    public double scoringAngle = 0;
+
+
     public double robotHeading;
     double leftFrontPower;
     double leftBackPower;
@@ -78,10 +88,10 @@ public abstract class Robot extends LinearOpMode {
     double rightBackPower;
     boolean DriverOrientationDriveMode = true;
     boolean Driver1Leftbumper;
-    float startingangle;
+    double startingangle;
 
 
-    float gain = 2;
+    float gain = 5;
     final float[] hsvValues = new float[3];
 
     NormalizedColorSensor backColorSensor;
@@ -111,7 +121,7 @@ public abstract class Robot extends LinearOpMode {
         backColorSensor = hardwareMap.get(NormalizedColorSensor.class, "backColorSensor");
     }
     public void updateColorSensors(){
-        gain += 0.005;
+
         frontColorSensor.setGain(gain);
         backColorSensor.setGain(gain);
         }
@@ -123,25 +133,12 @@ public abstract class Robot extends LinearOpMode {
 
 
     public void LightsInit(){
-        //Commented out so when you use code without the blinkin hooked up to the robot, the robot does not scream at you LOL
-//        blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver .class, "blinkin");
-//        pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
-//        blinkinLedDriver.setPattern(pattern);
+        blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver .class, "blinkin");
+        pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
+        blinkinLedDriver.setPattern(pattern);
     }
 public void lightsUpdate(){
-        //Commented out because the buttons are just for debug :)
-//    if (gamepad1.dpad_up) pattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE;
-//    if (gamepad1.dpad_down) pattern = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
-//    if (gamepad1.dpad_left) pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
-//    if (gamepad1.dpad_right) pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LARSON_SCANNER;
-//    if (gamepad1.a)  pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
-//
-//    if (gamepad1.x)      pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET;
-//
-//    if (gamepad1.b) pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
-//
-//    if (gamepad1.y)  pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
-//    blinkinLedDriver.setPattern(pattern);
+        blinkinLedDriver.setPattern(pattern);
 }
     public void straferAlgorithm(){
         DriverOrientationDriveMode = false;
@@ -155,16 +152,21 @@ public void lightsUpdate(){
             drive = temp;
         }
 
+        if (gamepad1.a) {
+            drive *= -1;
+            slide *= -1;
+        }
+
         leftFrontPower = Range.clip(drive + slide + turn, -1.0, 1.0);
         leftBackPower  =Range.clip(drive - slide + turn,-1.0, 1.0 );
         rightFrontPower=Range.clip(drive - slide - turn, -1.0, 1.0);
         rightBackPower =Range.clip(drive + slide - turn, -1.0, 1.0);
 
     }
-    public void IMUstuffs(){
+    public void IMU_Update(){
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
-        current = orientation.getYaw(AngleUnit.DEGREES) + startingangle;
+        current = orientation.getYaw(AngleUnit.DEGREES);
         telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
     robotHeading = orientation.getYaw(AngleUnit.RADIANS) ;
 
@@ -176,6 +178,8 @@ public void lightsUpdate(){
     }
 
     public void ProportionalFeedbackControl(){
+        telemetry.addData("angle", current);
+        telemetry.addData("target", Target);
         error = Wrap((Target - current));
         if (gamepad1.right_stick_x != 0){
             Target = current;
@@ -200,11 +204,13 @@ public void lightsUpdate(){
 //        time -= 1;
 //        }
     public void Init() {
-        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-
+        //telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+//TODO:FIX THIS
+        colorSenseInit();
+        LightsInit();
         imu = hardwareMap.get(IMU.class, "imu");
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.UP;
-        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.UP;
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -228,28 +234,38 @@ public void lightsUpdate(){
         backDepositorServo = hardwareMap.get(Servo.class, "backDepo");
         frontDepositorServo = hardwareMap.get(Servo.class, "frontDepo");
         droneTrigger = hardwareMap.get(Servo.class, "DroneTrigger");
-        pixelLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        pixelLiftMotor.setTargetPosition(1);
         transferMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        pixelLiftMotor.setTargetPosition(1);
+        pixelLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         pixelLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
         climberMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        droneTrigger.setPosition(0.9);
-        intakeServo.setPosition(1);
+        pixelLiftMotor.setPower(0.8);
+        fourBarServo.setPosition(0.92);
 
-        //ClimberLimitSwitchBottom = hardwareMap.get(DigitalChannel.class, "Climber_Limit_Switch_Bottom");
-        //ClimberLimitSwitchBottom.setMode(DigitalChannel.Mode.INPUT);
 
-        // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
-        // Pushing the left stick forward MUST make robot go forward. So adjust these two lines based on your first test drive.
-        // Note: The settings here assume direct drive on left and right wheels.  Gear Reduction or 90 Deg drives may require direction flips
-        leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
+climberMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        droneTrigger.setPosition(0.4);
+        intakeServo.setPosition(0.8);
+
+        ClimberLimitSwitchBottom = hardwareMap.get(DigitalChannel.class, "Climber_Limit_Switch_Bottom");
+        ClimberLimitSwitchBottom.setMode(DigitalChannel.Mode.INPUT);
+
+               leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
         rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
         rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
-        imu.resetYaw();
+
+      //  pixelLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
+       imu.resetYaw();
+       liftPosition = pixelLiftMotor.getCurrentPosition();
     }
 
 
@@ -266,9 +282,9 @@ public void lightsUpdate(){
                 relativeLayout.setBackgroundColor(Color.HSVToColor(hsvValues));
             }
         });
-        telemetry.addData("Color Data:H", hsvValues[0]);
-        telemetry.addData("Color Data:S", hsvValues[1]);
-        telemetry.addData("Color Data:V", hsvValues[2]);
+//        telemetry.addData("Color Data:H", hsvValues[0]);
+//        telemetry.addData("Color Data:S", hsvValues[1]);
+//        telemetry.addData("Color Data:V", hsvValues[2]);
         if (((DistanceSensor) sensor).getDistance(DistanceUnit.CM) <= 3) {
             if (hsvValues[2] > .13) {
                 //white pixel
