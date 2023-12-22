@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.teamcode.Robot.operatorState.extendLift;
+import static org.firstinspires.ftc.teamcode.Robot.operatorState.liftOut;
+
 public abstract class AutonomousFunction extends OdometryCode {
 
     public void PurplePixelRed() {
@@ -69,25 +72,34 @@ public abstract class AutonomousFunction extends OdometryCode {
             }}
     }
             public void YellowPixel () {
-                Target = 0;
-                RunToPoint(49, -36);
-                intakeMotor.setPower(0);
-                RunToPoint(45, -36);
-                if (Zone == 1) {
-                    RunToPoint(45, -30);
-                    liftOut();
-                    extendFourBar();
-                    score();
-                } else if (Zone == 2) {
-                    liftOut();
-                    extendFourBar();
-                    score();
-                } else if (Zone == 3) {
-                    RunToPoint(45, -42);
-                    liftOut();
-                    extendFourBar();
-                    score();
+                currentState = extendLift;
+                stateMachineTimer = getRuntime();
+                pixelLiftMotor.setTargetPosition(safeLiftHeight);
+                while   (pixelLiftMotor.getCurrentPosition() <= safeLiftHeight){
+                    keepAtPoint(RobotX,RobotY);
+                    ProportionalFeedbackControlAuto();
                 }
+
+                barHeightHigh = true;
+                fourBarServo.setPosition(0.015);
+                stateMachineTimer = getRuntime();
+                while (stateMachineTimer >= getRuntime() - 1) {
+                    keepAtPoint(RobotX,RobotY);
+                    ProportionalFeedbackControlAuto();
+
+                }
+                liftPosition = safeLiftHeight;
+
+                RunToPoint(48.5, -36);
+                backDepositorServo.setPosition(1);
+                frontDepositorServo.setPosition(0);
+                stateMachineTimer = getRuntime();
+                while (stateMachineTimer > getRuntime()-2){
+                 //   ProportionalFeedbackControl();
+                    keepAtPoint(RobotX,RobotY);
+                }
+                RunToPoint(44, -36);
+             //   RunToPoint();
             }
 
             public void Park(){

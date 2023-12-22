@@ -1,39 +1,44 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-@TeleOp(name="TESTING", group="Linear Opmode")
-public class TESTING extends GeneralCode {
 
+@Autonomous(name = "TESTING" , group = "CenterStage")
+public class TESTING extends AutonomousFunction {
     @Override
     public void runOpMode() {
-        double height = 0.96;
-        boolean old = false;
-        boolean oldB = false;
         Init();
+        AprilTagInit();
+       // CamInit();
+        robotHeading = Math.PI/2;
+        Target = 90;
+        startOfsetRadians = Math.PI/2;
         waitForStart();
-        while (opModeIsActive()){
-            // .99
-            // .015
-            if (gamepad2.a) height += 0.0008;
-            if (gamepad2.b) height -= 0.0008;
-            if (height >= 0.96) height = 0.96;
-            if (height <= 0) height = 0;
-            fourBarServo.setPosition(height);
-            telemetry.addData("currentSate", currentState);
-            telemetry.addData("height", height);
-            telemetry.addData("oldA", old);
-            telemetry.addData("oldB", oldB);
-            //  telemetry.addData("LiftEncoder count:", pixelLiftMotor.getCurrentPosition());
-            telemetry.update();
-            old = gamepad2.a;
-            oldB = gamepad2.b;
-        }
+        runtime.reset();
+        leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        leftFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        }
+        leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        IMUReset();
+        RobotX = 36;
+        RobotY = -36;
+        InitX= 36;
+        InitY = -36;
+       // CamRun(3);
+
+       // PurplePixelRed();
+        YellowPixel();
+        //Park();
+
     }
-
-
+}

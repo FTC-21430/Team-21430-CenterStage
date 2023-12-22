@@ -30,6 +30,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public abstract class Robot extends LinearOpMode {
     IMU imu;
+    boolean resettingImu = false;
     // Declare OpMode members.
     double Target = 0;
     double error = 0;
@@ -92,7 +93,7 @@ public abstract class Robot extends LinearOpMode {
     boolean DriverOrientationDriveMode = true;
     boolean Driver1Leftbumper;
     double startingangle;
-
+    public double startOfsetRadians = 0;
 
     float gain = 5;
     final float[] hsvValues = new float[3];
@@ -158,6 +159,7 @@ public void lightsUpdate(){
         if (gamepad1.a) {
             drive *= -1;
             slide *= -1;
+
         }
 
         leftFrontPower = Range.clip(drive + slide + turn, -1.0, 1.0);
@@ -168,18 +170,30 @@ public void lightsUpdate(){
     }
     public void IMU_Update(){
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        if(orientation.getRoll(AngleUnit.DEGREES) == 0 && orientation.getPitch(AngleUnit.DEGREES) == 0 && orientation.getYaw(AngleUnit.DEGREES) == 0) {
-            telemetry.addData("IMU failed?", "Re-initializing!");
-            RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
-            RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.UP;
-            RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
-            imu.initialize(new IMU.Parameters(orientationOnRobot));
+        if(orientation.getRoll(AngleUnit.DEGREES) == 0 && orientation.getPitch(AngleUnit.DEGREES) == 0
+                && orientation.getYaw(AngleUnit.DEGREES) == 0) {
+            if(!resettingImu) {
+                telemetry.addData("IMU failed?", "Re-initializing!");
+                resettingImu = true;
+                RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+                RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.UP;
+                RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+                imu.initialize(new IMU.Parameters(orientationOnRobot));
+            }
         }
+        else
+        {
+            resettingImu = false;
+        }
+        telemetry.addData("resettingIMU", resettingImu);
         AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
-        current = orientation.getYaw(AngleUnit.DEGREES);
-        telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
+
+
         robotHeading = orientation.getYaw(AngleUnit.RADIANS) ;
 
+        RobotAngle = orientation.getYaw(AngleUnit.RADIANS);
+        RobotAngle += startOfsetRadians;
+        telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", RobotAngle);
     }
     public void IMUReset(){
         telemetry.addData("Yaw", "Reset" + "ing\n");
@@ -188,11 +202,13 @@ public void lightsUpdate(){
     }
 
     public void ProportionalFeedbackControl(){
+        if(resettingImu)
+            return;
         telemetry.addData("angle", current);
         telemetry.addData("target", Target);
-        error = Wrap((Target - current));
+        error = Wrap((Target - (RobotAngle * 180 / Math.PI)));
         if (gamepad1.right_stick_x != 0){
-            Target = current;
+            Target = (RobotAngle * 180 / Math.PI);
         }
 
         turn -= error/20;

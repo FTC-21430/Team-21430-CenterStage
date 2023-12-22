@@ -565,7 +565,7 @@ public void idleCode(){
         }
         firstLoop = false;
     }else{
-        telemetry.addData("bkwd", "yay");
+      //  telemetry.addData("bkwd", "yay");
         if (stateMachineTimer <= runtime.seconds() - 0.5){
             currentState = scoreFinished;
         }
@@ -576,7 +576,7 @@ public void idleCode(){
         frontDepositorServo.setPosition(0.5);
         backDepositorServo.setPosition(0.5);
         if (ColorSensorCheck(backColorSensor) != "None"){
-            currentState = liftOut;
+            currentState = depoTransition;
         }
         if (gamepad2.dpad_down){
             fourBarServo.setPosition(0.92);
@@ -585,13 +585,16 @@ public void idleCode(){
         }
     }
     public void depositorTransition(){
-//        frontDepositorServo.setPosition(1);
-//        backDepositorServo.setPosition(-1);
-//        if (ColorSensorCheck(frontColorSensor) != "None"){
-//            currentState = liftOut;
-//            frontDepositorServo.setPosition(0.5);
-//            backDepositorServo.setPosition(0.5);
-//        }
+        if (firstLoop){
+                frontDepositorServo.setPosition(0);
+                stateMachineTimer = runtime.seconds();
+            firstLoop = false;
+        }else{
+
+            if (stateMachineTimer <= runtime.seconds() - 0.5){
+                currentState = liftOut;
+            }
+        }
 
     }
     public void fourBarWait(){

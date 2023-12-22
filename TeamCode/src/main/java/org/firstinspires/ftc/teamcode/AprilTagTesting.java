@@ -19,7 +19,7 @@ public class AprilTagTesting extends OdometryCode{
             TESTfRight = rightFrontMotor.getCurrentPosition();
             TESTbLeft = leftBackMotor.getCurrentPosition();
             TESTbRight = rightBackMotor.getCurrentPosition();
-            RobotAngles();
+            IMU_Update();
             UpdateEncoders();
             UpdateOdometry();
             aprilTagFindRobotPosition();
