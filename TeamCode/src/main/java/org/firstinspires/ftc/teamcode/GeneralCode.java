@@ -27,21 +27,14 @@ public abstract class GeneralCode extends Robot {
     int LiftManual = 0;
     boolean calabrate_Lift = false;
     boolean firstLoop = false;
-
     int LiftMAX = 1400;
-
-
     boolean leftTurnold = false;
     boolean rightTurnold = false;
-
     double intakeHeight = 0;
-
     boolean endGameMode = false;
-
     boolean pixelPickerUp = false;
     int pixelPickerCurrent = 6;
     boolean rightBumperOLD = false;
-
     boolean hasDroneLaunched = false;
     double stateMachineTimer;
     boolean oldEndGameMode = false;
@@ -60,9 +53,7 @@ public abstract class GeneralCode extends Robot {
     float IntakeInput;
     int safeLiftHeight = 350;
     boolean barHeightHigh = false;
-
-float communicationMode;
-
+    float communicationMode;
 double liftTimeOut;
 public void pixelLiftRunToPosition(int encoderTick){
 
@@ -85,12 +76,8 @@ public void pixelLiftRunToPosition(int encoderTick){
         lowJunction = gamepad2.dpad_left;
         groundJunction = gamepad2.dpad_down;
         //toggle Driver Orientation Mode
-
         communicationMode = gamepad2.right_trigger;
-
     }
-
-
     public void GridRunner() {
     // TODO: make it easy to not break the robot. :(
        // if (gamepad1.a) Target = scoringAngle;
@@ -147,7 +134,7 @@ public void pixelLiftRunToPosition(int encoderTick){
     }
 
     public void Climber() {
-        telemetry.addData("climber power", climberMotor.getPower());
+
 //        if (hasDroneLaunched){
             telemetry.addData("encoderCount:", climberMotor.getCurrentPosition());
 //
@@ -155,19 +142,21 @@ public void pixelLiftRunToPosition(int encoderTick){
 //        ClimberLimitSwitchBottom.getState() == false && climberMotor.getCurrentPosition()<=100
             if (gamepad2.dpad_down  && !ClimberLimitSwitchBottom.getState()) {
                 climberMotor.setPower(1);
-            } else if (gamepad2.dpad_up && climberMotor.getCurrentPosition() >= -25000) {
-
-                climberMotor.setPower(-0.9);
-            } else {
+            } else if (gamepad2.dpad_up && climberMotor.getCurrentPosition() >= -18700) {
+                climberMotor.setPower(-1);
+            } else if(gamepad2.dpad_up){
+                climberMotor.setPower(-0.1);
+            }else{
                 climberMotor.setPower(0);
             }
+        telemetry.addData("climber power", climberMotor.getPower());
         }
 
 
 //    }
 public void LaunchDrone(){
         hasDroneLaunched = true;
-        droneTrigger.setPosition(0.62);
+        droneTrigger.setPosition(0.67);
     // line 170, this is a temporary number. TUNE WHEN YOU CAN TEST;
 }
 
@@ -187,17 +176,17 @@ public void LaunchDrone(){
     }
 
     public void updateCommunication(){
-        if (currentState == scoreIdle || currentState == score || currentState == liftOut && ColorSensorCheck(frontColorSensor) != "None"){
-            if (ColorSensorCheck(frontColorSensor) == "White"){
+        if (currentState == scoreIdle || currentState == score || currentState == liftOut && ColorSensorCheck(backColorSensor) != "None"){
+            if (ColorSensorCheck(backColorSensor) == "White"){
             pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
             }
-            if (ColorSensorCheck(frontColorSensor) == "Yellow"){
+            if (ColorSensorCheck(backColorSensor) == "Yellow"){
                 pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
             }
-            if (ColorSensorCheck(frontColorSensor) == "Green"){
+            if (ColorSensorCheck(backColorSensor) == "Green"){
             pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
             }
-            if (ColorSensorCheck(frontColorSensor) == "Purple"){
+            if (ColorSensorCheck(backColorSensor) == "Purple"){
                 pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET;
             }
         }
