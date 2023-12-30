@@ -24,6 +24,7 @@ public abstract class OdometryCode extends CameraVision {
     public float TESTfLeft, TESTfRight, TESTbLeft, TESTbRight;
     public boolean CurrentAlign = true;
     public boolean GamepadAOld;
+public double Speed = 0.5;
 
     public void ProportionalFeedbackControlAuto(){
         error = Wrap(((Target - ((180 * RobotAngle) /Math.PI))));
@@ -88,8 +89,8 @@ public void setTurn(float angle){
         RunToPoint(TargetX, TargetY, 0.4, Timeout);
     }
     public void RunToPoint(double TargetX, double TargetY, double Circle, double Timeout){
-        double Timer = runtime.seconds();
-        while(distanceCircle(TargetX, TargetY) > Circle && opModeIsActive() && Timer >= (runtime.seconds() - Timeout))
+        double StartTime = runtime.seconds();
+        while(distanceCircle(TargetX, TargetY) > Circle && opModeIsActive() && StartTime >= (runtime.seconds() - Timeout))
         {
             TESTfLeft = leftFrontMotor.getCurrentPosition();
             TESTfRight = rightFrontMotor.getCurrentPosition();
@@ -98,13 +99,15 @@ public void setTurn(float angle){
             IMU_Update();
             UpdateEncoders();
             UpdateOdometry();
-            float[] arrayOutput = aprilTagFindRobotPosition();
-            if (arrayOutput[0] != 0 && arrayOutput[1] != 0 && arrayOutput[2] != 0) {
-                RobotX = arrayOutput[0];
-                RobotY = arrayOutput[1];
-                InitX = arrayOutput[0];
-                InitY = arrayOutput[1];
-                startOfsetRadians -= RobotAngle - arrayOutput[2];
+            if(aprilTagProcessorActive) {
+                float[] arrayOutput = aprilTagFindRobotPosition();
+                if (arrayOutput[0] != 0 && arrayOutput[1] != 0 && arrayOutput[2] != 0) {
+                    RobotX = arrayOutput[0];
+                    RobotY = arrayOutput[1];
+                    InitX = arrayOutput[0];
+                    InitY = arrayOutput[1];
+                    startOfsetRadians -= RobotAngle - arrayOutput[2];
+                }
             }
             telemetry.update();
             double l = 17.5/2;
@@ -153,18 +156,18 @@ public void setTurn(float angle){
             GridRunner();
 
             straferAlgorithm();
-            leftFrontPower=leftFrontPower / 2;
-            leftBackPower = leftBackPower / 2;
-            rightFrontPower = rightFrontPower / 2;
-            rightBackPower = rightBackPower / 2;
-            if (leftFrontPower <= 0.18 && leftFrontPower>=-0.07) leftFrontPower = 0.07;
-            if (leftBackPower <= 0.18  && rightFrontPower>=-0.07) leftBackPower = 0.07;
-            if (rightFrontPower <= 0.18  && leftBackPower>=-0.07) rightFrontPower = 0.07;
-            if (rightBackPower <= 0.18  && rightBackPower>=-0.07) rightBackPower = 0.07;
-            if (leftFrontPower >= -0.18 && leftFrontPower<=-0.07) leftFrontPower = -0.07;
-            if (leftBackPower >= -0.18  && rightFrontPower<=-0.07) leftBackPower = -0.07;
-            if (rightFrontPower >= -0.18  && leftBackPower<=-0.07) rightFrontPower = -0.07;
-            if (rightBackPower >= -0.18  && rightBackPower<=-0.07) rightBackPower = -0.07;
+            leftFrontPower=leftFrontPower * Speed;
+            leftBackPower = leftBackPower * Speed;
+            rightFrontPower = rightFrontPower * Speed;
+            rightBackPower = rightBackPower *Speed;
+//            if (leftFrontPower <= 0.18 && leftFrontPower>=-0.07) leftFrontPower = 0.07;
+//            if (leftBackPower <= 0.18  && rightFrontPower>=-0.07) leftBackPower = 0.07;
+//            if (rightFrontPower <= 0.18  && leftBackPower>=-0.07) rightFrontPower = 0.07;
+//            if (rightBackPower <= 0.18  && rightBackPower>=-0.07) rightBackPower = 0.07;
+//            if (leftFrontPower >= -0.18 && leftFrontPower<=-0.07) leftFrontPower = -0.07;
+//            if (leftBackPower >= -0.18  && rightFrontPower<=-0.07) leftBackPower = -0.07;
+//            if (rightFrontPower >= -0.18  && leftBackPower<=-0.07) rightFrontPower = -0.07;
+//            if (rightBackPower >= -0.18  && rightBackPower<=-0.07) rightBackPower = -0.07;
             setMotorPower();
 
 

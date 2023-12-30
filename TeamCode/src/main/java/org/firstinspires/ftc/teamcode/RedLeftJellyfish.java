@@ -8,36 +8,44 @@ public class RedLeftJellyfish extends AutonomousFunction {
     @Override
     public void runOpMode() {
         Init();
-      //  CamInit();
-        AprilTagInit();
+        CamInit();
         robotHeading = 0;
         Target = 0;
         startOfsetRadians = 0;
         waitForStart();
         runtime.reset();
-      //  IMUReset();
         RobotX = -41;
         RobotY = -62;
         InitX= -41;
         InitY = -62;
-        //CamRun(3);
-        Zone = 2;
+    //    Zone = 2;
+        CamRun(3);
+        Zone = 3;
         PurplePixelRed();
 
-        RunToPoint(-37,-38,1,10);
-        RunToPoint(-50,-58,1,10);
-        RunToPoint(-60,-42,1,10);
-        RunToPoint(-59,-17,2,10);
-        RunToPoint(-41,-11,3,10);
-        RunToPoint(12,-11,1,10);
-        RunToPoint(36,-13,1,10);
-        setTurn(90);
-        RunToPoint(36,-36,2,10);
 
+         Speed = 0.6;
+        CamEnd();
+        AprilTagInit();
+      //  RunToPoint(-37,-38,2,5);
+        RunToPoint(-50,-58,2,5);
+        RunToPoint(-63.7,-42,2,5);
+        RunToPoint(-61,-17,2,5);
+        RunToPoint(-41,-13,2,5);
+        setTurn(90);
+        resetRuntime();
+        while (0.4 >= getRuntime() && opModeIsActive()){
+            ProportionalFeedbackControl();
+        }
+        Speed = 0.8;
+        RunToPoint(12,-13,2,5);
+        RunToPoint(36,-13,2,5);
+        RunToPoint(36,-36,3,5);
+        Speed = 0.5;
 
 
         YellowPixel();
-        //Park();
+        Park();
 
         }
     }

@@ -90,8 +90,10 @@ public int Zone = 0;
     private VisionPortal AprilTagVisionPortal;
     private AprilTagProcessor ATProcessor;
     private TfodProcessor tfod;
+    public boolean aprilTagProcessorActive = false;
 
     public void AprilTagInit(){
+        aprilTagProcessorActive = true;
         ATProcessor = AprilTagProcessor.easyCreateWithDefaults();
         AprilTagVisionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 2"), ATProcessor);
     }
