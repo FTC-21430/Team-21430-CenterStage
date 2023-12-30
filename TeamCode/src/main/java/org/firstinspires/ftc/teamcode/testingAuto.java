@@ -37,23 +37,23 @@ public class testingAuto extends AutonomousFunction {
         InitY = -60;
 
 
-        RunToPoint(-37,-37);
+        RunToPoint(-37,-37,1);
         setTurn(90);
-        RunToPoint(-59,-36);
-        RunToPoint(-57,-36);
-        RunToPoint(-37,-12);
-        RunToPoint(11,-9);
-        RunToPoint(37,-12);
-        RunToPoint(37,-36);
-        RunToPoint(48,-36);
+        RunToPoint(-59,-36,1);
+        RunToPoint(-57,-36,1);
+        RunToPoint(-37,-12,1);
+        RunToPoint(11,-9,1);
+        RunToPoint(37,-12,1);
+        RunToPoint(37,-36,1);
+        RunToPoint(48,-36,1);
 
-        RunToPoint(11,-60);
-        RunToPoint(-38,-60);
-        RunToPoint(-60,-24);
-        RunToPoint(-49,-13);
-        RunToPoint(-30,-12);
-        RunToPoint(12,-11);
-        RunToPoint(61,-12);
+        RunToPoint(11,-60,1);
+        RunToPoint(-38,-60,1);
+        RunToPoint(-60,-24,1);
+        RunToPoint(-49,-13,1);
+        RunToPoint(-30,-12,1);
+        RunToPoint(12,-11,1);
+        RunToPoint(61,-12,1);
 
 
         //YellowPixel();

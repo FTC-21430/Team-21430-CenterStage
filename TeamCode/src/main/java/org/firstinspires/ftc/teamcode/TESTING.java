@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @Autonomous(name = "TESTING" , group = "CenterStage")
 public class TESTING extends AutonomousFunction {
     @Override
-    public void runOpMode() {
+    public void runOpMode () throws InterruptedException {
         Init();
         AprilTagInit();
        // CamInit();
@@ -29,7 +29,7 @@ public class TESTING extends AutonomousFunction {
         rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        IMUReset();
+        //IMUReset();
         RobotX = 36;
         RobotY = -36;
         InitX= 36;

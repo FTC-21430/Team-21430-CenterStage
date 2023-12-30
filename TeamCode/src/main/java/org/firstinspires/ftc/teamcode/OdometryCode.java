@@ -6,6 +6,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
+import java.sql.Time;
+
 public abstract class OdometryCode extends CameraVision {
     public double InitX, InitY;
     public double DForward, DSideways;
@@ -82,9 +84,12 @@ public void setTurn(float angle){
 
 
     }
-    public void RunToPoint(double TargetX, double TargetY){
-
-        while(distanceCircle(TargetX, TargetY) > 0.4 && opModeIsActive())
+    public void RunToPoint(double TargetX, double TargetY, double Timeout) {
+        RunToPoint(TargetX, TargetY, 0.4, Timeout);
+    }
+    public void RunToPoint(double TargetX, double TargetY, double Circle, double Timeout){
+        double Timer = runtime.seconds();
+        while(distanceCircle(TargetX, TargetY) > Circle && opModeIsActive() && Timer >= (runtime.seconds() - Timeout))
         {
             TESTfLeft = leftFrontMotor.getCurrentPosition();
             TESTfRight = rightFrontMotor.getCurrentPosition();
@@ -96,10 +101,10 @@ public void setTurn(float angle){
             float[] arrayOutput = aprilTagFindRobotPosition();
             if (arrayOutput[0] != 0 && arrayOutput[1] != 0 && arrayOutput[2] != 0) {
                 RobotX = arrayOutput[0];
-            RobotY = arrayOutput[1];
-            InitX = arrayOutput[0];
-            InitY = arrayOutput[1];
-            startOfsetRadians -= RobotAngle - arrayOutput[2];
+                RobotY = arrayOutput[1];
+                InitX = arrayOutput[0];
+                InitY = arrayOutput[1];
+                startOfsetRadians -= RobotAngle - arrayOutput[2];
             }
             telemetry.update();
             double l = 17.5/2;
@@ -134,12 +139,13 @@ public void setTurn(float angle){
             //UpdateControls();
 //            drive = -gamepad1.left_stick_y;
 //            slide = gamepad1.left_stick_x;
-           // turn = 0;
+             turn = 0;
 
-            IMU_Update();
 
-           // IMU_Update();
+
+            // IMU_Update();
             //ProportionalFeedbackControl();
+            ProportionalFeedbackControlAuto();
             UpdateEncoders();
 
             UpdateOdometry();
@@ -169,6 +175,7 @@ public void setTurn(float angle){
         rightBackMotor.setPower(0);
 
     }
+
     public double distanceCircle(double x, double y){
         return(Math.sqrt((x-RobotX)*(x-RobotX) + (y-RobotY)*(y-RobotY)));
     }

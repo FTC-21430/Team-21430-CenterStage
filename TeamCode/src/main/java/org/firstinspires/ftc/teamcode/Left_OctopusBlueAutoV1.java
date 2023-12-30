@@ -27,18 +27,18 @@ public class Left_OctopusBlueAutoV1 extends OdometryCode {
         IMUReset();
         OdometryInit(-63, 9);
         startOfsetRadians = -Math.PI/2;
-        RunToPoint(-63, 9);
-        RunToPoint(-50,30);
+        RunToPoint(-63, 9,1);
+        RunToPoint(-50,30,1);
         setTurn(180);
-        RunToPoint(-37,44);
+        RunToPoint(-37,44,1);
 
-        RunToPoint(-12,44);
-        RunToPoint(-11,-8);
-        RunToPoint(-12,-57);
-        RunToPoint(-11,44);
-        RunToPoint(-37,43);
-        RunToPoint(-61,43);
-        RunToPoint(-61,60);
+        RunToPoint(-12,44,1);
+        RunToPoint(-11,-8,1);
+        RunToPoint(-12,-57,1);
+        RunToPoint(-11,44,1);
+        RunToPoint(-37,43,1);
+        RunToPoint(-61,43,1);
+        RunToPoint(-61,60,1);
 
 
 

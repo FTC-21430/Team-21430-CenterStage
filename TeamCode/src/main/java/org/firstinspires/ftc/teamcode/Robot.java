@@ -85,6 +85,9 @@ public abstract class Robot extends LinearOpMode {
     public double scoringAngle = 0;
     FtcDashboard dashboard;
 
+    public double minPower = 0.01;
+    public double endOfClipPower = 0.2;
+
     public double robotHeading;
     double leftFrontPower;
     double leftBackPower;
@@ -193,7 +196,7 @@ public void lightsUpdate(){
 
         RobotAngle = orientation.getYaw(AngleUnit.RADIANS);
         RobotAngle += startOfsetRadians;
-        telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", RobotAngle);
+        telemetry.addData("Yaw (Z)", "%.2f Rad. (Heading)", RobotAngle);
     }
     public void IMUReset(){
         telemetry.addData("Yaw", "Reset" + "ing\n");
