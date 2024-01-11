@@ -1,44 +1,37 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@Autonomous(name = "TESTING" , group = "CenterStage")
-public class TESTING extends AutonomousFunction {
+@TeleOp(name="TESTING", group="Linear Opmode")
+public class TESTING extends OdometryCode{
+    double AlignWait;
     @Override
-    public void runOpMode () throws InterruptedException {
+
+    public void runOpMode() {
         Init();
-        AprilTagInit();
-       // CamInit();
-        robotHeading = Math.PI/2;
-        Target = 90;
-        startOfsetRadians = Math.PI/2;
+
+        //TODO: Add centerstage specific init
         waitForStart();
+        IMUReset();
+
+        //CamInit();
         runtime.reset();
-        leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        while (opModeIsActive()){
 
-        leftFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //IMUReset();
-        RobotX = 36;
-        RobotY = -36;
-        InitX= 36;
-        InitY = -36;
-       // CamRun(3);
-
-       // PurplePixelRed();
-        YellowPixel();
-        //Park();
-
+            telemetry.addData("wor","king");
+            CenterStageUpdateControls();
+            UpdateControls();
+            IMU_Update();
+          if (gamepad2.a){
+              frontDepositorServo.setPosition(1);
+              telemetry.addData("pos ", 1);
+          }
+          if (gamepad2.b){
+              frontDepositorServo.setPosition(0);
+              telemetry.addData("pos ", 0);
+          }
+            telemetry.update();
+        }
     }
+
 }

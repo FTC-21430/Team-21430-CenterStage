@@ -61,7 +61,7 @@ public float camBarrierONE=200;
 public float camBarrierTwo=400;
 public double x;
 public double y;
-public int Zone = 0;
+public int Zone = 2;
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -196,10 +196,10 @@ public int Zone = 0;
 public void CamRun(int timeoutS) {
     resetRuntime();
    while(timeoutS >= getRuntime() && opModeIsActive()){
-    telemetryTfod();
-Zone = findZone();
+    TfodZoneAndTelemetry();
+    // find where we set the "Zone" variable in the function above!
 
-telemetry.addData("Zone: ", Zone);
+//telemetry.addData("Zone: ", Zone);
 
 
     // Push telemetry to the Driver Station.
@@ -215,7 +215,9 @@ telemetry.addData("Zone: ", Zone);
     // Share the CPU.
    // sleep(20);
 
-}}
+}
+   Zone = findZone();
+    }
 public void CamEnd(){
 
         // Save more CPU resources when camera is no longer needed.
@@ -292,17 +294,21 @@ public void CamEnd(){
      */
     public int findZone(){
         if (x <= camBarrierONE){
-            telemetry.addData("Working:","Yes");
+            telemetry.addData("ZoneREAD", "1");
             return 1;
         }else if(x >= camBarrierONE && x <=camBarrierTwo){
+            telemetry.addData("ZoneREAD", "2");
             return 2;
         }else if(x >= camBarrierTwo){
+            telemetry.addData("ZoneREAD", "3");
             return 3;
+
         }else{
+            telemetry.addData("ZoneREAD", "Did not work :'( ");
             return 2;
         }
     }
-    private void telemetryTfod() {
+    private void TfodZoneAndTelemetry() {
 
         List<Recognition> currentRecognitions = tfod.getRecognitions();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
@@ -311,7 +317,8 @@ public void CamEnd(){
         for (Recognition recognition : currentRecognitions) {
              x = (recognition.getLeft() + recognition.getRight()) / 2 ;
              y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
-            telemetry.addData("zone!",findZone());
+             Zone = findZone();
+            telemetry.addData("zone!",Zone);
             telemetry.addData(""," ");
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
             telemetry.addData("- Position", "%.0f / %.0f", x, y);

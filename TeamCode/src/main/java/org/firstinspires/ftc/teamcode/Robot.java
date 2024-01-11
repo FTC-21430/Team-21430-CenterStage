@@ -207,7 +207,7 @@ public void lightsUpdate(){
     public void ProportionalFeedbackControl(){
         if(resettingImu)
             return;
-        telemetry.addData("angle", current);
+        telemetry.addData("angle", (RobotAngle * 180)/Math.PI);
         telemetry.addData("target", Target);
         error = Wrap((Target - (RobotAngle * 180 / Math.PI)));
         if (gamepad1.right_stick_x != 0){

@@ -9,35 +9,42 @@ public class BlueRightJellyfish extends AutonomousFunction {
     public void runOpMode() {
         Init();
         CamInit();
-        robotHeading = 180;
-        startOfsetRadians = Math.PI;
+        robotHeading = -Math.PI;
+        Target = -180;
+        startOfsetRadians = -Math.PI;
         waitForStart();
         runtime.reset();
-        leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        leftFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        IMUReset();
-        Target = 180;
-        RobotX = -29;
-        RobotY = 60;
-        InitX= -34;
-        InitY = 60;
+        RobotX = -38;
+        RobotY = 62;
+        InitX= -38;
+        InitY = 62;
+        //    Zone = 2;
         CamRun(3);
+        // Zone = 1;
+        PurplePixelBlueRight();
 
-        PurplePixelBlue();
-        //YellowPixel();
-        //Park();
+        Speed = 0.6;
+        CamEnd();
+        AprilTagInit();
+        //  RunToPoint(-37,-38,2,5);
+        RunToPoint(-50,58,2,5);
+        RunToPoint(-63.7,42,2,5);
+        RunToPoint(-61,17,2,5);
+        RunToPoint(-51,12,2,5);
+        setTurn(90);
+        resetRuntime();
+        while (0.4 >= getRuntime() && opModeIsActive()){
+            ProportionalFeedbackControl();
+        }
+        Speed = 0.8;
+        RunToPoint(12,12,2,5);
+        RunToPoint(36,12,2,5);
+        RunToPoint(36,36,3,5);
+        Speed = 0.5;
+
+
+        YellowPixelBlue();
+        ParkBlue();
 
     }
 }

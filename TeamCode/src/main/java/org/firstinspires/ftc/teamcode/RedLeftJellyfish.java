@@ -20,9 +20,8 @@ public class RedLeftJellyfish extends AutonomousFunction {
         InitY = -62;
     //    Zone = 2;
         CamRun(3);
-        Zone = 3;
-        PurplePixelRed();
-
+       // Zone = 1;
+        PurplePixelRedLeft();
 
          Speed = 0.6;
         CamEnd();
@@ -31,21 +30,21 @@ public class RedLeftJellyfish extends AutonomousFunction {
         RunToPoint(-50,-58,2,5);
         RunToPoint(-63.7,-42,2,5);
         RunToPoint(-61,-17,2,5);
-        RunToPoint(-41,-13,2,5);
+        RunToPoint(-41,-12,2,5);
         setTurn(90);
         resetRuntime();
         while (0.4 >= getRuntime() && opModeIsActive()){
             ProportionalFeedbackControl();
         }
         Speed = 0.8;
-        RunToPoint(12,-13,2,5);
-        RunToPoint(36,-13,2,5);
+        RunToPoint(12,-12,2,5);
+        RunToPoint(36,-12,2,5);
         RunToPoint(36,-36,3,5);
         Speed = 0.5;
 
 
-        YellowPixel();
-        Park();
+        YellowPixelRed();
+        ParkRed();
 
         }
     }

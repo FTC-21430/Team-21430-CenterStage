@@ -326,7 +326,9 @@ switch (currentState){
 
 
 public void idleCode(){
-    intakeServo.setPosition(1);
+    if (endGameMode) {
+        intakeServo.setPosition(1);
+    }
         if (gamepad2.b) currentState = scoreDocked;
         backDepositorServo.setPosition(0.5);
     pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
@@ -334,7 +336,7 @@ public void idleCode(){
             currentState = intaking;
             pixelPickerCurrent = 6;
             pixelPickerUp = true;
-            frontDepositorServo.setPosition(1);
+
             backDepositorServo.setPosition(-1);
         }
       //  if (gamepad2.right_bumper) currentState = intakeManaul;
@@ -397,7 +399,7 @@ public void idleCode(){
                 intakeServo.setPosition(0.278);
             }
 
-            telemetry.addData("currect pixel picker",pixelPickerCurrent);
+            telemetry.addData("current pixel picker",pixelPickerCurrent);
         if (pixelPickerCurrent == 6 ||  pixelPickerCurrent == 2 || pixelPickerCurrent ==3 ){
             intakeMotor.setPower(-0.7);
         }else if (pixelPickerCurrent == 5 || pixelPickerCurrent == 4){
@@ -412,6 +414,9 @@ public void idleCode(){
         if (!gamepad2.left_bumper || endGameMode) {
             currentState = intakeCancel;
             stateMachineTimer = getRuntime();
+        }
+        if (ColorSensorCheck(frontColorSensor) == "None"){
+            frontDepositorServo.setPosition(1);
         }
         if (ColorSensorCheck(frontColorSensor) != "None"){
             frontDepositorServo.setPosition(.5);
@@ -525,11 +530,14 @@ public void idleCode(){
 
     }
     public void liftOut(){
+        frontDepositorServo.setPosition(0.5);
+        backDepositorServo.setPosition(0.5);
         liftPosition += gamepad2.left_stick_y * -30;
         if (liftPosition >= LiftMAX) liftPosition = LiftMAX;
         if (liftPosition <= safeLiftHeight) liftPosition = safeLiftHeight;
         telemetry.addData("liftPosition", liftPosition);
         pixelLiftMotor.setTargetPosition(liftPosition);
+
         if(gamepad2.b){
             firstLoop = true;
             currentState = score;
@@ -556,7 +564,7 @@ public void idleCode(){
     }else{
       //  telemetry.addData("bkwd", "yay");
         if (stateMachineTimer <= runtime.seconds() - 0.5){
-            currentState = scoreFinished;
+            currentState = liftOut;
         }
     }
 

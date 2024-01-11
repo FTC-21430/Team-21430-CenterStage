@@ -50,10 +50,6 @@ public void setTurn(float angle){
         InitY = y;
     }
 
-
-    public int Zone = 0;
-
-
     public void UpdateOdometry(){
         DForward = (FrontRight + FrontLeft + BackRight + BackLeft)/4;
         DSideways = (-FrontRight + FrontLeft + BackRight - BackLeft)/4/1.2;
@@ -109,7 +105,7 @@ public void setTurn(float angle){
                     startOfsetRadians -= RobotAngle - arrayOutput[2];
                 }
             }
-            telemetry.update();
+          //  telemetry.update();
             double l = 17.5/2;
             double[] bxPoints = {l,-l,-l,l};
             double[] byPoints = {l,l,-l,-l};
@@ -128,12 +124,14 @@ public void setTurn(float angle){
             telemetry.addData("RobotX:", RobotX);
             telemetry.addData("Angle:", RobotAngle);
             telemetry.addData("RobotY:", RobotY);
-            telemetry.addData("zone", Zone);
+          //  telemetry.addData("zone", Zone);
             telemetry.addData("distance",distanceCircle(TargetX,TargetY));
             telemetry.addData("Y", RobotY);
             telemetry.addData("X", RobotX);
             telemetry.addData("Angle", RobotAngle);
             telemetry.addData( "a motor", FrontLeft);
+
+            telemetry.addData("Zone",Zone);
             telemetry.update();
             TESTfLeft = leftFrontMotor.getCurrentPosition();
             TESTfRight = rightFrontMotor.getCurrentPosition();
@@ -190,6 +188,7 @@ public void setTurn(float angle){
             TESTfLeft = leftFrontMotor.getCurrentPosition();
             TESTfRight = rightFrontMotor.getCurrentPosition();
             TESTbLeft = leftBackMotor.getCurrentPosition();
+            TESTbRight = rightBackMotor.getCurrentPosition();
             Target = 90;
             UpdateControls();
            IMU_Update();

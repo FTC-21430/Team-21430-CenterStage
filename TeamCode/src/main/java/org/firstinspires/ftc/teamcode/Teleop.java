@@ -4,7 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name="Teleop", group="Linear Opmode")
 public class Teleop extends OdometryCode{
+    double AlignWait;
     @Override
+
     public void runOpMode() {
         Init();
         AprilTagInit();
@@ -23,12 +25,16 @@ public class Teleop extends OdometryCode{
             if (gamepad1.y) {
                 IMUReset();
             }
-            if (gamepad1.a) AlignWithBackdrop(48.5);
+            if (gamepad1.a) {
+                AlignWithBackdrop(48.5);
+            }
             if (gamepad1.a && !GamepadAOld){
                 CurrentAlign = true;
-            }
-            if (gamepad1.dpad_up || gamepad1.dpad_down || gamepad1.left_stick_y > 0.7 || gamepad1.left_stick_y < -0.7){
+                AlignWait = getRuntime();
+            }else{
+            if (gamepad1.dpad_up || gamepad1.dpad_down || gamepad1.left_stick_y > 0.7 || gamepad1.left_stick_y < -0.7 && AlignWait > getRuntime() - 0.8){
                 CurrentAlign = false;
+            }
             }
             telemetry.addData("endGameMode:", endGameMode);
 
@@ -62,6 +68,7 @@ public class Teleop extends OdometryCode{
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Operator Current State", currentState);
             telemetry.addData("autoDriving", CurrentAlign);
+            telemetry.addData("Color Sensor Readings", ColorSensorCheck(frontColorSensor));
             telemetry.update();
             GamepadAOld = gamepad1.a;
 
