@@ -18,9 +18,7 @@ public class RedLeftJellyfish extends AutonomousFunction {
         RobotY = -62;
         InitX= -41;
         InitY = -62;
-    //    Zone = 2;
         CamRun(3);
-       // Zone = 1;
         PurplePixelRedLeft();
 
          Speed = 0.6;
@@ -30,7 +28,7 @@ public class RedLeftJellyfish extends AutonomousFunction {
         RunToPoint(-50,-58,2,5);
         RunToPoint(-63.7,-42,2,5);
         RunToPoint(-61,-17,2,5);
-        RunToPoint(-41,-12,2,5);
+        RunToPoint(-53,-12,2,5);
         setTurn(90);
         resetRuntime();
         while (0.4 >= getRuntime() && opModeIsActive()){

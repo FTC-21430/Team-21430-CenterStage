@@ -205,20 +205,18 @@ public boolean closeStartPos;
             ProportionalFeedbackControlAuto();
 
         }
-        //Zone = 1;
-        pixelLiftMotor.setTargetPosition(380);
+        pixelLiftMotor.setTargetPosition(480);
 
         if (Zone == 3) {
             RunToPoint(36, -46, 2.4, 1);
-            RunToPoint(49.5, -46, 1, 1);
+            RunToPoint(51, -45, 1, 1);
 
 
         } else if (Zone == 2) {
 
-            RunToPoint(50.5, -38.5, 1,1);
+            RunToPoint(50.5, -39.5, 1,1);
 
         }else {
-            //zone 1
                RunToPoint(36,-30, 2.4, 1);
                RunToPoint(49.5, -30, 1);
 
