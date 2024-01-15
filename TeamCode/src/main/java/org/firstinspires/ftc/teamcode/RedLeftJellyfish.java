@@ -8,6 +8,7 @@ public class RedLeftJellyfish extends AutonomousFunction {
     @Override
     public void runOpMode() {
         Init();
+        DriverOrientationDriveMode = false;
         CamInit();
         robotHeading = 0;
         Target = 0;

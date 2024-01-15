@@ -48,6 +48,8 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor rightBackMotor = null;
     public float controlHubChange = 51;
     int liftPosition;
+    boolean TurnOLD = false;
+    public boolean CurrentAlign = true;
     enum operatorState
     {
         idle,
@@ -87,6 +89,9 @@ public abstract class Robot extends LinearOpMode {
 
     public double minPower = 0.01;
     public double endOfClipPower = 0.2;
+
+
+    public double turnTimer;
 
     public double robotHeading;
     double leftFrontPower;
@@ -148,7 +153,7 @@ public void lightsUpdate(){
         blinkinLedDriver.setPattern(pattern);
 }
     public void straferAlgorithm(){
-        DriverOrientationDriveMode = false;
+
         if(DriverOrientationDriveMode == true){
 //            slide = (slide * Math.cos(robotHeading)) - (drive * Math.sin(robotHeading));
 //            drive = (slide * Math.sin(robotHeading)) + (drive * Math.cos(robotHeading));
@@ -156,13 +161,7 @@ public void lightsUpdate(){
 
             double temp = drive * Math.cos(-robotHeading) + slide * Math.sin(-robotHeading);
             slide = -drive * Math.sin(-robotHeading) + slide * Math.cos(-robotHeading);
-            drive = temp;
-        }
-
-        if (gamepad1.a) {
-            drive *= -1;
-            slide *= -1;
-
+            if(!CurrentAlign) drive = temp;
         }
 
         leftFrontPower = Range.clip(drive + slide + turn, -1.0, 1.0);
@@ -210,11 +209,17 @@ public void lightsUpdate(){
         telemetry.addData("angle", (RobotAngle * 180)/Math.PI);
         telemetry.addData("target", Target);
         error = Wrap((Target - (RobotAngle * 180 / Math.PI)));
-        if (gamepad1.right_stick_x != 0){
+        if (gamepad1.right_stick_x != 0 || (TurnOLD==true) || turnTimer +0.3 >= getRuntime()){
             Target = (RobotAngle * 180 / Math.PI);
         }
-
-        turn -= error/20;
+        if (gamepad1.right_stick_x != 0 && TurnOLD == true){
+            turnTimer = getRuntime();
+        }
+        if (gamepad1.right_stick_x != 0) TurnOLD = false;
+        if (gamepad1.right_stick_x == 0) TurnOLD = true;
+        if (gamepad1.right_stick_x==0) {
+            turn -= error / 20;
+        }
     }
     double Wrap(double angle){
         while(angle > 180){
@@ -271,7 +276,7 @@ public void lightsUpdate(){
         pixelLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         pixelLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+        DriverOrientationDriveMode = true;
         climberMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

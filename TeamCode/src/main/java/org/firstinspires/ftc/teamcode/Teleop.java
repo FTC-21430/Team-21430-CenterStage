@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp(name="Teleop", group="Linear Opmode")
 public class Teleop extends OdometryCode{
     double AlignWait;
+    int LiftHeightAtButtonPressed;
+    boolean gamepad2Yold;
     @Override
 
     public void runOpMode() {
@@ -53,6 +55,15 @@ public class Teleop extends OdometryCode{
             updateColorSensors();
             lightsUpdate();
             endGameThings();
+            if (gamepad2.y && !gamepad2Yold){
+                pixelLiftMotor.setTargetPosition(100);
+                LiftHeightAtButtonPressed = pixelLiftMotor.getCurrentPosition();
+            }
+            if (gamepad2.y) pixelLiftMotor.setTargetPosition(100);
+            if (!gamepad2.y && gamepad2Yold){
+                pixelLiftMotor.setTargetPosition(LiftHeightAtButtonPressed);
+            }
+            gamepad2Yold = gamepad2.y;
             if (endGameMode){
                 intakeServo.setPosition(0.5);
             }else{

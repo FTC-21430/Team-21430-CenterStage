@@ -7,6 +7,7 @@ public class BlueLeftJellyfish extends AutonomousFunction {
     @Override
     public void runOpMode() {
         Init();
+        DriverOrientationDriveMode = false;
         closeStartPos = true;
         CamInit();
         robotHeading = -Math.PI;

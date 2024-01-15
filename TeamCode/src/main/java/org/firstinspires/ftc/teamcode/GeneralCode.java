@@ -24,6 +24,8 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 public abstract class GeneralCode extends Robot {
+
+
     int LiftManual = 0;
     boolean calabrate_Lift = false;
     boolean firstLoop = false;
@@ -111,6 +113,7 @@ public void pixelLiftRunToPosition(int encoderTick){
         if (slowMode) {
             drive /= 2;
             slide /= 2;
+            turn *= 0.8;
 
         }
     }
@@ -285,14 +288,14 @@ switch (currentState){
 
     public void scoreDocked(){
         frontDepositorServo.setPosition(1);
-        if (ColorSensorCheck(frontColorSensor) == "None"){
+        backDepositorServo.setPosition(0);
+
+        if (!gamepad2.b) {
             frontDepositorServo.setPosition(0.5);
-            currentState = dockedScoreFinished;
+            backDepositorServo.setPosition(0.5);
+            currentState = idle;
         }
-        if (gamepad2.x) {
-            transferMotor.setPower(-1);
-            intakeMotor.setPower(1);
-        }
+
     }
 
     public void dockedScoreFinished(){
@@ -549,23 +552,13 @@ public void idleCode(){
         }
     }
     public void score(){
+        frontDepositorServo.setPosition(0);
+        backDepositorServo.setPosition(1);
 
-    if (firstLoop){
-        if (ColorSensorCheck(backColorSensor) == "None"){
-            frontDepositorServo.setPosition(0);
-            backDepositorServo.setPosition(1);
-            stateMachineTimer = runtime.seconds();
-        }else{
-            frontDepositorServo.setPosition(0);
-            backDepositorServo.setPosition(1);
-            stateMachineTimer = runtime.seconds();
-        }
-        firstLoop = false;
-    }else{
-      //  telemetry.addData("bkwd", "yay");
-        if (stateMachineTimer <= runtime.seconds() - 0.5){
-            currentState = liftOut;
-        }
+    if (!gamepad2.b) {
+        frontDepositorServo.setPosition(0.5);
+        backDepositorServo.setPosition(0.5);
+        currentState = liftOut;
     }
 
     }

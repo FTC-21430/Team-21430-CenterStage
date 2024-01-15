@@ -22,7 +22,7 @@ public abstract class OdometryCode extends CameraVision {
     public double scalingDouble;
     public double FrontLeftOld,FrontRightOld,BackLeftOld,BackRightOld;
     public float TESTfLeft, TESTfRight, TESTbLeft, TESTbRight;
-    public boolean CurrentAlign = true;
+
     public boolean GamepadAOld;
 public double Speed = 0.5;
 
