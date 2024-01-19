@@ -145,8 +145,8 @@ public void setTurn(float angle){
 
 
             // IMU_Update();
-            //ProportionalFeedbackControl();
-            ProportionalFeedbackControlAuto();
+            ProportionalFeedbackControl();
+//            ProportionalFeedbackControlAuto();
             UpdateEncoders();
 
             UpdateOdometry();

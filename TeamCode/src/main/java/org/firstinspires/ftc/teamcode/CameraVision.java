@@ -105,6 +105,8 @@ public int Zone = 2;
         for (AprilTagDetection detection : detections){
             AprilTagMetadata metaData = detection.metadata;
             AprilTagPoseRaw rawpose = detection.rawPose;
+        if (!detections.isEmpty()) {
+
 
             float tagInFieldX = metaData.fieldPosition.get(0);
             float tagInFieldY = metaData.fieldPosition.get(1);
@@ -124,16 +126,16 @@ public int Zone = 2;
                     .translated(tagInCameraX, tagInCameraY, tagInCameraZ)
                     .multiplied(tagInCameraR)
                     .inverted();
-                    //TODO:Make these values true to the robot THESE VALUES ARE ONLY TEMPORARY
+            //TODO:Make these values true to the robot THESE VALUES ARE ONLY TEMPORARY
             float cameraInRobotX = 1;
             float cameraInRobotY = -4.5f;
             float cameraInRobotZ = 1.75f;
             OpenGLMatrix cameraInRobotR = new Orientation(AxesReference.INTRINSIC, AxesOrder.XYZ,
-                    AngleUnit.DEGREES,-90,180,0,0)
+                    AngleUnit.DEGREES, -90, 180, 0, 0)
                     .getRotationMatrix();
 
             OpenGLMatrix robotInCameraFrame = OpenGLMatrix.identityMatrix()
-                    .translated(cameraInRobotX, cameraInRobotY,cameraInRobotZ)
+                    .translated(cameraInRobotX, cameraInRobotY, cameraInRobotZ)
                     .multiplied(cameraInRobotR)
                     .inverted();
 
@@ -152,24 +154,23 @@ public int Zone = 2;
             float robotInFieldZ = robotInFieldTranslation.get(2);
 
 
-
             float robotInFieldRoll = robotInFieldOrientation.firstAngle;
             float robotInFieldPitch = robotInFieldOrientation.secondAngle;
             float robotInFieldYaw = robotInFieldOrientation.thirdAngle;
 
             returnArray[0] = robotInFieldX;
             returnArray[1] = robotInFieldY;
-            returnArray[2] = robotInFieldYaw * ((float)Math.PI/180);
+            returnArray[2] = robotInFieldYaw * ((float) Math.PI / 180);
 //            RobotX = robotInFieldX;
 //            RobotY = robotInFieldY;
 //            InitX = robotInFieldX;
 //            InitY = robotInFieldY;
-           // RobotAngle = robotInFieldYaw * (Math.PI/180);
+            // RobotAngle = robotInFieldYaw * (Math.PI/180);
 //            startOfsetRadians -= RobotAngle - robotInFieldYaw * (Math.PI/180);
 
 
-            telemetry.addData("robotX",robotInFieldX);
-            telemetry.addData("robotY",robotInFieldY);
+            telemetry.addData("robotX", robotInFieldX);
+            telemetry.addData("robotY", robotInFieldY);
             telemetry.addData("robotZ", robotInFieldZ);
 
             telemetry.addData("robotRoll", robotInFieldRoll);
@@ -177,9 +178,10 @@ public int Zone = 2;
             telemetry.addData("robotYaw", robotInFieldYaw);
 
             telemetry.addData("decision Margin", detection.decisionMargin);
-
+        }
             break;
         }
+
         return returnArray;
     }
 

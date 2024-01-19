@@ -352,7 +352,8 @@ public void idleCode(){
     public void intake(){
     telemetry.addData("rightBumperOLD",rightBumperOLD);
     telemetry.addData("pickerUp",pixelPickerUp);
-    if (gamepad2.left_trigger >= 0.5) pixelPickerCurrent = 6;
+    if (gamepad2.right_trigger >= 0.5) pixelPickerCurrent = 6;
+    if (gamepad2.left_trigger >= 0.5) pixelPickerCurrent = 1;
     if (gamepad2.right_bumper && !rightBumperOLD) {
             if (pixelPickerUp == true) {
                 if (pixelPickerCurrent == 6) {

@@ -25,7 +25,7 @@ public class BlueLeftJellyfish extends AutonomousFunction {
 
 
         //RunToPoint(13,46,3,1);
-        PurplePixelBlueLeft();
+        //PurplePixelBlueLeft();
         RunToPoint(24,48,0,2.4);
         Speed = 0.6;
         CamEnd();

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -10,9 +11,12 @@ public class RedLeftJellyfish extends AutonomousFunction {
         Init();
         DriverOrientationDriveMode = false;
         CamInit();
+        pattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE;
+        blinkinLedDriver.setPattern(pattern);
         robotHeading = 0;
         Target = 0;
         startOfsetRadians = 0;
+        IsProgramAutonomous = true;
         waitForStart();
         runtime.reset();
         RobotX = -41;
@@ -25,10 +29,11 @@ public class RedLeftJellyfish extends AutonomousFunction {
          Speed = 0.6;
         CamEnd();
         AprilTagInit();
+
       //  RunToPoint(-37,-38,2,5);
         RunToPoint(-50,-58,2,5);
         RunToPoint(-63.7,-42,2,5);
-        RunToPoint(-61,-17,2,5);
+        RunToPoint(-61,-12,2,5);
         RunToPoint(-53,-12,2,5);
         setTurn(90);
         resetRuntime();

@@ -11,6 +11,7 @@ public class Teleop extends OdometryCode{
 
     public void runOpMode() {
         Init();
+        IsProgramAutonomous = false;
         AprilTagInit();
         //TODO: Add centerstage specific init
         waitForStart();

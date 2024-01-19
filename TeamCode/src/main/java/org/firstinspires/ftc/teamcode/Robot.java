@@ -39,6 +39,8 @@ public abstract class Robot extends LinearOpMode {
     double drive;
     double slide;
     double turn;
+    //double TeleopStartingRotation = 90;
+    boolean UseAprilTags;
     double distanceX, distanceY, PowerX, PowerY, PowerF, PowerS;
     public double RobotX, RobotY;
     public ElapsedTime runtime = new ElapsedTime();
@@ -50,6 +52,7 @@ public abstract class Robot extends LinearOpMode {
     int liftPosition;
     boolean TurnOLD = false;
     public boolean CurrentAlign = true;
+    public boolean IsProgramAutonomous;
     enum operatorState
     {
         idle,
@@ -192,7 +195,7 @@ public void lightsUpdate(){
 
 
         robotHeading = orientation.getYaw(AngleUnit.RADIANS) ;
-
+      //  robotHeading += ((TeleopStartingRotation)/180) * Math.PI;
         RobotAngle = orientation.getYaw(AngleUnit.RADIANS);
         RobotAngle += startOfsetRadians;
         telemetry.addData("Yaw (Z)", "%.2f Rad. (Heading)", RobotAngle);
@@ -208,16 +211,20 @@ public void lightsUpdate(){
             return;
         telemetry.addData("angle", (RobotAngle * 180)/Math.PI);
         telemetry.addData("target", Target);
+        telemetry.addData("IsProgramAutonomous",IsProgramAutonomous);
         error = Wrap((Target - (RobotAngle * 180 / Math.PI)));
         if (gamepad1.right_stick_x != 0 || (TurnOLD==true) || turnTimer +0.3 >= getRuntime()){
-            Target = (RobotAngle * 180 / Math.PI);
+            if (!IsProgramAutonomous){
+                Target = (RobotAngle * 180 / Math.PI);
+            }
+
         }
         if (gamepad1.right_stick_x != 0 && TurnOLD == true){
             turnTimer = getRuntime();
         }
         if (gamepad1.right_stick_x != 0) TurnOLD = false;
         if (gamepad1.right_stick_x == 0) TurnOLD = true;
-        if (gamepad1.right_stick_x==0) {
+        if (gamepad1.right_stick_x==0 || IsProgramAutonomous) {
             turn -= error / 20;
         }
     }

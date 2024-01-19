@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -8,6 +9,7 @@ public class BlueRightJellyfish extends AutonomousFunction {
     @Override
     public void runOpMode() {
         Init();
+        DriverOrientationDriveMode = false;
         CamInit();
         robotHeading = -Math.PI;
         Target = -180;
@@ -18,26 +20,32 @@ public class BlueRightJellyfish extends AutonomousFunction {
         RobotY = 62;
         InitX= -38;
         InitY = 62;
+        IsProgramAutonomous = true;
         //    Zone = 2;
+        pattern = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
+        blinkinLedDriver.setPattern(pattern);
         CamRun(3);
         // Zone = 1;
         PurplePixelBlueRight();
 
         Speed = 0.6;
         CamEnd();
-        AprilTagInit();
+       // AprilTagInit();
         //  RunToPoint(-37,-38,2,5);
         RunToPoint(-50,58,2,5);
-        RunToPoint(-63.7,42,2,5);
-        RunToPoint(-61,17,2,5);
-        RunToPoint(-51,12,2,5);
+        RunToPoint(-62.5,42,2,5);
+        RunToPoint(-62,13,3,5);
+        RunToPoint(-55,13,2,5);
+
         setTurn(90);
-        resetRuntime();
-        while (0.4 >= getRuntime() && opModeIsActive()){
+        double TempTimer = getRuntime();
+        while (0.4 + TempTimer >= getRuntime() && opModeIsActive()){
             ProportionalFeedbackControl();
         }
         Speed = 0.8;
-        RunToPoint(12,12,2,5);
+      //  RunToPoint(-40,-17,2,5);
+        RunToPoint(-11,11,2,5);
+        RunToPoint(36,12,2,5);
         RunToPoint(36,12,2,5);
         RunToPoint(36,36,3,5);
         Speed = 0.5;
