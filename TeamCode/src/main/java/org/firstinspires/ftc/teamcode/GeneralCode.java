@@ -519,7 +519,7 @@ public void idleCode(){
     public void liftOut(){
         frontDepositorServo.setPosition(0.5);
         backDepositorServo.setPosition(0.5);
-        liftPosition += gamepad2.left_stick_y * -30;
+        liftPosition += gamepad2.left_stick_y * -50;
         if (liftPosition >= LiftMAX) liftPosition = LiftMAX;
         if (liftPosition <= safeLiftHeight) liftPosition = safeLiftHeight;
         telemetry.addData("liftPosition", liftPosition);
