@@ -245,9 +245,6 @@ switch (currentState){
     case extendLift:
         extendLift();
         break;
-    case extendBar:
-        extendFourBar();
-        break;
     case liftOut:
         liftOut();
         break;
@@ -481,7 +478,7 @@ public void idleCode(){
 
         transferMotor.setPower(-1);
         if (stateMachineTimer <= getRuntime() - 0) {
-            //We set it to 0 because it was taking to much time and if we delete it we encounter bugs 
+            //We set it to 0 because it was taking to much time and if we delete it we encounter bugs
             currentState = scoreIdle;
             intakeMotor.setPower(0);
             transferMotor.setPower(0);
@@ -509,31 +506,15 @@ public void idleCode(){
 
         pixelLiftMotor.setTargetPosition(safeLiftHeight);
 
-        if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight - 1 && stateMachineTimer <= getRuntime() - 1){
-
-            if (barHeightHigh){
+        if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight  || stateMachineTimer <= getRuntime() - 1){
+            // We made it an or statement just in case the robot doesn't reach the exact safe lift height then will be okay :)
                 currentState = highFourBarExtend;
-            }else{
-                currentState = highFourBarExtend;
-            }
         }
     }
     public void extendFourBarHigh(){
-        barHeightHigh = true;
         fourBarServo.setPosition(0.015);
-        if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight - 1) {
-            liftPosition = safeLiftHeight;
-            currentState = liftOut;
-        }
-    }
-    public void extendFourBar(){
-        barHeightHigh = false;
-        fourBarServo.setPosition(0.015);
-        if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight - 1) {
-            liftPosition = safeLiftHeight;
-            currentState = liftOut;
-        }
-
+        liftPosition = safeLiftHeight;
+        currentState = liftOut;
     }
     public void liftOut(){
         frontDepositorServo.setPosition(0.5);
@@ -591,6 +572,7 @@ public void idleCode(){
 
     }
     public void fourBarWait(){
+    // TODO Figure out best time for the Four Bar Wait
         if (stateMachineTimer <= getRuntime() - 0.7) currentState = fourBarDock;
     }
     public void fourBarDock(){
