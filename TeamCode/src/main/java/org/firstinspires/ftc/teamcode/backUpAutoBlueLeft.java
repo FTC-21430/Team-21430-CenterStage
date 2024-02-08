@@ -5,12 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-
-
-
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.sun.tools.javac.jvm.Gen;
 @Autonomous(name = "backUpAutoBlueLeft" , group = "CenterStage")
 @Disabled
 public class backUpAutoBlueLeft extends OdometryCode {
@@ -50,7 +44,7 @@ public class backUpAutoBlueLeft extends OdometryCode {
 
 //        IntakeClose();
 
-        CamRun(5);
+        ZoneTelemetryUntilStart();
 
         if (Zone == 0){
     Zone = 2;}

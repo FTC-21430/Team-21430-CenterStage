@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name = "BlueRightJellyfish" , group = "CenterStage")
 public class BlueRightJellyfish extends AutonomousFunction {
@@ -14,18 +13,16 @@ public class BlueRightJellyfish extends AutonomousFunction {
         robotHeading = -Math.PI;
         Target = -180;
         startOfsetRadians = -Math.PI;
-        waitForStart();
+        ZoneTelemetryUntilStart();
+
         runtime.reset();
         RobotX = -38;
         RobotY = 62;
         InitX= -38;
         InitY = 62;
         IsProgramAutonomous = true;
-        //    Zone = 2;
         pattern = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
         blinkinLedDriver.setPattern(pattern);
-        CamRun(3);
-        // Zone = 1;
         PurplePixelBlueRight();
 
         Speed = 0.6;

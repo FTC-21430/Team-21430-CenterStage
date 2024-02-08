@@ -195,30 +195,14 @@ public int Zone = 2;
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
     }
-public void CamRun(int timeoutS) {
-    resetRuntime();
-   while(timeoutS >= getRuntime() && opModeIsActive()){
-    TfodZoneAndTelemetry();
-    // find where we set the "Zone" variable in the function above!
 
-//telemetry.addData("Zone: ", Zone);
-
-
-    // Push telemetry to the Driver Station.
-    telemetry.update();
-
-    // Save CPU resources; can resume streaming when needed.
-    if (gamepad1.dpad_down) {
-        TensorFlowVisionPortal.stopStreaming();
-    } else if (gamepad1.dpad_up) {
-        TensorFlowVisionPortal.resumeStreaming();
-    }
-
-    // Share the CPU.
-   // sleep(20);
-
-}
-   Zone = findZone();
+    public void ZoneTelemetryUntilStart() {
+        while (!isStarted()) {
+            TfodZoneAndTelemetry();
+            // Push telemetry to the Driver Station.
+            telemetry.update();
+        }
+        Zone = findZone();
     }
 public void CamEnd(){
 
