@@ -241,6 +241,23 @@ public boolean closeStartPos;
         }
         pixelLiftMotor.setTargetPosition(1);
     }
+    public void PlacePurplePixelWithPurplePixelPlacerOnThePixelPickerThatPlacesPerfectly(){
+        intakeServo.setPosition(PixelPickerBottom);
+        stateMachineTimer = getRuntime();
+         while (stateMachineTimer >= getRuntime() - 0.4  && opModeIsActive()){
+
+         }
+         intakeMotor.setPower(0.3);
+        stateMachineTimer = getRuntime();
+        while (stateMachineTimer >= getRuntime() - 0.3  && opModeIsActive()){
+
+        }
+        intakeMotor.setPower(0);
+        intakeServo.setPosition(PixelPickerTop);
+        while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()){
+
+        }
+    }
     public void YellowPixelBlue() {
         currentState = extendLift;
         stateMachineTimer = getRuntime();

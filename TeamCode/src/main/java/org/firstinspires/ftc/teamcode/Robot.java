@@ -81,6 +81,7 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor intakeMotor = null;
     public DcMotor pixelLiftMotor = null;
     public Servo intakeServo = null;
+    public Servo DroneLinkageServo = null;
     public Servo fourBarServo = null;
     public Servo backDepositorServo = null;
     public Servo frontDepositorServo = null;
@@ -251,6 +252,9 @@ public void lightsUpdate(){
 //TODO:FIX THIS
         colorSenseInit();
         LightsInit();
+
+        DroneLinkageServo = hardwareMap.get(Servo.class, "DroneLinkage");
+        DroneLinkageServo.setPosition(0.9);
         imu = hardwareMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
         RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.UP;
