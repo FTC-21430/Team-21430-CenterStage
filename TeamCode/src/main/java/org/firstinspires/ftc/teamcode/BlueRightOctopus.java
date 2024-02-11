@@ -36,17 +36,17 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
             CamEnd();
 
             AprilTagInit();
-//
-//            RunToPoint(-12, -9, 2, 5);
-//
-//            RunToPoint(-36, -9, 2, 5);
-//
-//            RunToPoint(-36, -36, 3, 5);
-//
-//            Speed = 0.5;
-//
-//            YellowPixelRed();
-//
-//            ParkRed();
+
+            RunToPoint(12, 9, 2, 5);
+
+            RunToPoint(36, 9, 2, 5);
+
+            RunToPoint(36, 36, 3, 5);
+
+            Speed = 0.5;
+
+            YellowPixelBlue();
+
+            ParkBlue();
         }
     }

@@ -172,38 +172,37 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
 
     public void PurplePixelBlueRight() {
         if (Zone == 1) {
-                Speed = 0.7;
-                RunToPoint(-38,62,3,3);
-                RunToPoint(-52,53,3,2);
-                setTurn(-45);
-                RunToPoint(-44,44,3,3);
-                setTurn(-90);
-                intakeServo.setPosition(PixelPickerBottom);
-                RunToPoint(-40,23,1,2);
-                intakeMotor.setPower(0.3);
-                stateMachineTimer = getRuntime();
-                while (stateMachineTimer >= getRuntime() - 1.5  && opModeIsActive()){
-                }
-                intakeMotor.setPower(0);
-                intakeServo.setPosition(PixelPickerTop);
-                setTurn(-135);
-                RunToPoint(-52,25,3,3);
-                setTurn(-270);
-                RunToPoint(-42,10,3,3);
-                //STOP HERE
+            Speed = 0.7;
+            RunToPoint(-38, 62, 3, 3);
+            RunToPoint(-52, 48, 3, 2);
+            setTurn(-45);
+            RunToPoint(-44, 39, 3, 3);
+            setTurn(-90);
+            intakeServo.setPosition(PixelPickerBottom);
+            RunToPoint(-39, 34, 1, 2);
+            intakeMotor.setPower(0.7);
+            stateMachineTimer = getRuntime();
+            while (stateMachineTimer >= getRuntime() - 1.5 && opModeIsActive()) {
+            }
+            intakeMotor.setPower(0);
+            intakeServo.setPosition(PixelPickerTop);
+            setTurn(-135);
+            RunToPoint(-52, 25, 3, 3);
+            setTurn(-270);
+            RunToPoint(-42, 8, 3, 3);
         } else if (Zone == 2) {
             Speed = 0.6;
-            RunToPoint(-40,34,3,5);
+            RunToPoint(-40, 34, 3, 5);
             setTurn(0);
             // intakeServo.setPosition(PixelPickerBottom);
-            RunToPoint(-41,14.3,1,5);
+            RunToPoint(-41, 14.3, 1, 5);
             intakeServo.setPosition(PixelPickerBottom);
             stateMachineTimer = getRuntime();
-            while (stateMachineTimer >= getRuntime() - 0.4  && opModeIsActive()){
+            while (stateMachineTimer >= getRuntime() - 0.4 && opModeIsActive()) {
             }
-            intakeMotor.setPower(0.3);
+            intakeMotor.setPower(0.7);
             stateMachineTimer = getRuntime();
-            while (stateMachineTimer >= getRuntime() - 1.5  && opModeIsActive()){
+            while (stateMachineTimer >= getRuntime() - 1.5 && opModeIsActive()) {
             }
             intakeMotor.setPower(0);
             intakeServo.setPosition(PixelPickerTop);
@@ -211,27 +210,27 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
             stateMachineTimer = getRuntime();
             Speed = 0.8;
             setTurn(90);
-            while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()){
+            while (stateMachineTimer >= getRuntime() - 1 && opModeIsActive()) {
             }
-        }else{
-            }
-            Speed = 0.8;
-            intakeServo.setPosition(PixelPickerBottom);
-            setTurn(180);
-            RunToPoint(-53,46,1,5);
+        } else {
+        Speed = 0.8;
+        intakeServo.setPosition(PixelPickerBottom);
+        setTurn(180);
+        RunToPoint(-49.5, 44, 1, 5);
 
-            intakeMotor.setPower(0.3);
-            stateMachineTimer = getRuntime();
-            while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()){
+        intakeMotor.setPower(0.7);
+        stateMachineTimer = getRuntime();
+        while (stateMachineTimer >= getRuntime() - 1 && opModeIsActive()) {
 
-            }
-            intakeMotor.setPower(0);
-            intakeServo.setPosition(PixelPickerTop);
-            RunToPoint(-38,52,1,5);
-            setTurn(180);
-            RunToPoint(-38,12,1,5);
-            setTurn(90);
-            RunToPoint(-35,12,1,5);
+        }
+        intakeMotor.setPower(0);
+        intakeServo.setPosition(PixelPickerTop);
+        RunToPoint(-39, 52, 1, 5);
+        setTurn(180);
+        RunToPoint(-39, 12, 1, 5);
+        setTurn(90);
+        RunToPoint(-35, 12, 1, 5);
+    }
         }
 
     public void YellowPixelRed() {
@@ -321,23 +320,21 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
             ProportionalFeedbackControlAuto();
 
         }
-        //Zone = 1;
         pixelLiftMotor.setTargetPosition(400);
 
         if (Zone == 1) {
-            RunToPoint(44, 49.5, 2.4, 1);
-            RunToPoint(48, 49.5, 1, 1);
+            RunToPoint(44, 41.5, 2.4, 1);
+            RunToPoint(51, 41.5, 1, 1);
 
 
         } else if (Zone == 2) {
 
-            RunToPoint(47.5, 40, 1,1.5);
+            RunToPoint(50, 34, 1,1.5);
 
 
         }else {
-            //zone 3
             RunToPoint(36,28, 2.4, 1);
-            RunToPoint(48, 29.8, 1);
+            RunToPoint(50, 24.5, 1);
 
 
         }
