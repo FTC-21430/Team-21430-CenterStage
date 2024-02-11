@@ -5,20 +5,6 @@ import static org.firstinspires.ftc.teamcode.Robot.operatorState.liftOut;
 
 public abstract class OctopusAutoFunctions extends OdometryCode {
 
-    public void PurplePixelBlueRight() {
-        if (Zone == 3) {
-
-        } else if (Zone == 2) {
-
-
-        }else{
-            if (Zone == 1) {
-
-
-            }
-        }
-        intakeMotor.setPower(0);}
-
 //    public void PurplePixelBlueLeft() {
 //        if (Zone == 3) {
 //
@@ -81,7 +67,7 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
 
             intakeMotor.setPower(0.3);
             stateMachineTimer = getRuntime();
-            while (stateMachineTimer >= getRuntime() - 0.4  && opModeIsActive()){
+            while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()){
 
             }
             intakeMotor.setPower(0);
@@ -107,7 +93,7 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
             }
             intakeMotor.setPower(0.3);
             stateMachineTimer = getRuntime();
-            while (stateMachineTimer >= getRuntime() - 0.8  && opModeIsActive()){
+            while (stateMachineTimer >= getRuntime() - 1.5  && opModeIsActive()){
 
             }
             intakeMotor.setPower(0);
@@ -129,7 +115,7 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
                 RunToPoint(-44,-44,3,3);
                 setTurn(-90);
                 intakeServo.setPosition(PixelPickerBottom);
-                RunToPoint(-38,-31,1,2);
+                RunToPoint(-38,-28,1,2);
 
 
                 intakeMotor.setPower(0.3);
@@ -149,40 +135,105 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
             }
         }
        }
-    public void PurplePixelBlue() {
-        if (Zone == 3) {
+//    public void PurplePixelBlue() {
+//        if (Zone == 3) {
+//
+//            RunToPoint(-46,42,5);
+//            intakeMotor.setPower(0.3);
+//            resetRuntime();
+//            while (3 >= getRuntime() && opModeIsActive()){
+//                ProportionalFeedbackControl();
+//            }
+//            //Remember to turn off
+//        } else if (Zone == 2) {
+//            RunToPoint(-37, 35, 5);
+//
+//            intakeMotor.setPower(0.3);
+//            resetRuntime();
+//            while (3 >= getRuntime() && opModeIsActive()){
+//                ProportionalFeedbackControl();
+//            }
+//            RunToPoint(-37,40 ,5);
+//
+//
+//        }else{
+//            if (Zone == 1) {
+//                RunToPoint(-38,34,5);
+//                RunToPoint(-24,34,5);
+//                intakeMotor.setPower(0.3);
+//                resetRuntime();
+//                while (0.3 >= getRuntime() && opModeIsActive()){
+//                    ProportionalFeedbackControl();
+//                }
+//                //Remember to turn off
+//
+//            }}
+//    }
 
-            RunToPoint(-46,42,5);
-            intakeMotor.setPower(0.3);
-            resetRuntime();
-            while (3 >= getRuntime() && opModeIsActive()){
-                ProportionalFeedbackControl();
-            }
-            //Remember to turn off
-        } else if (Zone == 2) {
-            RunToPoint(-37, 35, 5);
-
-            intakeMotor.setPower(0.3);
-            resetRuntime();
-            while (3 >= getRuntime() && opModeIsActive()){
-                ProportionalFeedbackControl();
-            }
-            RunToPoint(-37,40 ,5);
-
-
-        }else{
-            if (Zone == 1) {
-                RunToPoint(-38,34,5);
-                RunToPoint(-24,34,5);
+    public void PurplePixelBlueRight() {
+        if (Zone == 1) {
+                Speed = 0.7;
+                RunToPoint(-38,62,3,3);
+                RunToPoint(-52,53,3,2);
+                setTurn(-45);
+                RunToPoint(-44,44,3,3);
+                setTurn(-90);
+                intakeServo.setPosition(PixelPickerBottom);
+                RunToPoint(-40,23,1,2);
                 intakeMotor.setPower(0.3);
-                resetRuntime();
-                while (0.3 >= getRuntime() && opModeIsActive()){
-                    ProportionalFeedbackControl();
+                stateMachineTimer = getRuntime();
+                while (stateMachineTimer >= getRuntime() - 1.5  && opModeIsActive()){
                 }
-                //Remember to turn off
+                intakeMotor.setPower(0);
+                intakeServo.setPosition(PixelPickerTop);
+                setTurn(-135);
+                RunToPoint(-52,25,3,3);
+                setTurn(-270);
+                RunToPoint(-42,10,3,3);
+                //STOP HERE
+        } else if (Zone == 2) {
+            Speed = 0.6;
+            RunToPoint(-40,34,3,5);
+            setTurn(0);
+            // intakeServo.setPosition(PixelPickerBottom);
+            RunToPoint(-41,14.3,1,5);
+            intakeServo.setPosition(PixelPickerBottom);
+            stateMachineTimer = getRuntime();
+            while (stateMachineTimer >= getRuntime() - 0.4  && opModeIsActive()){
+            }
+            intakeMotor.setPower(0.3);
+            stateMachineTimer = getRuntime();
+            while (stateMachineTimer >= getRuntime() - 1.5  && opModeIsActive()){
+            }
+            intakeMotor.setPower(0);
+            intakeServo.setPosition(PixelPickerTop);
+            RunToPoint(-35, 8, 3, 3);
+            stateMachineTimer = getRuntime();
+            Speed = 0.8;
+            setTurn(90);
+            while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()){
+            }
+        }else{
+            }
+            Speed = 0.8;
+            intakeServo.setPosition(PixelPickerBottom);
+            setTurn(180);
+            RunToPoint(-53,46,1,5);
 
-            }}
-    }
+            intakeMotor.setPower(0.3);
+            stateMachineTimer = getRuntime();
+            while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()){
+
+            }
+            intakeMotor.setPower(0);
+            intakeServo.setPosition(PixelPickerTop);
+            RunToPoint(-38,52,1,5);
+            setTurn(180);
+            RunToPoint(-38,12,1,5);
+            setTurn(90);
+            RunToPoint(-35,12,1,5);
+        }
+
     public void YellowPixelRed() {
         currentState = extendLift;
         stateMachineTimer = getRuntime();
