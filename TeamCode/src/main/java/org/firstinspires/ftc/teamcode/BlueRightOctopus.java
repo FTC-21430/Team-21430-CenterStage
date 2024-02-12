@@ -50,8 +50,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
            // ParkBlue();
 
             Speed = 0.8;
-            RunToPoint(38,37,3,5);
-            RunToPoint(36,9,3,3);
+            RunToPoint(40,37,3,5);
+            RunToPoint(40,9,3,3);
             RunToPoint(5,8,5,3);
             intakeMotor.setPower(-0.9);
             transferMotor.setPower(1);
@@ -60,7 +60,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
             intakeServo.setPosition(0.371);
             RunToPoint(-46,9,3,5);
             Speed = 0.4;
-            RunToPoint(-53.4,9,1.4,1.4);
+            RunToPoint(-52.4,11,1.4,1.4);
 
             stateMachineTimer = getRuntime();
             while (stateMachineTimer >= getRuntime() - 0.1  && opModeIsActive()){
@@ -74,7 +74,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
             RunToPoint(-54,9,1,1);
             intakeServo.setPosition(0.8);
             Speed =0.3;
-            RunToPoint(-59,9,1,1);
+            RunToPoint(-52,9,1,1);
             stateMachineTimer = getRuntime();
             while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()){
 
