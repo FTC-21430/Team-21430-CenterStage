@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.teamcode.Robot.operatorState.intakeDone;
+
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -141,8 +143,14 @@ public void setTurn(float angle){
 //            drive = -gamepad1.left_stick_y;
 //            slide = gamepad1.left_stick_x;
              turn = 0;
-
-
+//THIS IS HERE FOR AUTONOMOUS PURPOSES
+            if (ColorSensorCheck(frontColorSensor) != "None"){
+                frontDepositorServo.setPosition(.5);
+            }
+            if (ColorSensorCheck(frontColorSensor) != "None" && ColorSensorCheck(backColorSensor) != "None"){
+                frontDepositorServo.setPosition(.5);
+                backDepositorServo.setPosition(.5);
+            }
 
             // IMU_Update();
             ProportionalFeedbackControl();

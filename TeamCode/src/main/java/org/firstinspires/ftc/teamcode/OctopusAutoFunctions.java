@@ -65,9 +65,9 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
             setTurn(0);
             RunToPoint(-53,-46,1,5);
 
-            intakeMotor.setPower(0.3);
+            intakeMotor.setPower(0.7);
             stateMachineTimer = getRuntime();
-            while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()){
+            while (stateMachineTimer >= getRuntime() - 0.5  && opModeIsActive()){
 
             }
             intakeMotor.setPower(0);
@@ -91,9 +91,9 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
             while (stateMachineTimer >= getRuntime() - 0.4  && opModeIsActive()){
 
             }
-            intakeMotor.setPower(0.3);
+            intakeMotor.setPower(0.7);
             stateMachineTimer = getRuntime();
-            while (stateMachineTimer >= getRuntime() - 1.5  && opModeIsActive()){
+            while (stateMachineTimer >= getRuntime() - 0.6  && opModeIsActive()){
 
             }
             intakeMotor.setPower(0);
@@ -103,9 +103,7 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
             stateMachineTimer = getRuntime();
             Speed = 0.8;
             setTurn(90);
-            while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()){
 
-            }
         }else{
             if (Zone == 3) {
                 Speed = 0.7;
@@ -118,7 +116,7 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
                 RunToPoint(-38,-28,1,2);
 
 
-                intakeMotor.setPower(0.3);
+                intakeMotor.setPower(0.7);
                 stateMachineTimer = getRuntime();
                 while (stateMachineTimer >= getRuntime() - 1.5  && opModeIsActive()){
 
@@ -325,13 +323,9 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
         if (Zone == 1) {
             RunToPoint(44, 41.5, 2.4, 1);
             RunToPoint(51, 41.5, 1, 1);
-
-
         } else if (Zone == 2) {
 
             RunToPoint(50, 34, 1,1.5);
-
-
         }else {
             RunToPoint(36,28, 2.4, 1);
             RunToPoint(50, 24.5, 1);
