@@ -410,7 +410,7 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
             RunToPoint(50.5, -39.5, 1,1);
 
         }else {
-
+            pixelLiftMotor.setTargetPosition(460);
             RunToPoint(50, -30,2, 1.4);
 
 

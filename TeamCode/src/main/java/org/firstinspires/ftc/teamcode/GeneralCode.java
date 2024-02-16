@@ -509,6 +509,10 @@ public void idleCode(){
         if (gamepad2.b) currentState = scoreDocked;
 
         if(gamepad2.a) currentState = idle;
+        if (gamepad2.x) {
+            transferMotor.setPower(-1);
+            intakeMotor.setPower(1);
+        }
 
         if (endGameMode){
             currentState = idle;
@@ -591,7 +595,7 @@ public void idleCode(){
     }
     public void fourBarWait(){
     // TODO Figure out best time for the Four Bar Wait
-        if (stateMachineTimer <= getRuntime() - 1.5) currentState = fourBarDock;
+        if (stateMachineTimer <= getRuntime() - 0.5) currentState = fourBarDock;
     }
     public void fourBarDock(){
         fourBarServo.setPosition(0.92);

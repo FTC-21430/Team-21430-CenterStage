@@ -62,6 +62,9 @@ public float camBarrierTwo=400;
 public double x;
 public double y;
 public int Zone = 2;
+public double Delay = 0;
+private boolean dpadUpOLD;
+private boolean dpadDownOLD;
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -195,9 +198,17 @@ public int Zone = 2;
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
     }
+public void configDelay(){
+        if (gamepad1.dpad_up && !dpadUpOLD) Delay += 1;
+        if (gamepad1.dpad_down && !dpadDownOLD) Delay -= 1;
+        dpadDownOLD = gamepad1.dpad_down;
+        dpadUpOLD = gamepad1.dpad_up;
+        telemetry.addData("Auto Delay = ",Delay);
+}
 
     public void ZoneTelemetryUntilStart() {
         while (!isStarted()) {
+            configDelay();
             TfodZoneAndTelemetry();
             // Push telemetry to the Driver Station.
             telemetry.update();

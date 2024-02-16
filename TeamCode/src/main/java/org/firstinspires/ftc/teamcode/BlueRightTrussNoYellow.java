@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name = "BlueRightTruss", group = "CenterStage")
-public class BlueRightTruss extends OctopusAutoFunctions{
+@Autonomous(name = "BlueRightTrussNoYellow", group = "CenterStage")
+public class BlueRightTrussNoYellow extends OctopusAutoFunctions{
     @Override
     public void runOpMode() {
         Init();
@@ -39,25 +39,16 @@ public class BlueRightTruss extends OctopusAutoFunctions{
         Speed = 0.9;
         setTurn(90);
         RunToPoint(35,60,1,5);
-        setTurn(90);
-        if (Zone != 2){
-            RunToPoint(36,36,1,5);
-            Speed = 0.6;
-            YellowPixelBlue();
-        }
 
-        Speed = 0.9;
         RunToPoint(48,57,1,5);
         // ParkRed();
-        if (Zone == 2){
-            pixelLiftMotor.setTargetPosition(100);
-            intakeMotor.setPower(0);
-            frontDepositorServo.setPosition(1);
-            backDepositorServo.setPosition(0);
-            stateMachineTimer = getRuntime();
-            while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()){}
-            pixelLiftMotor.setTargetPosition(0);
-            while (stateMachineTimer >= getRuntime() - 5  && opModeIsActive()){}
+        pixelLiftMotor.setTargetPosition(100);
+        intakeMotor.setPower(0);
+        frontDepositorServo.setPosition(1);
+        backDepositorServo.setPosition(0);
+        stateMachineTimer = getRuntime();
+        while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()){}
+        pixelLiftMotor.setTargetPosition(0);
+        while (stateMachineTimer >= getRuntime() - 5  && opModeIsActive()){}
 
-        }
     }}

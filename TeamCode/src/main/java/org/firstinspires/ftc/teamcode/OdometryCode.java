@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.Robot.operatorState.intakeDone;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
@@ -252,6 +253,14 @@ public void setTurn(float angle){
             rightBackPower = rightBackPower / 2;
 
 
+    }
+    public void WaitFunction(){
+        telemetry.addData("runtime", runtime.seconds() );
+        while (Delay >= runtime.seconds()   && opModeIsActive()){
+            ProportionalFeedbackControl();
+            telemetry.addData("runtime", getRuntime());
+            telemetry.update();
+        }
     }
 
     public void UpdateEncoders() {
