@@ -14,9 +14,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 @TeleOp(name="DriveTheRobotTeleop", group="Linear Opmode")
+@Disabled
 public class DriveTheRobotTeleop extends GeneralCode {
     // Wait for the game to start (driver presses PLAY)
     @Override
+
     public void runOpMode() {
         Init();
         waitForStart();

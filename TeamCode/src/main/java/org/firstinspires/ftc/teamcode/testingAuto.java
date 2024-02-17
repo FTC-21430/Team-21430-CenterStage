@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name = "testingAuto", group = "CenterStage")
+@Disabled
 public class testingAuto extends AutonomousFunction {
     @Override
+
     public void runOpMode() {
         Init();
         AprilTagInit();

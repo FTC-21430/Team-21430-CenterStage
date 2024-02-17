@@ -5,9 +5,11 @@ import static org.firstinspires.ftc.teamcode.Robot.operatorState.intakeDone;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @Autonomous(name="TESTING", group="Linear Opmode")
+@Disabled
 public class TESTING extends AutonomousFunction{
 
   //  @Override

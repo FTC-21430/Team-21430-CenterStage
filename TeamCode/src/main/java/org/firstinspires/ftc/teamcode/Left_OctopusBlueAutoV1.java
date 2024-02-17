@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
+@Disabled
 
 @Autonomous(name = "Left_OctopusBlueAutoV1" , group = "CenterStage")
 public class Left_OctopusBlueAutoV1 extends OdometryCode {
