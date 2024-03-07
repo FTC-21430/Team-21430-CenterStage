@@ -14,7 +14,7 @@ import java.sql.Time;
 public abstract class OdometryCode extends CameraVision {
     public double InitX, InitY;
     public double DForward, DSideways;
-    public double correctionFactor = 1.016723060905778;
+    public double correctionFactor = 1;
     public double ticksPerRevolution = 2000;
     public double MMPerRevolution = 48*Math.PI;
     public double MMPerInch = 25.4;
@@ -30,7 +30,7 @@ public abstract class OdometryCode extends CameraVision {
     public double OdometryPodOldX, OdometryPodOldY;
     public double OdometryPodX, OdometryPodY;
     public double RadiusX, RadiusY;
-public double Speed = 0.5;
+    public double Speed = 0.5;
 
     public void ProportionalFeedbackControlAuto(){
         error = Wrap(((Target - ((180 * RobotAngle) /Math.PI))));
