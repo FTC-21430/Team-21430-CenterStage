@@ -15,8 +15,8 @@ public abstract class OdometryCode extends CameraVision {
     public double InitX, InitY;
     public double DForward, DSideways;
     public double correctionFactor = 1.016723060905778;
-    public double ticksPerRevolution = 537.7;
-    public double MMPerRevolution = 96*Math.PI;
+    public double ticksPerRevolution = 2000;
+    public double MMPerRevolution = 48*Math.PI;
     public double MMPerInch = 25.4;
     public double FrontLeft = 0;
     public double FrontRight=0;
@@ -25,8 +25,11 @@ public abstract class OdometryCode extends CameraVision {
     public double scalingDouble;
     public double FrontLeftOld,FrontRightOld,BackLeftOld,BackRightOld;
     public float TESTfLeft, TESTfRight, TESTbLeft, TESTbRight;
-
     public boolean GamepadAOld;
+    //TODO: CONFIGURE STUFF
+    public double OdometryPodOldX, OdometryPodOldY;
+    public double OdometryPodX, OdometryPodY;
+    public double RadiusX, RadiusY;
 public double Speed = 0.5;
 
     public void ProportionalFeedbackControlAuto(){
@@ -52,14 +55,17 @@ public void setTurn(float angle){
         InitX = x;
         InitY = y;
     }
-
+double OldAngle=RobotAngle;
     public void UpdateOdometry(){
-        DForward = (FrontRight + FrontLeft + BackRight + BackLeft)/4;
-        DSideways = (-FrontRight + FrontLeft + BackRight - BackLeft)/4/1.2;
+
+        double DeltaRotation=RobotAngle-OldAngle;
+        DForward = OdometryPodX-RadiusX*DeltaRotation;
+        DSideways = OdometryPodY-RadiusY*DeltaRotation;
         RobotX = (InitX - DForward * Math.sin(RobotAngle)+ DSideways * Math.cos(RobotAngle));
         RobotY = (InitY + DForward * Math.cos(RobotAngle)+ DSideways * Math.sin(RobotAngle));
         InitX = RobotX;
         InitY = RobotY;
+        OldAngle=RobotAngle;
     }
     public void keepAtPoint(double Tx, double Ty) {
 
@@ -108,7 +114,7 @@ public void setTurn(float angle){
                     startOfsetRadians -= RobotAngle - arrayOutput[2];
                 }
             }
-          //  telemetry.update();
+
             double l = 17.5/2;
             double[] bxPoints = {l,-l,-l,l};
             double[] byPoints = {l,l,-l,-l};
@@ -264,41 +270,24 @@ public void setTurn(float angle){
     }
 
     public void UpdateEncoders() {
-        FrontLeft = TESTfLeft;
-        FrontRight = TESTfRight;
-        BackLeft = TESTbLeft;
-        BackRight = TESTbRight;
+        OdometryPodX = TESTfLeft;
+        OdometryPodY = TESTfRight;
 
-        FrontLeft -= FrontLeftOld;
-        BackLeft -= BackLeftOld;
-        FrontRight -= FrontRightOld;
-        BackRight -= BackRightOld;
+        OdometryPodX = OdometryPodX-OdometryPodOldX;
+        OdometryPodY = OdometryPodY-OdometryPodOldY;
 
-        FrontLeftOld = TESTfLeft;
-        FrontRightOld = TESTfRight;
-        BackLeftOld = TESTbLeft;
-        BackRightOld = TESTbRight;
+        OdometryPodOldX= OdometryPodX;
+        OdometryPodOldY = OdometryPodY;
 
-        FrontLeft = FrontLeft / ticksPerRevolution;
-        FrontLeft = MMPerRevolution * FrontLeft;
-        FrontLeft = FrontLeft / MMPerInch;
-        FrontLeft *= correctionFactor;
+        OdometryPodX = OdometryPodX / ticksPerRevolution;
+        OdometryPodX = MMPerRevolution * OdometryPodX;
+        OdometryPodX = OdometryPodX / MMPerInch;
+        OdometryPodX *= correctionFactor;
 
-        FrontRight = FrontRight / ticksPerRevolution;
-        FrontRight = MMPerRevolution * FrontRight;
-        FrontRight = FrontRight / MMPerInch;
-        FrontRight *= correctionFactor;
-
-        BackRight = BackRight / ticksPerRevolution;
-        BackRight = MMPerRevolution * BackRight;
-        BackRight = BackRight / MMPerInch;
-        BackRight *= correctionFactor;
-
-        BackLeft = BackLeft / ticksPerRevolution;
-        BackLeft = MMPerRevolution * BackLeft;
-        BackLeft = BackLeft / MMPerInch;
-        BackLeft *= correctionFactor;
-
+        OdometryPodY = OdometryPodY / ticksPerRevolution;
+        OdometryPodY = MMPerRevolution * OdometryPodY;
+        OdometryPodY = OdometryPodY / MMPerInch;
+        OdometryPodY *= correctionFactor;
     }
 
     YawPitchRollAngles orientation;
