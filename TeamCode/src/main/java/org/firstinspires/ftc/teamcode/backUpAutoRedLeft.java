@@ -50,7 +50,7 @@ public class backUpAutoRedLeft extends OldCodeForPowerPlay {
         //purple pixcel placement for zone 2
 
         IntakeClose();
-RunToPoint(0, -12);
+RunToPoint(0, -12,1);
         // if (Zone==1)
 //        RunToPoint(-14,21);
 //        IntakeOpen();

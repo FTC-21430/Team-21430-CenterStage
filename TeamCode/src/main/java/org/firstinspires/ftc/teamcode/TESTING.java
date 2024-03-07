@@ -1,39 +1,30 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import static org.firstinspires.ftc.teamcode.Robot.operatorState.intakeCancel;
+import static org.firstinspires.ftc.teamcode.Robot.operatorState.intakeDone;
+
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-@TeleOp(name="TESTING", group="Linear Opmode")
-public class TESTING extends GeneralCode {
 
-    @Override
+@Autonomous(name="TESTING", group="Linear Opmode")
+@Disabled
+public class TESTING extends AutonomousFunction{
+
+  //  @Override
+    double intakePower = 0;
+    double AlignWait;
     public void runOpMode() {
-        double height = 0.96;
-        boolean old = false;
-        boolean oldB = false;
         Init();
+
+
         waitForStart();
-        while (opModeIsActive()){
-            // .99
-            // .015
-            if (gamepad2.a) height += 0.0008;
-            if (gamepad2.b) height -= 0.0008;
-            if (height >= 0.96) height = 0.96;
-            if (height <= 0) height = 0;
-            fourBarServo.setPosition(height);
-            telemetry.addData("currentSate", currentState);
-            telemetry.addData("height", height);
-            telemetry.addData("oldA", old);
-            telemetry.addData("oldB", oldB);
-            //  telemetry.addData("LiftEncoder count:", pixelLiftMotor.getCurrentPosition());
-            telemetry.update();
-            old = gamepad2.a;
-            oldB = gamepad2.b;
-        }
+
+        runtime.reset();
 
 
-        }
-    }
+
+}}
 
 

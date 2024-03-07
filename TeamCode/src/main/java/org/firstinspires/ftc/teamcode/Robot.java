@@ -5,6 +5,8 @@ import android.view.View;
 //TODO:fix this
 //import com.acmerobotics.dashboard.FtcDashboard;
 //import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -23,10 +25,12 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public abstract class Robot extends LinearOpMode {
     IMU imu;
+    boolean resettingImu = false;
     // Declare OpMode members.
     double Target = 0;
     double error = 0;
@@ -35,6 +39,8 @@ public abstract class Robot extends LinearOpMode {
     double drive;
     double slide;
     double turn;
+    //double TeleopStartingRotation = 90;
+    boolean UseAprilTags;
     double distanceX, distanceY, PowerX, PowerY, PowerF, PowerS;
     public double RobotX, RobotY;
     public ElapsedTime runtime = new ElapsedTime();
@@ -44,6 +50,9 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor rightBackMotor = null;
     public float controlHubChange = 51;
     int liftPosition;
+    boolean TurnOLD = false;
+    public boolean CurrentAlign = true;
+    public boolean IsProgramAutonomous;
     enum operatorState
     {
         idle,
@@ -72,6 +81,7 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor intakeMotor = null;
     public DcMotor pixelLiftMotor = null;
     public Servo intakeServo = null;
+    public Servo DroneLinkageServo = null;
     public Servo fourBarServo = null;
     public Servo backDepositorServo = null;
     public Servo frontDepositorServo = null;
@@ -79,7 +89,13 @@ public abstract class Robot extends LinearOpMode {
     public Servo droneTrigger = null;
 
     public double scoringAngle = 0;
+    FtcDashboard dashboard;
 
+    public double minPower = 0.01;
+    public double endOfClipPower = 0.2;
+
+
+    public double turnTimer;
 
     public double robotHeading;
     double leftFrontPower;
@@ -89,7 +105,7 @@ public abstract class Robot extends LinearOpMode {
     boolean DriverOrientationDriveMode = true;
     boolean Driver1Leftbumper;
     double startingangle;
-
+    public double startOfsetRadians = 0;
 
     float gain = 5;
     final float[] hsvValues = new float[3];
@@ -141,7 +157,7 @@ public void lightsUpdate(){
         blinkinLedDriver.setPattern(pattern);
 }
     public void straferAlgorithm(){
-        DriverOrientationDriveMode = false;
+
         if(DriverOrientationDriveMode == true){
 //            slide = (slide * Math.cos(robotHeading)) - (drive * Math.sin(robotHeading));
 //            drive = (slide * Math.sin(robotHeading)) + (drive * Math.cos(robotHeading));
@@ -149,12 +165,7 @@ public void lightsUpdate(){
 
             double temp = drive * Math.cos(-robotHeading) + slide * Math.sin(-robotHeading);
             slide = -drive * Math.sin(-robotHeading) + slide * Math.cos(-robotHeading);
-            drive = temp;
-        }
-
-        if (gamepad1.a) {
-            drive *= -1;
-            slide *= -1;
+            if(!CurrentAlign) drive = temp;
         }
 
         leftFrontPower = Range.clip(drive + slide + turn, -1.0, 1.0);
@@ -165,11 +176,30 @@ public void lightsUpdate(){
     }
     public void IMU_Update(){
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+        if(orientation.getRoll(AngleUnit.DEGREES) == 0 && orientation.getPitch(AngleUnit.DEGREES) == 0
+                && orientation.getYaw(AngleUnit.DEGREES) == 0) {
+            if(!resettingImu) {
+                telemetry.addData("IMU failed?", "Re-initializing!");
+                resettingImu = true;
+                RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
+                RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.UP;
+                RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+                imu.initialize(new IMU.Parameters(orientationOnRobot));
+            }
+        }
+        else
+        {
+            resettingImu = false;
+        }
+        telemetry.addData("resettingIMU", resettingImu);
         AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
-        current = orientation.getYaw(AngleUnit.DEGREES);
-        telemetry.addData("Yaw (Z)", "%.2f Deg. (Heading)", orientation.getYaw(AngleUnit.DEGREES));
-    robotHeading = orientation.getYaw(AngleUnit.RADIANS) ;
 
+
+        robotHeading = orientation.getYaw(AngleUnit.RADIANS) ;
+      //  robotHeading += ((TeleopStartingRotation)/180) * Math.PI;
+        RobotAngle = orientation.getYaw(AngleUnit.RADIANS);
+        RobotAngle += startOfsetRadians;
+        telemetry.addData("Yaw (Z)", "%.2f Rad. (Heading)", RobotAngle);
     }
     public void IMUReset(){
         telemetry.addData("Yaw", "Reset" + "ing\n");
@@ -178,14 +208,26 @@ public void lightsUpdate(){
     }
 
     public void ProportionalFeedbackControl(){
-        telemetry.addData("angle", current);
+        if(resettingImu)
+            return;
+        telemetry.addData("angle", (RobotAngle * 180)/Math.PI);
         telemetry.addData("target", Target);
-        error = Wrap((Target - current));
-        if (gamepad1.right_stick_x != 0){
-            Target = current;
-        }
+        telemetry.addData("IsProgramAutonomous",IsProgramAutonomous);
+        error = Wrap((Target - (RobotAngle * 180 / Math.PI)));
+        if (gamepad1.right_stick_x != 0 || (TurnOLD==true) || turnTimer +0.3 >= getRuntime()){
+            if (!IsProgramAutonomous){
+                Target = (RobotAngle * 180 / Math.PI);
+            }
 
-        turn -= error/20;
+        }
+        if (gamepad1.right_stick_x != 0 && TurnOLD == true){
+            turnTimer = getRuntime();
+        }
+        if (gamepad1.right_stick_x != 0) TurnOLD = false;
+        if (gamepad1.right_stick_x == 0) TurnOLD = true;
+        if (gamepad1.right_stick_x==0 || IsProgramAutonomous) {
+            turn -= error / 20;
+        }
     }
     double Wrap(double angle){
         while(angle > 180){
@@ -204,10 +246,15 @@ public void lightsUpdate(){
 //        time -= 1;
 //        }
     public void Init() {
-        //telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+        dashboard = FtcDashboard.getInstance();
+        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+       //telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 //TODO:FIX THIS
         colorSenseInit();
         LightsInit();
+
+        DroneLinkageServo = hardwareMap.get(Servo.class, "DroneLinkage");
+        DroneLinkageServo.setPosition(0.9);
         imu = hardwareMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
         RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.UP;
@@ -240,7 +287,7 @@ public void lightsUpdate(){
         pixelLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         pixelLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+        DriverOrientationDriveMode = true;
         climberMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -266,6 +313,19 @@ climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
        imu.resetYaw();
        liftPosition = pixelLiftMotor.getCurrentPosition();
+        leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
     }
 
 

@@ -22,26 +22,21 @@ import static org.firstinspires.ftc.teamcode.Robot.operatorState.transferDocked;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 public abstract class GeneralCode extends Robot {
+    boolean ClimbAutoUp = false;
     int LiftManual = 0;
     boolean calabrate_Lift = false;
     boolean firstLoop = false;
-
     int LiftMAX = 1400;
-
-
     boolean leftTurnold = false;
     boolean rightTurnold = false;
-
     double intakeHeight = 0;
-
     boolean endGameMode = false;
-
     boolean pixelPickerUp = false;
     int pixelPickerCurrent = 6;
     boolean rightBumperOLD = false;
-
     boolean hasDroneLaunched = false;
     double stateMachineTimer;
     boolean oldEndGameMode = false;
@@ -58,12 +53,13 @@ public abstract class GeneralCode extends Robot {
     boolean TurnRight;
     boolean bumper_old;
     float IntakeInput;
-    int safeLiftHeight = 350;
+    int safeLiftHeight = 450;
     boolean barHeightHigh = false;
-
-float communicationMode;
-
+    float communicationMode;
 double liftTimeOut;
+
+    double PixelPickerBottom = 0.278;
+    double PixelPickerTop = 0.8;
 public void pixelLiftRunToPosition(int encoderTick){
 
     pixelLiftMotor.setTargetPosition(encoderTick);
@@ -85,12 +81,8 @@ public void pixelLiftRunToPosition(int encoderTick){
         lowJunction = gamepad2.dpad_left;
         groundJunction = gamepad2.dpad_down;
         //toggle Driver Orientation Mode
-
         communicationMode = gamepad2.right_trigger;
-
     }
-
-
     public void GridRunner() {
     // TODO: make it easy to not break the robot. :(
        // if (gamepad1.a) Target = scoringAngle;
@@ -124,6 +116,7 @@ public void pixelLiftRunToPosition(int encoderTick){
         if (slowMode) {
             drive /= 2;
             slide /= 2;
+            turn *= 0.8;
 
         }
     }
@@ -147,27 +140,34 @@ public void pixelLiftRunToPosition(int encoderTick){
     }
 
     public void Climber() {
-        telemetry.addData("climber power", climberMotor.getPower());
+
 //        if (hasDroneLaunched){
-            telemetry.addData("encoderCount:", climberMotor.getCurrentPosition());
+        telemetry.addData("encoderCount:", climberMotor.getCurrentPosition());
 //
 // && climberMotor.getCurrentPosition() >= -4630
 //        ClimberLimitSwitchBottom.getState() == false && climberMotor.getCurrentPosition()<=100
-            if (gamepad2.dpad_down  && !ClimberLimitSwitchBottom.getState()) {
-                climberMotor.setPower(1);
-            } else if (gamepad2.dpad_up && climberMotor.getCurrentPosition() >= -25000) {
-
-                climberMotor.setPower(-0.9);
-            } else {
-                climberMotor.setPower(0);
+        if (gamepad2.dpad_right && climberMotor.getCurrentPosition() > -18700) ClimbAutoUp = true;
+        if (gamepad2.dpad_left || climberMotor.getCurrentPosition() <= -18690) ClimbAutoUp = false;
+        if (ClimbAutoUp) {
+                climberMotor.setPower(-1);
             }
+        if (!ClimbAutoUp && gamepad2.dpad_right) {
+            climberMotor.setPower(-0.1);
+        }
+        if (gamepad2.dpad_left && !ClimberLimitSwitchBottom.getState()){
+            climberMotor.setPower(1);
+        }
+        if (!gamepad2.dpad_left && !gamepad2.dpad_right && !ClimbAutoUp) {
+            climberMotor.setPower(0);
+        }
+            telemetry.addData("climber power", climberMotor.getPower());
         }
 
 
 //    }
 public void LaunchDrone(){
         hasDroneLaunched = true;
-        droneTrigger.setPosition(0.62);
+        droneTrigger.setPosition(0.67);
     // line 170, this is a temporary number. TUNE WHEN YOU CAN TEST;
 }
 
@@ -180,24 +180,30 @@ public void LaunchDrone(){
             }
         }
         oldEndGameMode = gamepad2.back;
-        if (endGameMode && gamepad2.right_trigger >= 0.5) LaunchDrone();
+        if (gamepad1.left_bumper) {
+            DroneLinkageServo.setPosition(0.75);
+        }else{
+            DroneLinkageServo.setPosition(0.9);
+        }
+
+        if (gamepad1.left_trigger >= 0.5 && gamepad1.left_bumper) LaunchDrone();
         if (endGameMode){
             Climber();
         }
     }
 
     public void updateCommunication(){
-        if (currentState == scoreIdle || currentState == score || currentState == liftOut && ColorSensorCheck(frontColorSensor) != "None"){
-            if (ColorSensorCheck(frontColorSensor) == "White"){
+        if (currentState == scoreIdle || currentState == score || currentState == liftOut && ColorSensorCheck(backColorSensor) != "None"){
+            if (ColorSensorCheck(backColorSensor) == "White"){
             pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
             }
-            if (ColorSensorCheck(frontColorSensor) == "Yellow"){
+            if (ColorSensorCheck(backColorSensor) == "Yellow"){
                 pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;
             }
-            if (ColorSensorCheck(frontColorSensor) == "Green"){
+            if (ColorSensorCheck(backColorSensor) == "Green"){
             pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
             }
-            if (ColorSensorCheck(frontColorSensor) == "Purple"){
+            if (ColorSensorCheck(backColorSensor) == "Purple"){
                 pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE_VIOLET;
             }
         }
@@ -253,9 +259,6 @@ switch (currentState){
     case extendLift:
         extendLift();
         break;
-    case extendBar:
-        extendFourBar();
-        break;
     case liftOut:
         liftOut();
         break;
@@ -296,14 +299,14 @@ switch (currentState){
 
     public void scoreDocked(){
         frontDepositorServo.setPosition(1);
-        if (ColorSensorCheck(frontColorSensor) == "None"){
+        backDepositorServo.setPosition(0);
+
+        if (!gamepad2.b) {
             frontDepositorServo.setPosition(0.5);
-            currentState = dockedScoreFinished;
+            backDepositorServo.setPosition(0.5);
+            currentState = idle;
         }
-        if (gamepad2.x) {
-            transferMotor.setPower(-1);
-            intakeMotor.setPower(1);
-        }
+
     }
 
     public void dockedScoreFinished(){
@@ -337,19 +340,24 @@ switch (currentState){
 
 
 public void idleCode(){
-    intakeServo.setPosition(1);
+    if (endGameMode) {
+        intakeServo.setPosition(1);
+    }
         if (gamepad2.b) currentState = scoreDocked;
         backDepositorServo.setPosition(0.5);
     pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
-        if (gamepad2.left_bumper && !endGameMode) {
+        if (gamepad2.left_bumper) {
             currentState = intaking;
             pixelPickerCurrent = 6;
             pixelPickerUp = true;
-            frontDepositorServo.setPosition(1);
+
             backDepositorServo.setPosition(-1);
         }
       //  if (gamepad2.right_bumper) currentState = intakeManaul;
-        if (gamepad2.dpad_up && !endGameMode) currentState = extendLift;
+        if (gamepad2.dpad_up) {
+            currentState = extendLift;
+            stateMachineTimer = getRuntime();
+        }
     if (gamepad2.x) {
         transferMotor.setPower(-1);
         intakeMotor.setPower(1);
@@ -358,7 +366,8 @@ public void idleCode(){
     public void intake(){
     telemetry.addData("rightBumperOLD",rightBumperOLD);
     telemetry.addData("pickerUp",pixelPickerUp);
-    if (gamepad2.left_trigger >= 0.5) pixelPickerCurrent = 6;
+    if (gamepad2.right_trigger >= 0.5) pixelPickerCurrent = 6;
+    if (gamepad2.left_trigger >= 0.5) pixelPickerCurrent = 1;
     if (gamepad2.right_bumper && !rightBumperOLD) {
             if (pixelPickerUp == true) {
                 if (pixelPickerCurrent == 6) {
@@ -408,7 +417,7 @@ public void idleCode(){
                 intakeServo.setPosition(0.278);
             }
 
-            telemetry.addData("currect pixel picker",pixelPickerCurrent);
+            telemetry.addData("current pixel picker",pixelPickerCurrent);
         if (pixelPickerCurrent == 6 ||  pixelPickerCurrent == 2 || pixelPickerCurrent ==3 ){
             intakeMotor.setPower(-0.7);
         }else if (pixelPickerCurrent == 5 || pixelPickerCurrent == 4){
@@ -420,9 +429,12 @@ public void idleCode(){
         transferMotor.setPower(1);
 
         pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LARSON_SCANNER;
-        if (!gamepad2.left_bumper || endGameMode) {
+        if (!gamepad2.left_bumper) {
             currentState = intakeCancel;
             stateMachineTimer = getRuntime();
+        }
+        if (ColorSensorCheck(frontColorSensor) == "None"){
+            frontDepositorServo.setPosition(1);
         }
         if (ColorSensorCheck(frontColorSensor) != "None"){
             frontDepositorServo.setPosition(.5);
@@ -448,7 +460,8 @@ public void idleCode(){
         intakeMotor.setPower(0.9);
 
         transferMotor.setPower(-1);
-        if (stateMachineTimer <= getRuntime() - 1) {
+        if (stateMachineTimer <= getRuntime() - 0) {
+            // We set it to 0 because it was taking to much time and if we delete it we encounter bugs
             currentState = idle;
             intakeMotor.setPower(0);
             transferMotor.setPower(0);
@@ -481,7 +494,8 @@ public void idleCode(){
         intakeMotor.setPower(-0.8);
 
         transferMotor.setPower(-1);
-        if (stateMachineTimer <= getRuntime() - 1) {
+        if (stateMachineTimer <= getRuntime() - 0) {
+            //We set it to 0 because it was taking to much time and if we delete it we encounter bugs, edit: encountered bugs
             currentState = scoreIdle;
             intakeMotor.setPower(0);
             transferMotor.setPower(0);
@@ -495,6 +509,10 @@ public void idleCode(){
         if (gamepad2.b) currentState = scoreDocked;
 
         if(gamepad2.a) currentState = idle;
+        if (gamepad2.x) {
+            transferMotor.setPower(-1);
+            intakeMotor.setPower(1);
+        }
 
         if (endGameMode){
             currentState = idle;
@@ -509,66 +527,44 @@ public void idleCode(){
 
         pixelLiftMotor.setTargetPosition(safeLiftHeight);
 
-        if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight - 1 && stateMachineTimer <= getRuntime() - 1){
-
-            if (barHeightHigh){
+        if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight  || stateMachineTimer <= getRuntime() - 3){
+            // We made it an or statement just in case the robot doesn't reach the exact safe lift height then will be okay :)
                 currentState = highFourBarExtend;
-            }else{
-                currentState = highFourBarExtend;
-            }
         }
     }
     public void extendFourBarHigh(){
-        barHeightHigh = true;
         fourBarServo.setPosition(0.015);
-        if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight - 1) {
-            liftPosition = safeLiftHeight;
-            currentState = liftOut;
-        }
-    }
-    public void extendFourBar(){
-        barHeightHigh = false;
-        fourBarServo.setPosition(0.015);
-        if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight - 1) {
-            liftPosition = safeLiftHeight;
-            currentState = liftOut;
-        }
-
+        liftPosition = safeLiftHeight;
+        currentState = liftOut;
     }
     public void liftOut(){
-        liftPosition += gamepad2.left_stick_y * -30;
+        frontDepositorServo.setPosition(0.5);
+        backDepositorServo.setPosition(0.5);
+        liftPosition += gamepad2.left_stick_y * -50;
         if (liftPosition >= LiftMAX) liftPosition = LiftMAX;
         if (liftPosition <= safeLiftHeight) liftPosition = safeLiftHeight;
         telemetry.addData("liftPosition", liftPosition);
         pixelLiftMotor.setTargetPosition(liftPosition);
+
         if(gamepad2.b){
             firstLoop = true;
             currentState = score;
         }
-        if(gamepad2.dpad_down || endGameMode) {
+        if(gamepad2.dpad_down) {
             currentState = fourBarWait;
             fourBarServo.setPosition(0.96);
+        pixelLiftMotor.setTargetPosition(safeLiftHeight+200);
             stateMachineTimer = getRuntime();
         }
     }
     public void score(){
+        frontDepositorServo.setPosition(0);
+        backDepositorServo.setPosition(1);
 
-    if (firstLoop){
-        if (ColorSensorCheck(backColorSensor) == "None"){
-            frontDepositorServo.setPosition(0);
-            backDepositorServo.setPosition(1);
-            stateMachineTimer = runtime.seconds();
-        }else{
-            frontDepositorServo.setPosition(0);
-            backDepositorServo.setPosition(1);
-            stateMachineTimer = runtime.seconds();
-        }
-        firstLoop = false;
-    }else{
-        telemetry.addData("bkwd", "yay");
-        if (stateMachineTimer <= runtime.seconds() - 0.5){
-            currentState = scoreFinished;
-        }
+    if (!gamepad2.b) {
+        frontDepositorServo.setPosition(0.5);
+        backDepositorServo.setPosition(0.5);
+        currentState = liftOut;
     }
 
     }
@@ -576,7 +572,7 @@ public void idleCode(){
         frontDepositorServo.setPosition(0.5);
         backDepositorServo.setPosition(0.5);
         if (ColorSensorCheck(backColorSensor) != "None"){
-            currentState = liftOut;
+            currentState = depoTransition;
         }
         if (gamepad2.dpad_down){
             fourBarServo.setPosition(0.92);
@@ -585,21 +581,25 @@ public void idleCode(){
         }
     }
     public void depositorTransition(){
-//        frontDepositorServo.setPosition(1);
-//        backDepositorServo.setPosition(-1);
-//        if (ColorSensorCheck(frontColorSensor) != "None"){
-//            currentState = liftOut;
-//            frontDepositorServo.setPosition(0.5);
-//            backDepositorServo.setPosition(0.5);
-//        }
+        if (firstLoop){
+                frontDepositorServo.setPosition(0);
+                stateMachineTimer = runtime.seconds();
+            firstLoop = false;
+        }else{
+
+            if (stateMachineTimer <= runtime.seconds() - 0.5){
+                currentState = liftOut;
+            }
+        }
 
     }
     public void fourBarWait(){
-        if (stateMachineTimer <= getRuntime() - 0.7) currentState = fourBarDock;
+    // TODO Figure out best time for the Four Bar Wait
+        if (stateMachineTimer <= getRuntime() - 0.5) currentState = fourBarDock;
     }
     public void fourBarDock(){
         fourBarServo.setPosition(0.92);
-        if (gamepad2.dpad_down || endGameMode){
+        if (gamepad2.dpad_down){
             currentState = liftDock;
             stateMachineTimer = getRuntime();
             liftTimeOut = getRuntime();

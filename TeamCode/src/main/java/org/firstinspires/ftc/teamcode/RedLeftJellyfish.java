@@ -1,43 +1,53 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name = "RedLeftJellyfish" , group = "CenterStage")
 public class RedLeftJellyfish extends AutonomousFunction {
     @Override
     public void runOpMode() {
         Init();
+        DriverOrientationDriveMode = false;
         CamInit();
+        pattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE;
+        blinkinLedDriver.setPattern(pattern);
         robotHeading = 0;
         Target = 0;
         startOfsetRadians = 0;
-        waitForStart();
+        IsProgramAutonomous = true;
+        ZoneTelemetryUntilStart();
+
         runtime.reset();
-        leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        RobotX = -41;
+        RobotY = -62;
+        InitX= -41;
+        InitY = -62;
+        PurplePixelRedLeft();
 
-        leftFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+         Speed = 0.6;
+        CamEnd();
+        AprilTagInit();
 
-        leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        IMUReset();
-        RobotX = -32;
-        RobotY = -60;
-        InitX= -37;
-        InitY = -60;
-        CamRun(3);
+      //  RunToPoint(-37,-38,2,5);
+        RunToPoint(-50,-58,2,5);
+        RunToPoint(-63.7,-42,2,5);
+        RunToPoint(-61,-12,2,5);
+        RunToPoint(-53,-12,2,5);
+        setTurn(90);
+        resetRuntime();
+        while (0.4 >= getRuntime() && opModeIsActive()){
+            ProportionalFeedbackControl();
+        }
+        Speed = 0.8;
+        RunToPoint(12,-12,2,5);
+        RunToPoint(36,-12,2,5);
+        RunToPoint(36,-36,3,5);
+        Speed = 0.5;
 
-        PurplePixelRed();
-        //YellowPixel();
-        //Park();
+
+        YellowPixelRed();
+        ParkRed();
 
         }
     }

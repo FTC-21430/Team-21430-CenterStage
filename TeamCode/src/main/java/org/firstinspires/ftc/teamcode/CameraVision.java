@@ -56,12 +56,15 @@ import java.util.List;
  */
 //@TeleOp(name = "CameraVision", group = "Concept")
 
-public abstract class CameraVision extends OdometryCode {
+public abstract class CameraVision extends GeneralCode {
 public float camBarrierONE=200;
 public float camBarrierTwo=400;
 public double x;
 public double y;
-public int Zone = 0;
+public int Zone = 2;
+public double Delay = 0;
+private boolean dpadUpOLD;
+private boolean dpadDownOLD;
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
@@ -90,21 +93,23 @@ public int Zone = 0;
     private VisionPortal AprilTagVisionPortal;
     private AprilTagProcessor ATProcessor;
     private TfodProcessor tfod;
+    public boolean aprilTagProcessorActive = false;
 
     public void AprilTagInit(){
+        aprilTagProcessorActive = true;
         ATProcessor = AprilTagProcessor.easyCreateWithDefaults();
-        AprilTagVisionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 1"), ATProcessor);
+        AprilTagVisionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 2"), ATProcessor);
     }
 
-
-
-
-    public void aprilTagFindRobotPosition(){
+    public float[] aprilTagFindRobotPosition(){
+        float[] returnArray = {0, 0, 0};
 
         List<AprilTagDetection> detections = ATProcessor.getDetections();
         for (AprilTagDetection detection : detections){
             AprilTagMetadata metaData = detection.metadata;
             AprilTagPoseRaw rawpose = detection.rawPose;
+        if (!detections.isEmpty()) {
+
 
             float tagInFieldX = metaData.fieldPosition.get(0);
             float tagInFieldY = metaData.fieldPosition.get(1);
@@ -124,16 +129,16 @@ public int Zone = 0;
                     .translated(tagInCameraX, tagInCameraY, tagInCameraZ)
                     .multiplied(tagInCameraR)
                     .inverted();
-                    //TODO:Make these values true to the robot THESE VALUES ARE ONLY TEMPORARY
-            float cameraInRobotX = 5;
-            float cameraInRobotY = -4;
-            float cameraInRobotZ = 11.5f;
+            //TODO:Make these values true to the robot THESE VALUES ARE ONLY TEMPORARY
+            float cameraInRobotX = 1;
+            float cameraInRobotY = -4.5f;
+            float cameraInRobotZ = 1.75f;
             OpenGLMatrix cameraInRobotR = new Orientation(AxesReference.INTRINSIC, AxesOrder.XYZ,
-                    AngleUnit.DEGREES,-105,0,0,0)
+                    AngleUnit.DEGREES, -90, 180, 0, 0)
                     .getRotationMatrix();
 
             OpenGLMatrix robotInCameraFrame = OpenGLMatrix.identityMatrix()
-                    .translated(cameraInRobotX, cameraInRobotY,cameraInRobotZ)
+                    .translated(cameraInRobotX, cameraInRobotY, cameraInRobotZ)
                     .multiplied(cameraInRobotR)
                     .inverted();
 
@@ -152,13 +157,23 @@ public int Zone = 0;
             float robotInFieldZ = robotInFieldTranslation.get(2);
 
 
-
             float robotInFieldRoll = robotInFieldOrientation.firstAngle;
             float robotInFieldPitch = robotInFieldOrientation.secondAngle;
             float robotInFieldYaw = robotInFieldOrientation.thirdAngle;
 
-            telemetry.addData("robotX",robotInFieldX);
-            telemetry.addData("robotY",robotInFieldY);
+            returnArray[0] = robotInFieldX;
+            returnArray[1] = robotInFieldY;
+            returnArray[2] = robotInFieldYaw * ((float) Math.PI / 180);
+//            RobotX = robotInFieldX;
+//            RobotY = robotInFieldY;
+//            InitX = robotInFieldX;
+//            InitY = robotInFieldY;
+            // RobotAngle = robotInFieldYaw * (Math.PI/180);
+//            startOfsetRadians -= RobotAngle - robotInFieldYaw * (Math.PI/180);
+
+
+            telemetry.addData("robotX", robotInFieldX);
+            telemetry.addData("robotY", robotInFieldY);
             telemetry.addData("robotZ", robotInFieldZ);
 
             telemetry.addData("robotRoll", robotInFieldRoll);
@@ -166,9 +181,11 @@ public int Zone = 0;
             telemetry.addData("robotYaw", robotInFieldYaw);
 
             telemetry.addData("decision Margin", detection.decisionMargin);
-
-
         }
+            break;
+        }
+
+        return returnArray;
     }
 
 
@@ -181,29 +198,23 @@ public int Zone = 0;
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
     }
-public void CamRun(int timeoutS) {
-    resetRuntime();
-   while(timeoutS >= getRuntime() && opModeIsActive()){
-    telemetryTfod();
-Zone = findZone();
+public void configDelay(){
+        if (gamepad1.dpad_up && !dpadUpOLD) Delay += 1;
+        if (gamepad1.dpad_down && !dpadDownOLD) Delay -= 1;
+        dpadDownOLD = gamepad1.dpad_down;
+        dpadUpOLD = gamepad1.dpad_up;
+        telemetry.addData("Auto Delay = ",Delay);
+}
 
-telemetry.addData("Zone: ", Zone);
-
-
-    // Push telemetry to the Driver Station.
-    telemetry.update();
-
-    // Save CPU resources; can resume streaming when needed.
-    if (gamepad1.dpad_down) {
-        TensorFlowVisionPortal.stopStreaming();
-    } else if (gamepad1.dpad_up) {
-        TensorFlowVisionPortal.resumeStreaming();
+    public void ZoneTelemetryUntilStart() {
+        while (!isStarted()) {
+            configDelay();
+            TfodZoneAndTelemetry();
+            // Push telemetry to the Driver Station.
+            telemetry.update();
+        }
+        Zone = findZone();
     }
-
-    // Share the CPU.
-   // sleep(20);
-
-}}
 public void CamEnd(){
 
         // Save more CPU resources when camera is no longer needed.
@@ -280,17 +291,21 @@ public void CamEnd(){
      */
     public int findZone(){
         if (x <= camBarrierONE){
-            telemetry.addData("Working:","Yes");
+            telemetry.addData("ZoneREAD", "1");
             return 1;
         }else if(x >= camBarrierONE && x <=camBarrierTwo){
+            telemetry.addData("ZoneREAD", "2");
             return 2;
         }else if(x >= camBarrierTwo){
+            telemetry.addData("ZoneREAD", "3");
             return 3;
+
         }else{
+            telemetry.addData("ZoneREAD", "Did not work :'( ");
             return 2;
         }
     }
-    private void telemetryTfod() {
+    private void TfodZoneAndTelemetry() {
 
         List<Recognition> currentRecognitions = tfod.getRecognitions();
         telemetry.addData("# Objects Detected", currentRecognitions.size());
@@ -299,7 +314,8 @@ public void CamEnd(){
         for (Recognition recognition : currentRecognitions) {
              x = (recognition.getLeft() + recognition.getRight()) / 2 ;
              y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
-            telemetry.addData("zone!",findZone());
+             Zone = findZone();
+            telemetry.addData("zone!",Zone);
             telemetry.addData(""," ");
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
             telemetry.addData("- Position", "%.0f / %.0f", x, y);

@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 @TeleOp(name="OldRobotTeleop", group="Linear Opmode")
+@Disabled
 public class OldRobotTeleop extends OldCodeForPowerPlay {
     // Wait for the game to start (driver presses PLAY)
     @Override
