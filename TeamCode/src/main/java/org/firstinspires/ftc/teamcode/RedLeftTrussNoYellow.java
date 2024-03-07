@@ -38,9 +38,9 @@ public class RedLeftTrussNoYellow extends OctopusAutoFunctions{
         WaitFunction();
         Speed = 0.9;
         setTurn(90);
-        RunToPoint(35,-60,1,5);
+        RunToPoint(35,-61,1,5);
 
-        RunToPoint(48,-57,1,5);
+        RunToPoint(48,-61,1,5);
         // ParkRed();
         pixelLiftMotor.setTargetPosition(100);
         intakeMotor.setPower(0);
