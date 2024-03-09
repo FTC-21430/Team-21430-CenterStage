@@ -48,6 +48,8 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor leftBackMotor = null;
     public DcMotor rightFrontMotor = null;
     public DcMotor rightBackMotor = null;
+    public DcMotor odometrypodx;
+    public DcMotor odometrypody;
     public float controlHubChange = 51;
     int liftPosition;
     boolean TurnOLD = false;
@@ -213,7 +215,7 @@ public void lightsUpdate(){
         telemetry.addData("angle", (RobotAngle * 180)/Math.PI);
         telemetry.addData("target", Target);
         telemetry.addData("IsProgramAutonomous",IsProgramAutonomous);
-        error = Wrap((Target - (RobotAngle * 180 / Math.PI)));
+        error = Wrap(Target - RobotAngle);
         if (gamepad1.right_stick_x != 0 || (TurnOLD==true) || turnTimer +0.3 >= getRuntime()){
             if (!IsProgramAutonomous){
                 Target = (RobotAngle * 180 / Math.PI);
@@ -230,11 +232,11 @@ public void lightsUpdate(){
         }
     }
     double Wrap(double angle){
-        while(angle > 180){
-            angle -= 360;
+        while(angle > Math.PI){
+            angle -= 2*Math.PI;
         }
-        while(angle < -180){
-            angle += 360;
+        while(angle < -Math.PI){
+            angle += 2 * Math.PI;
         }
         return angle;
     }
@@ -326,6 +328,19 @@ climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+    }
+    public void OdometrypodInit () {
+       odometrypodx = hardwareMap.get(DcMotor.class,"odometrypodX");
+      odometrypody = hardwareMap.get(DcMotor.class, "odometrypodY");
+        imu = hardwareMap.get(IMU.class, "imu");
+        odometrypodx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        odometrypody.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        odometrypodx.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        odometrypody.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.FORWARD;
+        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
+        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
+        imu.initialize(new IMU.Parameters(orientationOnRobot));
     }
 
 

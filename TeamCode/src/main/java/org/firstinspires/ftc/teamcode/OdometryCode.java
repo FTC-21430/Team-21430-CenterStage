@@ -59,8 +59,10 @@ double OldAngle=RobotAngle;
     public void UpdateOdometry(){
 
         double DeltaRotation=RobotAngle-OldAngle;
-        DForward = OdometryPodX-RadiusX*DeltaRotation;
-        DSideways = OdometryPodY-RadiusY*DeltaRotation;
+        telemetry.addData("Delta Rotation", DeltaRotation);
+        DeltaRotation = Wrap(DeltaRotation);
+        DForward = OdometryPodY-RadiusY*DeltaRotation;
+        DSideways = OdometryPodX-RadiusX*DeltaRotation;
         RobotX = (InitX - DForward * Math.sin(RobotAngle)+ DSideways * Math.cos(RobotAngle));
         RobotY = (InitY + DForward * Math.cos(RobotAngle)+ DSideways * Math.sin(RobotAngle));
         InitX = RobotX;
@@ -270,14 +272,15 @@ double OldAngle=RobotAngle;
     }
 
     public void UpdateEncoders() {
-        OdometryPodX = TESTfLeft;
-        OdometryPodY = TESTfRight;
-
-        OdometryPodX = OdometryPodX-OdometryPodOldX;
-        OdometryPodY = OdometryPodY-OdometryPodOldY;
+        OdometryPodX = odometrypodx.getCurrentPosition();
+        OdometryPodY = odometrypody.getCurrentPosition();
+        double tempX = OdometryPodX-OdometryPodOldX;
+        double tempY = OdometryPodY-OdometryPodOldY;
 
         OdometryPodOldX= OdometryPodX;
         OdometryPodOldY = OdometryPodY;
+        OdometryPodX = tempX;
+        OdometryPodY = tempY;
 
         OdometryPodX = OdometryPodX / ticksPerRevolution;
         OdometryPodX = MMPerRevolution * OdometryPodX;
