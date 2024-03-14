@@ -148,7 +148,7 @@ public abstract class Robot extends LinearOpMode {
     RevBlinkinLedDriver.BlinkinPattern pattern;
 
     public DigitalChannel ClimberLimitSwitchBottom;
-
+    public DigitalChannel PixelLiftLimitSwitch;
 
     public void LightsInit(){
         blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver .class, "blinkin");
@@ -306,6 +306,8 @@ climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         ClimberLimitSwitchBottom = hardwareMap.get(DigitalChannel.class, "Climber_Limit_Switch_Bottom");
         ClimberLimitSwitchBottom.setMode(DigitalChannel.Mode.INPUT);
 
+        PixelLiftLimitSwitch = hardwareMap.get(DigitalChannel.class, "LiftLimitSwitch");
+        PixelLiftLimitSwitch.setMode(DigitalChannel.Mode.INPUT);
                leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
         rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
