@@ -1,10 +1,12 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.Genral.OctopusAutoFunctions;
+
 @Autonomous(name = "RedLeftTrussNoYellow", group = "CenterStage")
-public class RedLeftTrussNoYellow extends OctopusAutoFunctions{
+public class RedLeftTrussNoYellow extends OctopusAutoFunctions {
     @Override
     public void runOpMode() {
         Init();

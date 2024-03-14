@@ -1,9 +1,11 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Genral.OdometryCode;
+
 @TeleOp(name="Teleop", group="Linear Opmode")
-public class Teleop extends OdometryCode{
+public class Teleop extends OdometryCode {
     double AlignWait;
     int LiftHeightAtButtonPressed;
     boolean gamepad2Yold;

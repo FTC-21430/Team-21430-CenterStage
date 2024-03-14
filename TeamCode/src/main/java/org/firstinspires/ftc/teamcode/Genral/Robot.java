@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Genral;
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
@@ -29,19 +29,19 @@ import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public abstract class Robot extends LinearOpMode {
-    IMU imu;
-    boolean resettingImu = false;
+    public IMU imu;
+    public boolean resettingImu = false;
     // Declare OpMode members.
-    double Target = 0;
-    double error = 0;
-    double current = 0;
+    public double Target = 0;
+    public double error = 0;
+    public double current = 0;
     public double RobotAngle = 0;
-    double drive;
-    double slide;
-    double turn;
+    public double drive;
+    public double slide;
+    public double turn;
     //double TeleopStartingRotation = 90;
-    boolean UseAprilTags;
-    double distanceX, distanceY, PowerX, PowerY, PowerF, PowerS;
+    public boolean UseAprilTags;
+    public double distanceX, distanceY, PowerX, PowerY, PowerF, PowerS;
     public double RobotX, RobotY;
     public ElapsedTime runtime = new ElapsedTime();
     public DcMotor leftFrontMotor = null;
@@ -51,11 +51,11 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor odometrypodx;
     public DcMotor odometrypody;
     public float controlHubChange = 51;
-    int liftPosition;
-    boolean TurnOLD = false;
+    public int liftPosition;
+    public boolean TurnOLD = false;
     public boolean CurrentAlign = true;
     public boolean IsProgramAutonomous;
-    enum operatorState
+   public enum operatorState
     {
         idle,
         intaking,
@@ -100,20 +100,20 @@ public abstract class Robot extends LinearOpMode {
     public double turnTimer;
 
     public double robotHeading;
-    double leftFrontPower;
-    double leftBackPower;
-    double rightFrontPower;
-    double rightBackPower;
-    boolean DriverOrientationDriveMode = true;
-    boolean Driver1Leftbumper;
-    double startingangle;
+    public double leftFrontPower;
+    public double leftBackPower;
+    public double rightFrontPower;
+    public double rightBackPower;
+    public  boolean DriverOrientationDriveMode = true;
+    public boolean Driver1Leftbumper;
+    public double startingangle;
     public double startOfsetRadians = 0;
 
-    float gain = 5;
-    final float[] hsvValues = new float[3];
+    public float gain = 5;
+    public  final float[] hsvValues = new float[3];
 
-    NormalizedColorSensor backColorSensor;
-    NormalizedColorSensor frontColorSensor;
+    public NormalizedColorSensor backColorSensor;
+    public NormalizedColorSensor frontColorSensor;
 
     View relativeLayout;
 
@@ -144,8 +144,8 @@ public abstract class Robot extends LinearOpMode {
         backColorSensor.setGain(gain);
         }
 
-    RevBlinkinLedDriver blinkinLedDriver;
-    RevBlinkinLedDriver.BlinkinPattern pattern;
+    public RevBlinkinLedDriver blinkinLedDriver;
+    public RevBlinkinLedDriver.BlinkinPattern pattern;
 
     public DigitalChannel ClimberLimitSwitchBottom;
 

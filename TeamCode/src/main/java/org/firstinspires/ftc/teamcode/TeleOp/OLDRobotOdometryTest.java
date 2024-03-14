@@ -1,10 +1,11 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.teamcode.Genral.OdometryCode;
 
 @TeleOp(name="OLDRobotOdometryTest", group="Linear Opmode")
-public class OLDRobotOdometryTest extends OdometryCode{
+public class OLDRobotOdometryTest extends OdometryCode {
     @Override
     public void runOpMode() throws InterruptedException {
         OdometrypodInit();

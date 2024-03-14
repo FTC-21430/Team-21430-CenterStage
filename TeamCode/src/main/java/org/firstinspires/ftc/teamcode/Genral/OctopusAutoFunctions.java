@@ -1,7 +1,4 @@
-package org.firstinspires.ftc.teamcode;
-
-import static org.firstinspires.ftc.teamcode.Robot.operatorState.extendLift;
-import static org.firstinspires.ftc.teamcode.Robot.operatorState.liftOut;
+package org.firstinspires.ftc.teamcode.Genral;
 
 public abstract class OctopusAutoFunctions extends OdometryCode {
 

@@ -1,7 +1,9 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.firstinspires.ftc.teamcode.Genral.AutonomousFunction;
 
 @Autonomous(name = "RedLeftJellyfish" , group = "CenterStage")
 public class RedLeftJellyfish extends AutonomousFunction {

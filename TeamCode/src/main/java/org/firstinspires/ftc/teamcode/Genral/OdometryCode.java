@@ -1,15 +1,9 @@
-package org.firstinspires.ftc.teamcode;
-
-import static org.firstinspires.ftc.teamcode.Robot.operatorState.intakeDone;
+package org.firstinspires.ftc.teamcode.Genral;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-
-import java.sql.Time;
 
 public abstract class OdometryCode extends CameraVision {
     public double InitX, InitY;

@@ -1,12 +1,15 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.sun.tools.javac.jvm.Gen;
-@Autonomous(name = "backUpAutoBlueRight" , group = "CenterStage")
+
+import org.firstinspires.ftc.teamcode.Genral.OdometryCode;
+
 @Disabled
-public class backUpAutoblueRight extends OldCodeForPowerPlay {
+
+@Autonomous(name = "Left_OctopusBlueAutoV1" , group = "CenterStage")
+public class Left_OctopusBlueAutoV1 extends OdometryCode {
     @Override
     public void runOpMode() throws InterruptedException {
         Init();
@@ -27,46 +30,24 @@ public class backUpAutoblueRight extends OldCodeForPowerPlay {
         leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         IMUReset();
-        PowerplayInit();
+        OdometryInit(-63, 9);
+        startOfsetRadians = -Math.PI/2;
+        RunToPoint(-63, 9,1);
+        RunToPoint(-50,30,1);
+        setTurn(180);
+        RunToPoint(-37,44,1);
 
-//        RobotX = -65;
-//        RobotY = 61;
-
-        DriverOrientationDriveMode = false;
-        startOfsetRadians = 0;
-//MAKE IT FASTER!!!!!!
-// put autoPather Output here
-        //purple pixcel placement for zone 2
-
-        IntakeClose();
-
-        // if (Zone==1)
-RunToPoint(0,5,1);
-        Target = 90;
-        RunToPoint(0,29,1);
-        RunToPoint(-4,29,1);
-        IntakeOpen();
-        RunToPoint(2,29,1);
-        //if (Zone==2)
-//        RunToPoint(2,5);
-//        RunToPoint(0,37);
-//        IntakeOpen();
-        //if (Zone==3)
-//        RunToPoint(14,21);
-//        IntakeOpen();
-        //if statments stop
-
-        RunToPoint(2,5,1);
-        //RunToPoint(-92,5);
-
-
-        // code for just parking in the corner
-        //RunToPoint(0,5);
-        //RunToPoint(-92,5);
+        RunToPoint(-12,44,1);
+        RunToPoint(-11,-8,1);
+        RunToPoint(-12,-57,1);
+        RunToPoint(-11,44,1);
+        RunToPoint(-37,43,1);
+        RunToPoint(-61,43,1);
+        RunToPoint(-61,60,1);
 
 
 
-// end Here
+
         telemetry.addData("Y", RobotY);
         telemetry.addData("X", RobotX);
         telemetry.addData("Angle", RobotAngle);
@@ -79,9 +60,5 @@ RunToPoint(0,5,1);
         telemetry.addData("stick Data Y", drive);
         telemetry.addData("dpad",gamepad1.dpad_up);
         telemetry.update();
-
-
-
-
     }
 }
