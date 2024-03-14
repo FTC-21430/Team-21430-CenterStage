@@ -11,14 +11,12 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.SwitchableLight;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
@@ -26,14 +24,13 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public abstract class Robot extends LinearOpMode {
     public IMU imu;
     public boolean resettingImu = false;
     // Declare OpMode members.
-    public double Target = 0;
+    public double TargetAngle = 0;
     public double error = 0;
     public double current = 0;
     public double RobotAngle = 0;
@@ -102,7 +99,7 @@ public abstract class Robot extends LinearOpMode {
     public boolean DriverOrientationDriveMode = true;
     public boolean Driver1Leftbumper;
     public double startingangle;
-    public double startOfsetRadians = 0;
+    public double AutoStartAngle = 0;
     public float gain = 5;
     public final float[] hsvValues = new float[3];
     public NormalizedColorSensor backColorSensor;
@@ -185,26 +182,26 @@ public abstract class Robot extends LinearOpMode {
 
         robotHeading = orientation.getYaw(AngleUnit.RADIANS);
         RobotAngle = orientation.getYaw(AngleUnit.RADIANS);
-        RobotAngle += startOfsetRadians;
+        RobotAngle += AutoStartAngle;
         telemetry.addData("Yaw (Z)", "%.2f Rad. (Heading)", RobotAngle);
     }
 
     public void IMUReset() {
         telemetry.addData("Yaw", "Reset" + "ing\n");
         imu.resetYaw();
-        Target = 0;
+        TargetAngle = 0;
     }
 
     public void ProportionalFeedbackControl() {
         if (resettingImu)
             return;
         telemetry.addData("angle", (RobotAngle * 180) / Math.PI);
-        telemetry.addData("target", Target);
+        telemetry.addData("target", TargetAngle);
         telemetry.addData("IsProgramAutonomous", IsProgramAutonomous);
-        error = Wrap(Target - RobotAngle);
+        error = Wrap(TargetAngle - RobotAngle);
         if (gamepad1.right_stick_x != 0 || (TurnOLD == true) || turnTimer + 0.3 >= getRuntime()) {
             if (!IsProgramAutonomous) {
-                Target = (RobotAngle * 180 / Math.PI);
+                TargetAngle = (RobotAngle * 180 / Math.PI);
             }
 
         }

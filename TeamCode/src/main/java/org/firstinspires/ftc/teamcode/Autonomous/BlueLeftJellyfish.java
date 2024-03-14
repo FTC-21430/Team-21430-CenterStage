@@ -2,9 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-
 import org.firstinspires.ftc.teamcode.Genral.AutonomousFunction;
-
 @Disabled
 @Autonomous(name = "BlueLeftJellyfish", group = "CenterStage")
 public class BlueLeftJellyfish extends AutonomousFunction {
@@ -14,9 +12,9 @@ public class BlueLeftJellyfish extends AutonomousFunction {
         DriverOrientationDriveMode = false;
         closeStartPos = true;
         CamInit();
-        robotHeading = -Math.PI;
-        Target = -180;
-        startOfsetRadians = -Math.PI;
+        RobotAngle = -Math.PI;
+        TargetAngle = -180;
+        AutoStartAngle = -Math.PI;
         ZoneTelemetryUntilStart();
 
         runtime.reset();

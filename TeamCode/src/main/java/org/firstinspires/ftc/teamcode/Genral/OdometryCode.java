@@ -27,7 +27,7 @@ public abstract class OdometryCode extends CameraVision {
     public double Speed = 0.5;
 
     public void ProportionalFeedbackControlAuto() {
-        error = Wrap(((Target - ((180 * RobotAngle) / Math.PI))));
+        error = Wrap(((TargetAngle - ((180 * RobotAngle) / Math.PI))));
         turn -= error / 20;
     }
 
@@ -41,7 +41,7 @@ public abstract class OdometryCode extends CameraVision {
     }
 
     public void setTurn(float angle) {
-        Target = angle;
+        TargetAngle = angle;
     }
 
     public void OdometryInit(float x, float y) {
@@ -110,7 +110,7 @@ public abstract class OdometryCode extends CameraVision {
                     RobotY = arrayOutput[1];
                     InitX = arrayOutput[0];
                     InitY = arrayOutput[1];
-                    startOfsetRadians -= RobotAngle - arrayOutput[2];
+                    AutoStartAngle -= RobotAngle - arrayOutput[2];
                 }
             }
 
@@ -186,7 +186,7 @@ public abstract class OdometryCode extends CameraVision {
         TESTfRight = rightFrontMotor.getCurrentPosition();
         TESTbLeft = leftBackMotor.getCurrentPosition();
         TESTbRight = rightBackMotor.getCurrentPosition();
-        Target = 90;
+        TargetAngle = 90;
         UpdateControls();
         IMU_Update();
         UpdateEncoders();
@@ -197,7 +197,7 @@ public abstract class OdometryCode extends CameraVision {
             RobotY = arrayOutput[1];
             InitX = arrayOutput[0];
             InitY = arrayOutput[1];
-            startOfsetRadians -= RobotAngle - arrayOutput[2];
+            AutoStartAngle -= RobotAngle - arrayOutput[2];
         }
         telemetry.update();
         double l = 17.5 / 2;

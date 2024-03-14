@@ -15,8 +15,8 @@ public class RedLeftJellyfish extends AutonomousFunction {
         pattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE;
         blinkinLedDriver.setPattern(pattern);
         robotHeading = 0;
-        Target = 0;
-        startOfsetRadians = 0;
+        TargetAngle = 0;
+        AutoStartAngle = 0;
         IsProgramAutonomous = true;
         ZoneTelemetryUntilStart();
 

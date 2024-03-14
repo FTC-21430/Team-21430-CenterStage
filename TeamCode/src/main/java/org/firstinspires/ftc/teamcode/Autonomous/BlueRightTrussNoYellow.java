@@ -18,8 +18,8 @@ public class BlueRightTrussNoYellow extends OctopusAutoFunctions {
         pattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE;
         blinkinLedDriver.setPattern(pattern);
         robotHeading = -Math.PI;
-        Target = -180;
-        startOfsetRadians = -Math.PI;
+        TargetAngle = -180;
+        AutoStartAngle = -Math.PI;
         IsProgramAutonomous = true;
 
         ZoneTelemetryUntilStart();
