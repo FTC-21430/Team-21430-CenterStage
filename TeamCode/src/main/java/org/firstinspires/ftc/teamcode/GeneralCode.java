@@ -299,7 +299,7 @@ switch (currentState){
 
     public void scoreDocked(){
         frontDepositorServo.setPosition(1);
-        backDepositorServo.setPosition(0);
+        backDepositorServo.setPosition(1);
 
         if (!gamepad2.b) {
             frontDepositorServo.setPosition(0.5);
@@ -326,7 +326,7 @@ switch (currentState){
 
     public void transferDocked(){
         frontDepositorServo.setPosition(1);
-        backDepositorServo.setPosition(-1);
+        backDepositorServo.setPosition(1);
         if (ColorSensorCheck(frontColorSensor) != "None"){
             currentState = idle;
             frontDepositorServo.setPosition(0.5);
@@ -351,7 +351,7 @@ public void idleCode(){
             pixelPickerCurrent = 6;
             pixelPickerUp = true;
 
-            backDepositorServo.setPosition(-1);
+            backDepositorServo.setPosition(0);
         }
       //  if (gamepad2.right_bumper) currentState = intakeManaul;
         if (gamepad2.dpad_up) {
@@ -559,7 +559,7 @@ public void idleCode(){
     }
     public void score(){
         frontDepositorServo.setPosition(0);
-        backDepositorServo.setPosition(1);
+        backDepositorServo.setPosition(0);
 
     if (!gamepad2.b) {
         frontDepositorServo.setPosition(0.5);
