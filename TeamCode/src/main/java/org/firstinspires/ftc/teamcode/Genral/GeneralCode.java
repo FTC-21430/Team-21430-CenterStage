@@ -82,7 +82,6 @@ public abstract class GeneralCode extends Robot {
 
     public void GridRunner() {
         // TODO: make it easy to not break the robot. :(
-        // if (gamepad1.a) Target = scoringAngle;
         if (gamepad1.dpad_up) {
             drive = 1;
             slide = 0;
@@ -138,11 +137,7 @@ public abstract class GeneralCode extends Robot {
 
     public void Climber() {
 
-//        if (hasDroneLaunched){
         telemetry.addData("encoderCount:", climberMotor.getCurrentPosition());
-//
-// && climberMotor.getCurrentPosition() >= -4630
-//        ClimberLimitSwitchBottom.getState() == false && climberMotor.getCurrentPosition()<=100
         if (gamepad2.dpad_right && climberMotor.getCurrentPosition() > -18700) ClimbAutoUp = true;
         if (gamepad2.dpad_left || climberMotor.getCurrentPosition() <= -18690) ClimbAutoUp = false;
         if (ClimbAutoUp) {
@@ -160,12 +155,9 @@ public abstract class GeneralCode extends Robot {
         telemetry.addData("climber power", climberMotor.getPower());
     }
 
-
-    //    }
     public void LaunchDrone() {
         hasDroneLaunched = true;
         droneTrigger.setPosition(0.67);
-        // line 170, this is a temporary number. TUNE WHEN YOU CAN TEST;
     }
 
     public void endGameThings() {
@@ -336,7 +328,6 @@ public abstract class GeneralCode extends Robot {
         }
     }
 
-
     public void idleCode() {
         if (endGameMode) {
             intakeServo.setPosition(1);
@@ -351,7 +342,6 @@ public abstract class GeneralCode extends Robot {
 
             backDepositorServo.setPosition(-1);
         }
-        //  if (gamepad2.right_bumper) currentState = intakeManaul;
         if (gamepad2.dpad_up) {
             currentState = extendLift;
             stateMachineTimer = getRuntime();
@@ -573,7 +563,6 @@ public abstract class GeneralCode extends Robot {
             backDepositorServo.setPosition(0.5);
             currentState = liftOut;
         }
-
     }
 
     public void scoreFinished() {
@@ -600,11 +589,10 @@ public abstract class GeneralCode extends Robot {
                 currentState = liftOut;
             }
         }
-
     }
 
     public void fourBarWait() {
-        // TODO Figure out best time for the Four Bar Wait
+        // TODO Figure out best time for the four bar wait
         if (stateMachineTimer <= getRuntime() - 0.5) currentState = fourBarDock;
     }
 
@@ -623,4 +611,3 @@ public abstract class GeneralCode extends Robot {
         if (pixelLiftMotor.getCurrentPosition() <= 5) currentState = idle;
     }
 }
-

@@ -43,7 +43,6 @@ public class RedLeftTrussNoYellow extends OctopusAutoFunctions {
         RunToPoint(35, -61, 1, 5);
 
         RunToPoint(48, -61, 1, 5);
-        // ParkRed();
         pixelLiftMotor.setTargetPosition(100);
         intakeMotor.setPower(0);
         frontDepositorServo.setPosition(1);

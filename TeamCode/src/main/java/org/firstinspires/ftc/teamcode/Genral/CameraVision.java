@@ -65,7 +65,6 @@ public abstract class CameraVision extends GeneralCode {
     public double Delay = 0;
     private boolean dpadUpOLD;
     private boolean dpadDownOLD;
-
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
@@ -109,22 +108,17 @@ public abstract class CameraVision extends GeneralCode {
             AprilTagMetadata metaData = detection.metadata;
             AprilTagPoseRaw rawpose = detection.rawPose;
             if (!detections.isEmpty()) {
-
-
                 float tagInFieldX = metaData.fieldPosition.get(0);
                 float tagInFieldY = metaData.fieldPosition.get(1);
                 float tagInFieldZ = metaData.fieldPosition.get(2);
                 OpenGLMatrix tagInFieldR = new OpenGLMatrix(metaData.fieldOrientation.toMatrix());
-
                 OpenGLMatrix tagInFieldFrame = OpenGLMatrix.identityMatrix()
                         .translated(tagInFieldX, tagInFieldY, tagInFieldZ)
                         .multiplied(tagInFieldR);
-
                 float tagInCameraX = (float) rawpose.x;
                 float tagInCameraY = (float) rawpose.y;
                 float tagInCameraZ = (float) rawpose.z;
                 OpenGLMatrix tagInCameraR = new OpenGLMatrix((rawpose.R));
-
                 OpenGLMatrix cameraInTagFrame = OpenGLMatrix.identityMatrix()
                         .translated(tagInCameraX, tagInCameraY, tagInCameraZ)
                         .multiplied(tagInCameraR)
@@ -136,17 +130,14 @@ public abstract class CameraVision extends GeneralCode {
                 OpenGLMatrix cameraInRobotR = new Orientation(AxesReference.INTRINSIC, AxesOrder.XYZ,
                         AngleUnit.DEGREES, -90, 180, 0, 0)
                         .getRotationMatrix();
-
                 OpenGLMatrix robotInCameraFrame = OpenGLMatrix.identityMatrix()
                         .translated(cameraInRobotX, cameraInRobotY, cameraInRobotZ)
                         .multiplied(cameraInRobotR)
                         .inverted();
-
                 OpenGLMatrix robotInFieldFrame =
                         tagInFieldFrame
                                 .multiplied(cameraInTagFrame)
                                 .multiplied(robotInCameraFrame);
-
                 VectorF robotInFieldTranslation = robotInFieldFrame.getTranslation();
 
                 Orientation robotInFieldOrientation = Orientation.getOrientation(robotInFieldFrame,
@@ -155,8 +146,6 @@ public abstract class CameraVision extends GeneralCode {
                 float robotInFieldX = robotInFieldTranslation.get(0);
                 float robotInFieldY = robotInFieldTranslation.get(1);
                 float robotInFieldZ = robotInFieldTranslation.get(2);
-
-
                 float robotInFieldRoll = robotInFieldOrientation.firstAngle;
                 float robotInFieldPitch = robotInFieldOrientation.secondAngle;
                 float robotInFieldYaw = robotInFieldOrientation.thirdAngle;
@@ -164,14 +153,6 @@ public abstract class CameraVision extends GeneralCode {
                 returnArray[0] = robotInFieldX;
                 returnArray[1] = robotInFieldY;
                 returnArray[2] = robotInFieldYaw * ((float) Math.PI / 180);
-//            RobotX = robotInFieldX;
-//            RobotY = robotInFieldY;
-//            InitX = robotInFieldX;
-//            InitY = robotInFieldY;
-                // RobotAngle = robotInFieldYaw * (Math.PI/180);
-//            startOfsetRadians -= RobotAngle - robotInFieldYaw * (Math.PI/180);
-
-
                 telemetry.addData("robotX", robotInFieldX);
                 telemetry.addData("robotY", robotInFieldY);
                 telemetry.addData("robotZ", robotInFieldZ);
@@ -184,10 +165,8 @@ public abstract class CameraVision extends GeneralCode {
             }
             break;
         }
-
         return returnArray;
     }
-
 
     public void CamInit() {
 
@@ -218,36 +197,18 @@ public abstract class CameraVision extends GeneralCode {
     }
 
     public void CamEnd() {
-
-        // Save more CPU resources when camera is no longer needed.
         TensorFlowVisionPortal.close();
-
-    }   // end runOpMode()
+    }
 
     /**
      * Initialize the TensorFlow Object Detection processor.
      */
     private void initTfod() {
 
-        // Create the TensorFlow processor by using a builder.
         tfod = new TfodProcessor.Builder()
 
-                // With the following lines commented out, the default TfodProcessor Builder
-                // will load the default model for the season. To define a custom model to load,
-                // choose one of the following:
-                //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
-                //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
                 .setModelAssetName(TFOD_MODEL_ASSET)
-                //.setModelFileName(TFOD_MODEL_FILE)
-
-                // The following default settings are available to un-comment and edit as needed to
-                // set parameters for custom models.
                 .setModelLabels(LABELS)
-                //.setIsModelTensorFlow2(true)
-                //.setIsModelQuantized(true)
-                //.setModelInputSize(300)
-                //.setModelAspectRatio(16.0 / 9.0)
-
                 .build();
 
         // Create the vision portal by using a builder.
@@ -301,7 +262,6 @@ public abstract class CameraVision extends GeneralCode {
         } else if (x >= camBarrierTwo) {
             telemetry.addData("ZoneREAD", "3");
             return 3;
-
         } else {
             telemetry.addData("ZoneREAD", "Did not work :'( ");
             return 2;
@@ -324,7 +284,5 @@ public abstract class CameraVision extends GeneralCode {
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }   // end for() loop
-
     }   // end method telemetryTfod()
-
 }   // end class

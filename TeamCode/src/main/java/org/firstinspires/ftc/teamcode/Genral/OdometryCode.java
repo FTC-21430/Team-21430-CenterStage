@@ -87,8 +87,6 @@ public abstract class OdometryCode extends CameraVision {
         drive = PowerF;
         slide = PowerS;
         straferAlgorithm();
-
-
     }
 
     public void RunToPoint(double TargetX, double TargetY, double Timeout) {
@@ -134,7 +132,6 @@ public abstract class OdometryCode extends CameraVision {
             telemetry.addData("RobotX:", RobotX);
             telemetry.addData("Angle:", RobotAngle);
             telemetry.addData("RobotY:", RobotY);
-            //  telemetry.addData("zone", Zone);
             telemetry.addData("distance", distanceCircle(TargetX, TargetY));
             telemetry.addData("Y", RobotY);
             telemetry.addData("X", RobotX);
@@ -147,9 +144,6 @@ public abstract class OdometryCode extends CameraVision {
             TESTfRight = rightFrontMotor.getCurrentPosition();
             TESTbLeft = leftBackMotor.getCurrentPosition();
             TESTbRight = rightBackMotor.getCurrentPosition();
-            //UpdateControls();
-//            drive = -gamepad1.left_stick_y;
-//            slide = gamepad1.left_stick_x;
             turn = 0;
 //THIS IS HERE FOR AUTONOMOUS PURPOSES
             if (ColorSensorCheck(frontColorSensor) != "None") {
@@ -160,9 +154,7 @@ public abstract class OdometryCode extends CameraVision {
                 backDepositorServo.setPosition(.5);
             }
 
-            // IMU_Update();
             ProportionalFeedbackControl();
-//            ProportionalFeedbackControlAuto();
             UpdateEncoders();
 
             UpdateOdometry();
@@ -174,14 +166,6 @@ public abstract class OdometryCode extends CameraVision {
             leftBackPower = leftBackPower * Speed;
             rightFrontPower = rightFrontPower * Speed;
             rightBackPower = rightBackPower * Speed;
-//            if (leftFrontPower <= 0.18 && leftFrontPower>=-0.07) leftFrontPower = 0.07;
-//            if (leftBackPower <= 0.18  && rightFrontPower>=-0.07) leftBackPower = 0.07;
-//            if (rightFrontPower <= 0.18  && leftBackPower>=-0.07) rightFrontPower = 0.07;
-//            if (rightBackPower <= 0.18  && rightBackPower>=-0.07) rightBackPower = 0.07;
-//            if (leftFrontPower >= -0.18 && leftFrontPower<=-0.07) leftFrontPower = -0.07;
-//            if (leftBackPower >= -0.18  && rightFrontPower<=-0.07) leftBackPower = -0.07;
-//            if (rightFrontPower >= -0.18  && leftBackPower<=-0.07) rightFrontPower = -0.07;
-//            if (rightBackPower >= -0.18  && rightBackPower<=-0.07) rightBackPower = -0.07;
             setMotorPower();
 
 
@@ -197,10 +181,7 @@ public abstract class OdometryCode extends CameraVision {
         return (Math.sqrt((x - RobotX) * (x - RobotX) + (y - RobotY) * (y - RobotY)));
     }
 
-
     public void AlignWithBackdrop(double TargetX) {
-
-
         TESTfLeft = leftFrontMotor.getCurrentPosition();
         TESTfRight = rightFrontMotor.getCurrentPosition();
         TESTbLeft = leftBackMotor.getCurrentPosition();
@@ -238,7 +219,6 @@ public abstract class OdometryCode extends CameraVision {
         telemetry.addData("Angle:", RobotAngle);
         telemetry.addData("RobotY:", RobotY);
         telemetry.addData("zone", Zone);
-        //  telemetry.addData("distance",distanceCircle(TargetX,TargetY));
         telemetry.addData("Y", RobotY);
         telemetry.addData("X", RobotX);
         telemetry.addData("Angle", RobotAngle);
@@ -248,9 +228,6 @@ public abstract class OdometryCode extends CameraVision {
         TESTfRight = rightFrontMotor.getCurrentPosition();
         TESTbLeft = leftBackMotor.getCurrentPosition();
         TESTbRight = rightBackMotor.getCurrentPosition();
-
-//            drive = -gamepad1.left_stick_y;
-//            slide = gamepad1.left_stick_x;
         turn = 0;
 
         if (CurrentAlign) keepAtPoint(TargetX, RobotY);
@@ -258,8 +235,6 @@ public abstract class OdometryCode extends CameraVision {
         leftBackPower = leftBackPower / 2;
         rightFrontPower = rightFrontPower / 2;
         rightBackPower = rightBackPower / 2;
-
-
     }
 
     public void WaitFunction() {
@@ -295,6 +270,4 @@ public abstract class OdometryCode extends CameraVision {
 
     YawPitchRollAngles orientation;
     AngularVelocity angularVelocity;
-
-
 }

@@ -46,10 +46,7 @@ public class RedLeftOctopus extends OctopusAutoFunctions {
 
         Speed = 0.5;
 
-
         YellowPixelRed();
-
-        // ParkRed();
 
         Speed = 0.8;
         RunToPoint(38, -37, 3, 5);

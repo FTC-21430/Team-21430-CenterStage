@@ -32,6 +32,5 @@ public class BlueLeftJellyfish extends AutonomousFunction {
         Speed = 0.5;
         YellowPixelBlue();
         ParkBlue();
-
     }
 }

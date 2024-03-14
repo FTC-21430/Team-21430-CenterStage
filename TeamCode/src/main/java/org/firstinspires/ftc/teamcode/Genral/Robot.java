@@ -40,7 +40,6 @@ public abstract class Robot extends LinearOpMode {
     public double drive;
     public double slide;
     public double turn;
-    //double TeleopStartingRotation = 90;
     public boolean UseAprilTags;
     public double distanceX, distanceY, PowerX, PowerY, PowerF, PowerS;
     public double RobotX, RobotY;
@@ -80,7 +79,6 @@ public abstract class Robot extends LinearOpMode {
     }
 
     public operatorState currentState = operatorState.idle;
-
     public DcMotor climberMotor = null;
     public DcMotor intakeMotor = null;
     public DcMotor pixelLiftMotor = null;
@@ -91,16 +89,11 @@ public abstract class Robot extends LinearOpMode {
     public Servo frontDepositorServo = null;
     public DcMotor transferMotor = null;
     public Servo droneTrigger = null;
-
     public double scoringAngle = 0;
     FtcDashboard dashboard;
-
     public double minPower = 0.01;
     public double endOfClipPower = 0.2;
-
-
     public double turnTimer;
-
     public double robotHeading;
     public double leftFrontPower;
     public double leftBackPower;
@@ -110,15 +103,12 @@ public abstract class Robot extends LinearOpMode {
     public boolean Driver1Leftbumper;
     public double startingangle;
     public double startOfsetRadians = 0;
-
     public float gain = 5;
     public final float[] hsvValues = new float[3];
-
     public NormalizedColorSensor backColorSensor;
     public NormalizedColorSensor frontColorSensor;
 
     View relativeLayout;
-
 
     public void colorSenseInit() {
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
@@ -142,17 +132,13 @@ public abstract class Robot extends LinearOpMode {
     }
 
     public void updateColorSensors() {
-
         frontColorSensor.setGain(gain);
         backColorSensor.setGain(gain);
     }
 
     public RevBlinkinLedDriver blinkinLedDriver;
     public RevBlinkinLedDriver.BlinkinPattern pattern;
-
     public DigitalChannel ClimberLimitSwitchBottom;
-
-
     public void LightsInit() {
         blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
         pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
@@ -162,13 +148,9 @@ public abstract class Robot extends LinearOpMode {
     public void lightsUpdate() {
         blinkinLedDriver.setPattern(pattern);
     }
-
     public void straferAlgorithm() {
 
         if (DriverOrientationDriveMode == true) {
-//            slide = (slide * Math.cos(robotHeading)) - (drive * Math.sin(robotHeading));
-//            drive = (slide * Math.sin(robotHeading)) + (drive * Math.cos(robotHeading));
-
 
             double temp = drive * Math.cos(-robotHeading) + slide * Math.sin(-robotHeading);
             slide = -drive * Math.sin(-robotHeading) + slide * Math.cos(-robotHeading);
@@ -202,7 +184,6 @@ public abstract class Robot extends LinearOpMode {
 
 
         robotHeading = orientation.getYaw(AngleUnit.RADIANS);
-        //  robotHeading += ((TeleopStartingRotation)/180) * Math.PI;
         RobotAngle = orientation.getYaw(AngleUnit.RADIANS);
         RobotAngle += startOfsetRadians;
         telemetry.addData("Yaw (Z)", "%.2f Rad. (Heading)", RobotAngle);
@@ -247,16 +228,9 @@ public abstract class Robot extends LinearOpMode {
         return angle;
     }
 
-
-    //        public void autoWait(int time){
-//         while(time > -1){
-//        wait(1);
-//        time -= 1;
-//        }
     public void Init() {
         dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-        //telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 //TODO:FIX THIS
         colorSenseInit();
         LightsInit();
@@ -293,31 +267,23 @@ public abstract class Robot extends LinearOpMode {
         transferMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pixelLiftMotor.setTargetPosition(1);
         pixelLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         pixelLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         DriverOrientationDriveMode = true;
         climberMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         pixelLiftMotor.setPower(0.8);
         fourBarServo.setPosition(0.92);
-
-
         climberMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         droneTrigger.setPosition(0.4);
         intakeServo.setPosition(0.8);
-
         ClimberLimitSwitchBottom = hardwareMap.get(DigitalChannel.class, "Climber_Limit_Switch_Bottom");
         ClimberLimitSwitchBottom.setMode(DigitalChannel.Mode.INPUT);
-
         leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
         rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
         rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
-
-        //  pixelLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         imu.resetYaw();
         liftPosition = pixelLiftMotor.getCurrentPosition();
@@ -363,9 +329,7 @@ public abstract class Robot extends LinearOpMode {
                 relativeLayout.setBackgroundColor(Color.HSVToColor(hsvValues));
             }
         });
-//        telemetry.addData("Color Data:H", hsvValues[0]);
-//        telemetry.addData("Color Data:S", hsvValues[1]);
-//        telemetry.addData("Color Data:V", hsvValues[2]);
+
         if (((DistanceSensor) sensor).getDistance(DistanceUnit.CM) <= 3) {
             if (hsvValues[2] > .13) {
                 //white pixel
@@ -386,4 +350,3 @@ public abstract class Robot extends LinearOpMode {
     }
 
 }
-

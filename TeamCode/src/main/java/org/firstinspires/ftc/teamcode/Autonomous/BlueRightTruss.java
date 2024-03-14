@@ -50,7 +50,6 @@ public class BlueRightTruss extends OctopusAutoFunctions {
 
         Speed = 0.9;
         RunToPoint(48, 57, 1, 5);
-        // ParkRed();
         if (Zone == 2) {
             pixelLiftMotor.setTargetPosition(100);
             intakeMotor.setPower(0);
@@ -62,7 +61,6 @@ public class BlueRightTruss extends OctopusAutoFunctions {
             pixelLiftMotor.setTargetPosition(0);
             while (stateMachineTimer >= getRuntime() - 5 && opModeIsActive()) {
             }
-
         }
     }
 }

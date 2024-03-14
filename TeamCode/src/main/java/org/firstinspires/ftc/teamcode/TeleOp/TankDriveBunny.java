@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @TeleOp
 @Disabled
 public class TankDriveBunny extends LinearOpMode {
-    //Defining variables
     DcMotor LeftMotor;
     DcMotor RightMotor;
     double LeftPower;
@@ -23,14 +22,10 @@ public class TankDriveBunny extends LinearOpMode {
         LeftPower *= SpeedScale;
         RightPower *= SpeedScale;
     }
-
-    //runOpMode
     @Override
     public void runOpMode() {
-        //Initialize
         LeftMotor = hardwareMap.get(DcMotor.class, "Left Motor");
         RightMotor = hardwareMap.get(DcMotor.class, "Right Motor");
-        //While op mode is active
         waitForStart();
         while (opModeIsActive()) {
             DriveSpeed(.5);

@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Genral.OctopusAutoFunctions;
 
-
 @Autonomous(name = "BlueRightOctopus", group = "CenterStage")
 public class BlueRightOctopus extends OctopusAutoFunctions {
     @Override
@@ -48,8 +47,6 @@ public class BlueRightOctopus extends OctopusAutoFunctions {
         Speed = 0.5;
 
         YellowPixelBlue();
-
-        // ParkBlue();
 
         Speed = 0.8;
         RunToPoint(40, 37, 3, 5);

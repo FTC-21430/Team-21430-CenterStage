@@ -45,7 +45,6 @@ public class Left_OctopusBlueAutoV1 extends OdometryCode {
         RunToPoint(-61, 43, 1);
         RunToPoint(-61, 60, 1);
 
-
         telemetry.addData("Y", RobotY);
         telemetry.addData("X", RobotX);
         telemetry.addData("Angle", RobotAngle);

@@ -15,7 +15,6 @@ public class OLDRobotOdometryTest extends OdometryCode {
         RadiusX = 5.4;
         RadiusY = 7.25;
 
-        //CamInit();
         runtime.reset();
         while (opModeIsActive()) {
             IMU_Update();
@@ -26,7 +25,6 @@ public class OLDRobotOdometryTest extends OdometryCode {
             telemetry.addData("RobotX", RobotX);
             telemetry.addData("RobotY", RobotY);
             double tLast = getRuntime();
-//            imu.getRobotYawPitchRollAngles();
             odometrypodx.getCurrentPosition();
             double tNow = getRuntime();
             telemetry.addData("DeltaT", tNow - tLast);

@@ -31,8 +31,6 @@ public class BlueRightJellyfish extends AutonomousFunction {
 
         Speed = 0.6;
         CamEnd();
-        // AprilTagInit();
-        //  RunToPoint(-37,-38,2,5);
         RunToPoint(-50, 58, 2, 5);
         RunToPoint(-62.5, 42, 2, 5);
         RunToPoint(-62, 13, 3, 5);
@@ -44,16 +42,13 @@ public class BlueRightJellyfish extends AutonomousFunction {
             ProportionalFeedbackControl();
         }
         Speed = 0.8;
-        //  RunToPoint(-40,-17,2,5);
         RunToPoint(-11, 11, 2, 5);
         RunToPoint(36, 12, 2, 5);
         RunToPoint(36, 12, 2, 5);
         RunToPoint(36, 36, 3, 5);
         Speed = 0.5;
 
-
         YellowPixelBlue();
         ParkBlue();
-
     }
 }
