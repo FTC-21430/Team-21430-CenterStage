@@ -27,12 +27,12 @@ public class BlueRightTrussNoYellow extends OctopusAutoFunctions {
         runtime.reset();
         RobotX = -38;
         RobotY = 62;
-        InitX= -38;
+        InitX = -38;
         InitY = 62;
 
         PurplePixelBlueRightTruss();
 
-        Speed =0.8;
+        Speed = 0.8;
 
         CamEnd();
 
@@ -40,17 +40,20 @@ public class BlueRightTrussNoYellow extends OctopusAutoFunctions {
         WaitFunction();
         Speed = 0.9;
         setTurn(90);
-        RunToPoint(35,60,1,5);
+        RunToPoint(35, 60, 1, 5);
 
-        RunToPoint(48,57,1,5);
+        RunToPoint(48, 57, 1, 5);
         // ParkRed();
         pixelLiftMotor.setTargetPosition(100);
         intakeMotor.setPower(0);
         frontDepositorServo.setPosition(1);
         backDepositorServo.setPosition(0);
         stateMachineTimer = getRuntime();
-        while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()){}
+        while (stateMachineTimer >= getRuntime() - 1 && opModeIsActive()) {
+        }
         pixelLiftMotor.setTargetPosition(0);
-        while (stateMachineTimer >= getRuntime() - 5  && opModeIsActive()){}
+        while (stateMachineTimer >= getRuntime() - 5 && opModeIsActive()) {
+        }
 
-    }}
+    }
+}

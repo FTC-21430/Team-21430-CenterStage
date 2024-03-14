@@ -10,14 +10,14 @@ public abstract class OdometryCode extends CameraVision {
     public double DForward, DSideways;
     public double correctionFactor = 1;
     public double ticksPerRevolution = 2000;
-    public double MMPerRevolution = 48*Math.PI;
+    public double MMPerRevolution = 48 * Math.PI;
     public double MMPerInch = 25.4;
     public double FrontLeft = 0;
-    public double FrontRight=0;
-    public double BackLeft=0;
-    public double BackRight=0;
+    public double FrontRight = 0;
+    public double BackLeft = 0;
+    public double BackRight = 0;
     public double scalingDouble;
-    public double FrontLeftOld,FrontRightOld,BackLeftOld,BackRightOld;
+    public double FrontLeftOld, FrontRightOld, BackLeftOld, BackRightOld;
     public float TESTfLeft, TESTfRight, TESTbLeft, TESTbRight;
     public boolean GamepadAOld;
     //TODO: CONFIGURE STUFF
@@ -26,11 +26,12 @@ public abstract class OdometryCode extends CameraVision {
     public double RadiusX, RadiusY;
     public double Speed = 0.5;
 
-    public void ProportionalFeedbackControlAuto(){
-        error = Wrap(((Target - ((180 * RobotAngle) /Math.PI))));
-        turn -= error/20;
+    public void ProportionalFeedbackControlAuto() {
+        error = Wrap(((Target - ((180 * RobotAngle) / Math.PI))));
+        turn -= error / 20;
     }
-    public static void rotatePoints(double[] xPoints, double[] yPoints, double angle){
+
+    public static void rotatePoints(double[] xPoints, double[] yPoints, double angle) {
         for (int i = 0; i < xPoints.length; i++) {
             double x = xPoints[i];
             double y = yPoints[i];
@@ -39,46 +40,49 @@ public abstract class OdometryCode extends CameraVision {
         }
     }
 
-public void setTurn(float angle){
-    Target = angle;
-}
+    public void setTurn(float angle) {
+        Target = angle;
+    }
 
-    public void OdometryInit(float x, float y){
+    public void OdometryInit(float x, float y) {
         RobotX = x;
         RobotY = y;
         InitX = x;
         InitY = y;
     }
-double OldAngle=RobotAngle;
-    public void UpdateOdometry(){
 
-        double DeltaRotation=RobotAngle-OldAngle;
+    double OldAngle = RobotAngle;
+
+    public void UpdateOdometry() {
+
+        double DeltaRotation = RobotAngle - OldAngle;
         telemetry.addData("Delta Rotation", DeltaRotation);
         DeltaRotation = Wrap(DeltaRotation);
-        DForward = OdometryPodY-RadiusY*DeltaRotation;
-        DSideways = OdometryPodX-RadiusX*DeltaRotation;
-        RobotX = (InitX - DForward * Math.sin(RobotAngle)+ DSideways * Math.cos(RobotAngle));
-        RobotY = (InitY + DForward * Math.cos(RobotAngle)+ DSideways * Math.sin(RobotAngle));
+        DForward = OdometryPodY - RadiusY * DeltaRotation;
+        DSideways = OdometryPodX - RadiusX * DeltaRotation;
+        RobotX = (InitX - DForward * Math.sin(RobotAngle) + DSideways * Math.cos(RobotAngle));
+        RobotY = (InitY + DForward * Math.cos(RobotAngle) + DSideways * Math.sin(RobotAngle));
         InitX = RobotX;
         InitY = RobotY;
-        OldAngle=RobotAngle;
+        OldAngle = RobotAngle;
     }
+
     public void keepAtPoint(double Tx, double Ty) {
 
         distanceX = RobotX - Tx;
         distanceY = RobotY - Ty;
 
-        PowerX = -distanceX * .55 /3;
-        PowerY = -distanceY * .4 /3;
+        PowerX = -distanceX * .55 / 3;
+        PowerY = -distanceY * .4 / 3;
 
         PowerS = PowerX * Math.cos(-RobotAngle) - PowerY * Math.sin(-RobotAngle);
         PowerF = PowerX * Math.sin(-RobotAngle) + PowerY * Math.cos(-RobotAngle);
 
 
-        scalingDouble = Math.max(Math.abs(PowerS),Math.abs(PowerF));
-        if (scalingDouble >= 1){
-            PowerF/= scalingDouble;
-            PowerS/= scalingDouble;
+        scalingDouble = Math.max(Math.abs(PowerS), Math.abs(PowerF));
+        if (scalingDouble >= 1) {
+            PowerF /= scalingDouble;
+            PowerS /= scalingDouble;
         }
         drive = PowerF;
         slide = PowerS;
@@ -86,13 +90,14 @@ double OldAngle=RobotAngle;
 
 
     }
+
     public void RunToPoint(double TargetX, double TargetY, double Timeout) {
         RunToPoint(TargetX, TargetY, 0.4, Timeout);
     }
-    public void RunToPoint(double TargetX, double TargetY, double Circle, double Timeout){
+
+    public void RunToPoint(double TargetX, double TargetY, double Circle, double Timeout) {
         double StartTime = runtime.seconds();
-        while(distanceCircle(TargetX, TargetY) > Circle && opModeIsActive() && StartTime >= (runtime.seconds() - Timeout))
-        {
+        while (distanceCircle(TargetX, TargetY) > Circle && opModeIsActive() && StartTime >= (runtime.seconds() - Timeout)) {
             TESTfLeft = leftFrontMotor.getCurrentPosition();
             TESTfRight = rightFrontMotor.getCurrentPosition();
             TESTbLeft = leftBackMotor.getCurrentPosition();
@@ -100,7 +105,7 @@ double OldAngle=RobotAngle;
             IMU_Update();
             UpdateEncoders();
             UpdateOdometry();
-            if(aprilTagProcessorActive) {
+            if (aprilTagProcessorActive) {
                 float[] arrayOutput = aprilTagFindRobotPosition();
                 if (arrayOutput[0] != 0 && arrayOutput[1] != 0 && arrayOutput[2] != 0) {
                     RobotX = arrayOutput[0];
@@ -111,11 +116,11 @@ double OldAngle=RobotAngle;
                 }
             }
 
-            double l = 17.5/2;
-            double[] bxPoints = {l,-l,-l,l};
-            double[] byPoints = {l,l,-l,-l};
+            double l = 17.5 / 2;
+            double[] bxPoints = {l, -l, -l, l};
+            double[] byPoints = {l, l, -l, -l};
             rotatePoints(bxPoints, byPoints, RobotAngle);
-            for (int i = 0; i < 4; i++){
+            for (int i = 0; i < 4; i++) {
                 bxPoints[i] += RobotX;
                 byPoints[i] += RobotY;
             }
@@ -129,14 +134,14 @@ double OldAngle=RobotAngle;
             telemetry.addData("RobotX:", RobotX);
             telemetry.addData("Angle:", RobotAngle);
             telemetry.addData("RobotY:", RobotY);
-          //  telemetry.addData("zone", Zone);
-            telemetry.addData("distance",distanceCircle(TargetX,TargetY));
+            //  telemetry.addData("zone", Zone);
+            telemetry.addData("distance", distanceCircle(TargetX, TargetY));
             telemetry.addData("Y", RobotY);
             telemetry.addData("X", RobotX);
             telemetry.addData("Angle", RobotAngle);
-            telemetry.addData( "a motor", FrontLeft);
+            telemetry.addData("a motor", FrontLeft);
 
-            telemetry.addData("Zone",Zone);
+            telemetry.addData("Zone", Zone);
             telemetry.update();
             TESTfLeft = leftFrontMotor.getCurrentPosition();
             TESTfRight = rightFrontMotor.getCurrentPosition();
@@ -145,12 +150,12 @@ double OldAngle=RobotAngle;
             //UpdateControls();
 //            drive = -gamepad1.left_stick_y;
 //            slide = gamepad1.left_stick_x;
-             turn = 0;
+            turn = 0;
 //THIS IS HERE FOR AUTONOMOUS PURPOSES
-            if (ColorSensorCheck(frontColorSensor) != "None"){
+            if (ColorSensorCheck(frontColorSensor) != "None") {
                 frontDepositorServo.setPosition(.5);
             }
-            if (ColorSensorCheck(frontColorSensor) != "None" && ColorSensorCheck(backColorSensor) != "None"){
+            if (ColorSensorCheck(frontColorSensor) != "None" && ColorSensorCheck(backColorSensor) != "None") {
                 frontDepositorServo.setPosition(.5);
                 backDepositorServo.setPosition(.5);
             }
@@ -165,10 +170,10 @@ double OldAngle=RobotAngle;
             GridRunner();
 
             straferAlgorithm();
-            leftFrontPower=leftFrontPower * Speed;
+            leftFrontPower = leftFrontPower * Speed;
             leftBackPower = leftBackPower * Speed;
             rightFrontPower = rightFrontPower * Speed;
-            rightBackPower = rightBackPower *Speed;
+            rightBackPower = rightBackPower * Speed;
 //            if (leftFrontPower <= 0.18 && leftFrontPower>=-0.07) leftFrontPower = 0.07;
 //            if (leftBackPower <= 0.18  && rightFrontPower>=-0.07) leftBackPower = 0.07;
 //            if (rightFrontPower <= 0.18  && leftBackPower>=-0.07) rightFrontPower = 0.07;
@@ -188,77 +193,78 @@ double OldAngle=RobotAngle;
 
     }
 
-    public double distanceCircle(double x, double y){
-        return(Math.sqrt((x-RobotX)*(x-RobotX) + (y-RobotY)*(y-RobotY)));
+    public double distanceCircle(double x, double y) {
+        return (Math.sqrt((x - RobotX) * (x - RobotX) + (y - RobotY) * (y - RobotY)));
     }
 
 
-    public void AlignWithBackdrop (double TargetX){
+    public void AlignWithBackdrop(double TargetX) {
 
 
-            TESTfLeft = leftFrontMotor.getCurrentPosition();
-            TESTfRight = rightFrontMotor.getCurrentPosition();
-            TESTbLeft = leftBackMotor.getCurrentPosition();
-            TESTbRight = rightBackMotor.getCurrentPosition();
-            Target = 90;
-            UpdateControls();
-           IMU_Update();
-            UpdateEncoders();
-            UpdateOdometry();
-            float[] arrayOutput = aprilTagFindRobotPosition();
-            if (arrayOutput[0] != 0 && arrayOutput[1] != 0 && arrayOutput[2] != 0) {
-                RobotX = arrayOutput[0];
-                RobotY = arrayOutput[1];
-                InitX = arrayOutput[0];
-                InitY = arrayOutput[1];
-                startOfsetRadians -= RobotAngle - arrayOutput[2];
-            }
-            telemetry.update();
-            double l = 17.5/2;
-            double[] bxPoints = {l,-l,-l,l};
-            double[] byPoints = {l,l,-l,-l};
-            rotatePoints(bxPoints, byPoints, RobotAngle);
-            for (int i = 0; i < 4; i++){
-                bxPoints[i] += RobotX;
-                byPoints[i] += RobotY;
-            }
-            TelemetryPacket packet = new TelemetryPacket();
-            packet.fieldOverlay()
-                    .setStrokeWidth(1)
-                    .setStroke("goldenrod")
-                    .setFill("black")
-                    .fillPolygon(bxPoints, byPoints);
-            dashboard.sendTelemetryPacket(packet);
-            telemetry.addData("RobotX:", RobotX);
-            telemetry.addData("Angle:", RobotAngle);
-            telemetry.addData("RobotY:", RobotY);
-            telemetry.addData("zone", Zone);
-          //  telemetry.addData("distance",distanceCircle(TargetX,TargetY));
-            telemetry.addData("Y", RobotY);
-            telemetry.addData("X", RobotX);
-            telemetry.addData("Angle", RobotAngle);
-            telemetry.addData( "a motor", FrontLeft);
+        TESTfLeft = leftFrontMotor.getCurrentPosition();
+        TESTfRight = rightFrontMotor.getCurrentPosition();
+        TESTbLeft = leftBackMotor.getCurrentPosition();
+        TESTbRight = rightBackMotor.getCurrentPosition();
+        Target = 90;
+        UpdateControls();
+        IMU_Update();
+        UpdateEncoders();
+        UpdateOdometry();
+        float[] arrayOutput = aprilTagFindRobotPosition();
+        if (arrayOutput[0] != 0 && arrayOutput[1] != 0 && arrayOutput[2] != 0) {
+            RobotX = arrayOutput[0];
+            RobotY = arrayOutput[1];
+            InitX = arrayOutput[0];
+            InitY = arrayOutput[1];
+            startOfsetRadians -= RobotAngle - arrayOutput[2];
+        }
+        telemetry.update();
+        double l = 17.5 / 2;
+        double[] bxPoints = {l, -l, -l, l};
+        double[] byPoints = {l, l, -l, -l};
+        rotatePoints(bxPoints, byPoints, RobotAngle);
+        for (int i = 0; i < 4; i++) {
+            bxPoints[i] += RobotX;
+            byPoints[i] += RobotY;
+        }
+        TelemetryPacket packet = new TelemetryPacket();
+        packet.fieldOverlay()
+                .setStrokeWidth(1)
+                .setStroke("goldenrod")
+                .setFill("black")
+                .fillPolygon(bxPoints, byPoints);
+        dashboard.sendTelemetryPacket(packet);
+        telemetry.addData("RobotX:", RobotX);
+        telemetry.addData("Angle:", RobotAngle);
+        telemetry.addData("RobotY:", RobotY);
+        telemetry.addData("zone", Zone);
+        //  telemetry.addData("distance",distanceCircle(TargetX,TargetY));
+        telemetry.addData("Y", RobotY);
+        telemetry.addData("X", RobotX);
+        telemetry.addData("Angle", RobotAngle);
+        telemetry.addData("a motor", FrontLeft);
 
-            TESTfLeft = leftFrontMotor.getCurrentPosition();
-            TESTfRight = rightFrontMotor.getCurrentPosition();
-            TESTbLeft = leftBackMotor.getCurrentPosition();
-            TESTbRight = rightBackMotor.getCurrentPosition();
+        TESTfLeft = leftFrontMotor.getCurrentPosition();
+        TESTfRight = rightFrontMotor.getCurrentPosition();
+        TESTbLeft = leftBackMotor.getCurrentPosition();
+        TESTbRight = rightBackMotor.getCurrentPosition();
 
 //            drive = -gamepad1.left_stick_y;
 //            slide = gamepad1.left_stick_x;
-            turn = 0;
+        turn = 0;
 
-            if (CurrentAlign) keepAtPoint(TargetX, RobotY);
-            leftFrontPower=leftFrontPower / 2;
-            leftBackPower = leftBackPower / 2;
-            rightFrontPower = rightFrontPower / 2;
-            rightBackPower = rightBackPower / 2;
+        if (CurrentAlign) keepAtPoint(TargetX, RobotY);
+        leftFrontPower = leftFrontPower / 2;
+        leftBackPower = leftBackPower / 2;
+        rightFrontPower = rightFrontPower / 2;
+        rightBackPower = rightBackPower / 2;
 
 
     }
-    public void WaitFunction(){
-        telemetry.addData("runtime", runtime.seconds() );
-        while (Delay >= runtime.seconds()   && opModeIsActive()){
+
+    public void WaitFunction() {
+        telemetry.addData("runtime", runtime.seconds());
+        while (Delay >= runtime.seconds() && opModeIsActive()) {
             ProportionalFeedbackControl();
             telemetry.addData("runtime", getRuntime());
             telemetry.update();
@@ -268,10 +274,10 @@ double OldAngle=RobotAngle;
     public void UpdateEncoders() {
         OdometryPodX = odometrypodx.getCurrentPosition();
         OdometryPodY = odometrypody.getCurrentPosition();
-        double tempX = OdometryPodX-OdometryPodOldX;
-        double tempY = OdometryPodY-OdometryPodOldY;
+        double tempX = OdometryPodX - OdometryPodOldX;
+        double tempY = OdometryPodY - OdometryPodOldY;
 
-        OdometryPodOldX= OdometryPodX;
+        OdometryPodOldX = OdometryPodX;
         OdometryPodOldY = OdometryPodY;
         OdometryPodX = tempX;
         OdometryPodY = tempY;
@@ -291,5 +297,4 @@ double OldAngle=RobotAngle;
     AngularVelocity angularVelocity;
 
 
-
-    }
+}

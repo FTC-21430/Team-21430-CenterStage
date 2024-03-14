@@ -4,12 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Genral.OdometryCode;
 
-@TeleOp(name="OLDRobotOdometryTest", group="Linear Opmode")
+@TeleOp(name = "OLDRobotOdometryTest", group = "Linear Opmode")
 public class OLDRobotOdometryTest extends OdometryCode {
     @Override
     public void runOpMode() throws InterruptedException {
         OdometrypodInit();
-        OdometryInit(0,0);
+        OdometryInit(0, 0);
         waitForStart();
         IMUReset();
         RadiusX = 5.4;
@@ -17,7 +17,7 @@ public class OLDRobotOdometryTest extends OdometryCode {
 
         //CamInit();
         runtime.reset();
-        while (opModeIsActive()){
+        while (opModeIsActive()) {
             IMU_Update();
             UpdateEncoders();
             UpdateOdometry();
@@ -29,7 +29,7 @@ public class OLDRobotOdometryTest extends OdometryCode {
 //            imu.getRobotYawPitchRollAngles();
             odometrypodx.getCurrentPosition();
             double tNow = getRuntime();
-            telemetry.addData("DeltaT", tNow-tLast);
+            telemetry.addData("DeltaT", tNow - tLast);
             tLast = tNow;
             telemetry.update();
         }

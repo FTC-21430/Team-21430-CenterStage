@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.Genral.AutonomousFunction;
 
 @Disabled
-@Autonomous(name = "BlueLeftJellyfish" , group = "CenterStage")
+@Autonomous(name = "BlueLeftJellyfish", group = "CenterStage")
 public class BlueLeftJellyfish extends AutonomousFunction {
     @Override
     public void runOpMode() {
@@ -22,9 +22,9 @@ public class BlueLeftJellyfish extends AutonomousFunction {
         runtime.reset();
         RobotX = 9.5;
         RobotY = 62;
-        InitX= 9.5;
+        InitX = 9.5;
         InitY = 62;
-        RunToPoint(24,48,0,2.4);
+        RunToPoint(24, 48, 0, 2.4);
         Speed = 0.6;
         CamEnd();
         AprilTagInit();

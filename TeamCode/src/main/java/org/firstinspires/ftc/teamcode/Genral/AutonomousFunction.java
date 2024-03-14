@@ -3,14 +3,15 @@ package org.firstinspires.ftc.teamcode.Genral;
 import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.extendLift;
 
 public abstract class AutonomousFunction extends OdometryCode {
-public boolean closeStartPos;
+    public boolean closeStartPos;
+
     public void PurplePixelBlueRight() {
         if (Zone == 3) {
-            RunToPoint(-51.5,43,1,1.8);
+            RunToPoint(-51.5, 43, 1, 1.8);
             //RunToPoint(-56,-37, 0, 1.2);
             intakeMotor.setPower(0.4);
             resetRuntime();
-            while (0.8 >= getRuntime() && opModeIsActive()){
+            while (0.8 >= getRuntime() && opModeIsActive()) {
                 ProportionalFeedbackControl();
             }
             //Remember to turn off
@@ -19,29 +20,29 @@ public boolean closeStartPos;
 
             intakeMotor.setPower(0.4);
             resetRuntime();
-            while (0.8 >= getRuntime() && opModeIsActive()){
+            while (0.8 >= getRuntime() && opModeIsActive()) {
                 ProportionalFeedbackControl();
             }
-            RunToPoint(-37,40,0,1.6);
+            RunToPoint(-37, 40, 0, 1.6);
 
 
-        }else{
+        } else {
             if (Zone == 1) {
 
-                RunToPoint(-45,46,0,1.8);
+                RunToPoint(-45, 46, 0, 1.8);
                 // RunToPoint(-38,-34,0,2);
                 setTurn(-90);
                 resetRuntime();
-                while (0.5 >= getRuntime() && opModeIsActive()){
+                while (0.5 >= getRuntime() && opModeIsActive()) {
                     ProportionalFeedbackControl();
                 }
-                RunToPoint(-40,30,0,2);
+                RunToPoint(-40, 30, 0, 2);
                 intakeMotor.setPower(0.4);
                 resetRuntime();
-                while (0.3 >= getRuntime() && opModeIsActive()){
+                while (0.3 >= getRuntime() && opModeIsActive()) {
                     ProportionalFeedbackControl();
                 }
-                RunToPoint(-48,35,0,1.5);
+                RunToPoint(-48, 35, 0, 1.5);
                 setTurn(-180);
                 resetRuntime();
                 while (0.4 >= getRuntime() && opModeIsActive()) {
@@ -51,7 +52,8 @@ public boolean closeStartPos;
 
             }
         }
-        intakeMotor.setPower(0);}
+        intakeMotor.setPower(0);
+    }
 
 //    public void PurplePixelBlueLeft() {
 //        if (Zone == 3) {
@@ -107,11 +109,11 @@ public boolean closeStartPos;
 
     public void PurplePixelRedLeft() {
         if (Zone == 1) {
-            RunToPoint(-51.5,-43,1,1.8);
+            RunToPoint(-51.5, -43, 1, 1.8);
             //RunToPoint(-56,-37, 0, 1.2);
             intakeMotor.setPower(0.6);
             resetRuntime();
-            while (0.8 >= getRuntime() && opModeIsActive()){
+            while (0.8 >= getRuntime() && opModeIsActive()) {
                 ProportionalFeedbackControl();
             }
             //Remember to turn off
@@ -120,46 +122,48 @@ public boolean closeStartPos;
 
             intakeMotor.setPower(0.4);
             resetRuntime();
-            while (0.8 >= getRuntime() && opModeIsActive()){
+            while (0.8 >= getRuntime() && opModeIsActive()) {
                 ProportionalFeedbackControl();
             }
-            RunToPoint(-37,-40,0,1.6);
+            RunToPoint(-37, -40, 0, 1.6);
 
 
-        }else{
+        } else {
             if (Zone == 3) {
 
-                RunToPoint(-45,-46,0,1.8);
+                RunToPoint(-45, -46, 0, 1.8);
                 // RunToPoint(-38,-34,0,2);
                 setTurn(-90);
                 resetRuntime();
-                while (0.5 >= getRuntime() && opModeIsActive()){
+                while (0.5 >= getRuntime() && opModeIsActive()) {
                     ProportionalFeedbackControl();
                 }
-                RunToPoint(-39.5,-31,0,2);
+                RunToPoint(-39.5, -31, 0, 2);
                 intakeMotor.setPower(0.4);
                 resetRuntime();
-                while (0.3 >= getRuntime() && opModeIsActive()){
+                while (0.3 >= getRuntime() && opModeIsActive()) {
                     ProportionalFeedbackControl();
                 }
-                RunToPoint(-48,-35,0,1.5);
+                RunToPoint(-48, -35, 0, 1.5);
                 setTurn(0);
                 resetRuntime();
                 while (0.4 >= getRuntime() && opModeIsActive()) {
-                ProportionalFeedbackControl();
+                    ProportionalFeedbackControl();
                 }
 
 
             }
         }
-        intakeMotor.setPower(0);}
+        intakeMotor.setPower(0);
+    }
+
     public void PurplePixelBlue() {
         if (Zone == 3) {
 
-            RunToPoint(-46,42,5);
+            RunToPoint(-46, 42, 5);
             intakeMotor.setPower(0.3);
             resetRuntime();
-            while (3 >= getRuntime() && opModeIsActive()){
+            while (3 >= getRuntime() && opModeIsActive()) {
                 ProportionalFeedbackControl();
             }
             //Remember to turn off
@@ -168,39 +172,41 @@ public boolean closeStartPos;
 
             intakeMotor.setPower(0.3);
             resetRuntime();
-            while (3 >= getRuntime() && opModeIsActive()){
+            while (3 >= getRuntime() && opModeIsActive()) {
                 ProportionalFeedbackControl();
             }
-            RunToPoint(-37,40 ,5);
+            RunToPoint(-37, 40, 5);
 
 
-        }else{
+        } else {
             if (Zone == 1) {
-                RunToPoint(-38,34,5);
-                RunToPoint(-24,34,5);
+                RunToPoint(-38, 34, 5);
+                RunToPoint(-24, 34, 5);
                 intakeMotor.setPower(0.3);
                 resetRuntime();
-                while (0.3 >= getRuntime() && opModeIsActive()){
+                while (0.3 >= getRuntime() && opModeIsActive()) {
                     ProportionalFeedbackControl();
                 }
                 //Remember to turn off
 
-            }}
+            }
+        }
     }
+
     public void YellowPixelRed() {
         currentState = extendLift;
         stateMachineTimer = getRuntime();
         pixelLiftMotor.setTargetPosition(safeLiftHeight);
-        while   (pixelLiftMotor.getCurrentPosition() <= safeLiftHeight && opModeIsActive()){
-            keepAtPoint(RobotX,RobotY);
+        while (pixelLiftMotor.getCurrentPosition() <= safeLiftHeight && opModeIsActive()) {
+            keepAtPoint(RobotX, RobotY);
             ProportionalFeedbackControlAuto();
         }
 
         barHeightHigh = true;
         fourBarServo.setPosition(0.015);
         stateMachineTimer = getRuntime();
-        while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()) {
-            keepAtPoint(RobotX,RobotY);
+        while (stateMachineTimer >= getRuntime() - 1 && opModeIsActive()) {
+            keepAtPoint(RobotX, RobotY);
             ProportionalFeedbackControlAuto();
 
         }
@@ -213,20 +219,20 @@ public boolean closeStartPos;
 
         } else if (Zone == 2) {
 
-            RunToPoint(50.5, -39.5, 1,1);
+            RunToPoint(50.5, -39.5, 1, 1);
 
-        }else {
-               RunToPoint(36,-30, 2.4, 1);
-               RunToPoint(49.5, -30, 1);
+        } else {
+            RunToPoint(36, -30, 2.4, 1);
+            RunToPoint(49.5, -30, 1);
 
 
         }
         backDepositorServo.setPosition(1);
         frontDepositorServo.setPosition(0);
         stateMachineTimer = getRuntime();
-        while (stateMachineTimer > getRuntime()-2  && opModeIsActive()){
+        while (stateMachineTimer > getRuntime() - 2 && opModeIsActive()) {
             //   ProportionalFeedbackControl();
-            keepAtPoint(RobotX,RobotY);
+            keepAtPoint(RobotX, RobotY);
         }
         backDepositorServo.setPosition(0.5);
         frontDepositorServo.setPosition(0.5);
@@ -234,43 +240,45 @@ public boolean closeStartPos;
         fourBarServo.setPosition(0.92);
         //   RunToPoint();
         stateMachineTimer = getRuntime();
-        while (stateMachineTimer > getRuntime()-0.5  && opModeIsActive()){
-               ProportionalFeedbackControl();
-            keepAtPoint(RobotX,RobotY);
+        while (stateMachineTimer > getRuntime() - 0.5 && opModeIsActive()) {
+            ProportionalFeedbackControl();
+            keepAtPoint(RobotX, RobotY);
         }
         pixelLiftMotor.setTargetPosition(1);
     }
-    public void PlacePurplePixelWithPurplePixelPlacerOnThePixelPickerThatPlacesPerfectly(){
+
+    public void PlacePurplePixelWithPurplePixelPlacerOnThePixelPickerThatPlacesPerfectly() {
         intakeServo.setPosition(PixelPickerBottom);
         stateMachineTimer = getRuntime();
-         while (stateMachineTimer >= getRuntime() - 0.4  && opModeIsActive()){
+        while (stateMachineTimer >= getRuntime() - 0.4 && opModeIsActive()) {
 
-         }
-         intakeMotor.setPower(0.3);
+        }
+        intakeMotor.setPower(0.3);
         stateMachineTimer = getRuntime();
-        while (stateMachineTimer >= getRuntime() - 0.3  && opModeIsActive()){
+        while (stateMachineTimer >= getRuntime() - 0.3 && opModeIsActive()) {
 
         }
         intakeMotor.setPower(0);
         intakeServo.setPosition(PixelPickerTop);
-        while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()){
+        while (stateMachineTimer >= getRuntime() - 1 && opModeIsActive()) {
 
         }
     }
+
     public void YellowPixelBlue() {
         currentState = extendLift;
         stateMachineTimer = getRuntime();
         pixelLiftMotor.setTargetPosition(safeLiftHeight);
-        while   (pixelLiftMotor.getCurrentPosition() <= safeLiftHeight && opModeIsActive()){
-            keepAtPoint(RobotX,RobotY);
+        while (pixelLiftMotor.getCurrentPosition() <= safeLiftHeight && opModeIsActive()) {
+            keepAtPoint(RobotX, RobotY);
             ProportionalFeedbackControlAuto();
         }
 
         barHeightHigh = true;
         fourBarServo.setPosition(0.015);
         stateMachineTimer = getRuntime();
-        while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()) {
-            keepAtPoint(RobotX,RobotY);
+        while (stateMachineTimer >= getRuntime() - 1 && opModeIsActive()) {
+            keepAtPoint(RobotX, RobotY);
             ProportionalFeedbackControlAuto();
 
         }
@@ -284,12 +292,12 @@ public boolean closeStartPos;
 
         } else if (Zone == 2) {
 
-    RunToPoint(47.5, 40, 1,1.5);
+            RunToPoint(47.5, 40, 1, 1.5);
 
 
-        }else {
+        } else {
             //zone 3
-            RunToPoint(36,28, 2.4, 1);
+            RunToPoint(36, 28, 2.4, 1);
             RunToPoint(48, 29.8, 1);
 
 
@@ -297,9 +305,9 @@ public boolean closeStartPos;
         backDepositorServo.setPosition(1);
         frontDepositorServo.setPosition(0);
         stateMachineTimer = getRuntime();
-        while (stateMachineTimer > getRuntime()-2  && opModeIsActive()){
+        while (stateMachineTimer > getRuntime() - 2 && opModeIsActive()) {
             //   ProportionalFeedbackControl();
-            keepAtPoint(RobotX,RobotY);
+            keepAtPoint(RobotX, RobotY);
         }
         backDepositorServo.setPosition(0.5);
         frontDepositorServo.setPosition(0.5);
@@ -307,22 +315,24 @@ public boolean closeStartPos;
         fourBarServo.setPosition(0.92);
         //   RunToPoint();
         stateMachineTimer = getRuntime();
-        while (stateMachineTimer > getRuntime()-0.5  && opModeIsActive()){
+        while (stateMachineTimer > getRuntime() - 0.5 && opModeIsActive()) {
             ProportionalFeedbackControl();
-            keepAtPoint(RobotX,RobotY);
+            keepAtPoint(RobotX, RobotY);
         }
         pixelLiftMotor.setTargetPosition(1);
     }
-    public void ParkBlue(){
 
-        RunToPoint(46,13,4,2);
-        RunToPoint(50,13,1,2);
+    public void ParkBlue() {
+
+        RunToPoint(46, 13, 4, 2);
+        RunToPoint(50, 13, 1, 2);
 
     }
-    public void ParkRed(){
 
-        RunToPoint(46,-10,4,2);
-        RunToPoint(60,-10,2,2);
+    public void ParkRed() {
+
+        RunToPoint(46, -10, 4, 2);
+        RunToPoint(60, -10, 2, 2);
 
     }
 }

@@ -11,28 +11,28 @@ public class RedLeftTrussNoYellow extends OctopusAutoFunctions {
     public void runOpMode() {
         Init();
 
-        DriverOrientationDriveMode =false;
+        DriverOrientationDriveMode = false;
 
         CamInit();
 
-        pattern =RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE;
+        pattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE;
         blinkinLedDriver.setPattern(pattern);
-        robotHeading =0;
-        Target =0;
-        startOfsetRadians =0;
-        IsProgramAutonomous =true;
+        robotHeading = 0;
+        Target = 0;
+        startOfsetRadians = 0;
+        IsProgramAutonomous = true;
 
         ZoneTelemetryUntilStart();
 
         runtime.reset();
-        RobotX =-41;
-        RobotY =-62;
-        InitX=-41;
-        InitY =-62;
+        RobotX = -41;
+        RobotY = -62;
+        InitX = -41;
+        InitY = -62;
 
         PurplePixelRedLeftTruss();
 
-        Speed =0.8;
+        Speed = 0.8;
 
         CamEnd();
 
@@ -40,18 +40,21 @@ public class RedLeftTrussNoYellow extends OctopusAutoFunctions {
         WaitFunction();
         Speed = 0.9;
         setTurn(90);
-        RunToPoint(35,-61,1,5);
+        RunToPoint(35, -61, 1, 5);
 
-        RunToPoint(48,-61,1,5);
+        RunToPoint(48, -61, 1, 5);
         // ParkRed();
         pixelLiftMotor.setTargetPosition(100);
         intakeMotor.setPower(0);
         frontDepositorServo.setPosition(1);
         backDepositorServo.setPosition(0);
         stateMachineTimer = getRuntime();
-        while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()){}
+        while (stateMachineTimer >= getRuntime() - 1 && opModeIsActive()) {
+        }
         pixelLiftMotor.setTargetPosition(0);
-        while (stateMachineTimer >= getRuntime() - 5  && opModeIsActive()){}
-    }}
+        while (stateMachineTimer >= getRuntime() - 5 && opModeIsActive()) {
+        }
+    }
+}
 
 
