@@ -1,4 +1,5 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Genral;
+
 import android.app.Activity;
 import android.graphics.Color;
 import android.view.View;
@@ -10,14 +11,12 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.SwitchableLight;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
@@ -25,23 +24,21 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public abstract class Robot extends LinearOpMode {
-    IMU imu;
-    boolean resettingImu = false;
+    public IMU imu;
+    public boolean resettingImu = false;
     // Declare OpMode members.
-    double Target = 0;
-    double error = 0;
-    double current = 0;
+    public double TargetAngle = 0;
+    public double error = 0;
+    public double current = 0;
     public double RobotAngle = 0;
-    double drive;
-    double slide;
-    double turn;
-    //double TeleopStartingRotation = 90;
-    boolean UseAprilTags;
-    double distanceX, distanceY, PowerX, PowerY, PowerF, PowerS;
+    public double drive;
+    public double slide;
+    public double turn;
+    public boolean UseAprilTags;
+    public double distanceX, distanceY, PowerX, PowerY, PowerF, PowerS;
     public double RobotX, RobotY;
     public ElapsedTime runtime = new ElapsedTime();
     public DcMotor leftFrontMotor = null;
@@ -51,12 +48,12 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor odometrypodx;
     public DcMotor odometrypody;
     public float controlHubChange = 51;
-    int liftPosition;
-    boolean TurnOLD = false;
+    public int liftPosition;
+    public boolean TurnOLD = false;
     public boolean CurrentAlign = true;
     public boolean IsProgramAutonomous;
-    enum operatorState
-    {
+
+    public enum operatorState {
         idle,
         intaking,
         intakeManaul,
@@ -77,8 +74,8 @@ public abstract class Robot extends LinearOpMode {
         dockedScoreFinished,
         highFourBarExtend,
     }
-    public operatorState currentState = operatorState.idle;
 
+    public operatorState currentState = operatorState.idle;
     public DcMotor climberMotor = null;
     public DcMotor intakeMotor = null;
     public DcMotor pixelLiftMotor = null;
@@ -89,36 +86,28 @@ public abstract class Robot extends LinearOpMode {
     public Servo frontDepositorServo = null;
     public DcMotor transferMotor = null;
     public Servo droneTrigger = null;
-
     public double scoringAngle = 0;
     FtcDashboard dashboard;
-
     public double minPower = 0.01;
     public double endOfClipPower = 0.2;
-
-
     public double turnTimer;
-
     public double robotHeading;
-    double leftFrontPower;
-    double leftBackPower;
-    double rightFrontPower;
-    double rightBackPower;
-    boolean DriverOrientationDriveMode = true;
-    boolean Driver1Leftbumper;
-    double startingangle;
-    public double startOfsetRadians = 0;
-
-    float gain = 5;
-    final float[] hsvValues = new float[3];
-
-    NormalizedColorSensor backColorSensor;
-    NormalizedColorSensor frontColorSensor;
+    public double leftFrontPower;
+    public double leftBackPower;
+    public double rightFrontPower;
+    public double rightBackPower;
+    public boolean DriverOrientationDriveMode = true;
+    public boolean Driver1Leftbumper;
+    public double startingangle;
+    public double AutoStartAngle = 0;
+    public float gain = 5;
+    public final float[] hsvValues = new float[3];
+    public NormalizedColorSensor backColorSensor;
+    public NormalizedColorSensor frontColorSensor;
 
     View relativeLayout;
 
-
-    public void colorSenseInit(){
+    public void colorSenseInit() {
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
 
@@ -138,49 +127,45 @@ public abstract class Robot extends LinearOpMode {
         frontColorSensor = hardwareMap.get(NormalizedColorSensor.class, "frontColorSensor");
         backColorSensor = hardwareMap.get(NormalizedColorSensor.class, "backColorSensor");
     }
-    public void updateColorSensors(){
 
+    public void updateColorSensors() {
         frontColorSensor.setGain(gain);
         backColorSensor.setGain(gain);
-        }
+    }
 
-    RevBlinkinLedDriver blinkinLedDriver;
-    RevBlinkinLedDriver.BlinkinPattern pattern;
-
+    public RevBlinkinLedDriver blinkinLedDriver;
+    public RevBlinkinLedDriver.BlinkinPattern pattern;
     public DigitalChannel ClimberLimitSwitchBottom;
-
-
-    public void LightsInit(){
-        blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver .class, "blinkin");
+    public void LightsInit() {
+        blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
         pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
         blinkinLedDriver.setPattern(pattern);
     }
-public void lightsUpdate(){
+
+    public void lightsUpdate() {
         blinkinLedDriver.setPattern(pattern);
-}
-    public void straferAlgorithm(){
+    }
+    public void straferAlgorithm() {
 
-        if(DriverOrientationDriveMode == true){
-//            slide = (slide * Math.cos(robotHeading)) - (drive * Math.sin(robotHeading));
-//            drive = (slide * Math.sin(robotHeading)) + (drive * Math.cos(robotHeading));
-
+        if (DriverOrientationDriveMode == true) {
 
             double temp = drive * Math.cos(-robotHeading) + slide * Math.sin(-robotHeading);
             slide = -drive * Math.sin(-robotHeading) + slide * Math.cos(-robotHeading);
-            if(!CurrentAlign) drive = temp;
+            if (!CurrentAlign) drive = temp;
         }
 
         leftFrontPower = Range.clip(drive + slide + turn, -1.0, 1.0);
-        leftBackPower  =Range.clip(drive - slide + turn,-1.0, 1.0 );
-        rightFrontPower=Range.clip(drive - slide - turn, -1.0, 1.0);
-        rightBackPower =Range.clip(drive + slide - turn, -1.0, 1.0);
+        leftBackPower = Range.clip(drive - slide + turn, -1.0, 1.0);
+        rightFrontPower = Range.clip(drive - slide - turn, -1.0, 1.0);
+        rightBackPower = Range.clip(drive + slide - turn, -1.0, 1.0);
 
     }
-    public void IMU_Update(){
+
+    public void IMU_Update() {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        if(orientation.getRoll(AngleUnit.DEGREES) == 0 && orientation.getPitch(AngleUnit.DEGREES) == 0
+        if (orientation.getRoll(AngleUnit.DEGREES) == 0 && orientation.getPitch(AngleUnit.DEGREES) == 0
                 && orientation.getYaw(AngleUnit.DEGREES) == 0) {
-            if(!resettingImu) {
+            if (!resettingImu) {
                 telemetry.addData("IMU failed?", "Re-initializing!");
                 resettingImu = true;
                 RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
@@ -188,69 +173,61 @@ public void lightsUpdate(){
                 RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
                 imu.initialize(new IMU.Parameters(orientationOnRobot));
             }
-        }
-        else
-        {
+        } else {
             resettingImu = false;
         }
         telemetry.addData("resettingIMU", resettingImu);
         AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
 
 
-        robotHeading = orientation.getYaw(AngleUnit.RADIANS) ;
-      //  robotHeading += ((TeleopStartingRotation)/180) * Math.PI;
+        robotHeading = orientation.getYaw(AngleUnit.RADIANS);
         RobotAngle = orientation.getYaw(AngleUnit.RADIANS);
-        RobotAngle += startOfsetRadians;
+        RobotAngle += AutoStartAngle;
         telemetry.addData("Yaw (Z)", "%.2f Rad. (Heading)", RobotAngle);
     }
-    public void IMUReset(){
+
+    public void IMUReset() {
         telemetry.addData("Yaw", "Reset" + "ing\n");
         imu.resetYaw();
-        Target = 0;
+        TargetAngle = 0;
     }
 
-    public void ProportionalFeedbackControl(){
-        if(resettingImu)
+    public void ProportionalFeedbackControl() {
+        if (resettingImu)
             return;
-        telemetry.addData("angle", (RobotAngle * 180)/Math.PI);
-        telemetry.addData("target", Target);
-        telemetry.addData("IsProgramAutonomous",IsProgramAutonomous);
-        error = Wrap(Target - RobotAngle);
-        if (gamepad1.right_stick_x != 0 || (TurnOLD==true) || turnTimer +0.3 >= getRuntime()){
-            if (!IsProgramAutonomous){
-                Target = (RobotAngle * 180 / Math.PI);
+        telemetry.addData("angle", (RobotAngle * 180) / Math.PI);
+        telemetry.addData("target", TargetAngle);
+        telemetry.addData("IsProgramAutonomous", IsProgramAutonomous);
+        error = Wrap(TargetAngle - RobotAngle);
+        if (gamepad1.right_stick_x != 0 || (TurnOLD == true) || turnTimer + 0.3 >= getRuntime()) {
+            if (!IsProgramAutonomous) {
+                TargetAngle = (RobotAngle * 180 / Math.PI);
             }
 
         }
-        if (gamepad1.right_stick_x != 0 && TurnOLD == true){
+        if (gamepad1.right_stick_x != 0 && TurnOLD == true) {
             turnTimer = getRuntime();
         }
         if (gamepad1.right_stick_x != 0) TurnOLD = false;
         if (gamepad1.right_stick_x == 0) TurnOLD = true;
-        if (gamepad1.right_stick_x==0 || IsProgramAutonomous) {
+        if (gamepad1.right_stick_x == 0 || IsProgramAutonomous) {
             turn -= error / 20;
         }
     }
-    double Wrap(double angle){
-        while(angle > Math.PI){
-            angle -= 2*Math.PI;
+
+    double Wrap(double angle) {
+        while (angle > Math.PI) {
+            angle -= 2 * Math.PI;
         }
-        while(angle < -Math.PI){
+        while (angle < -Math.PI) {
             angle += 2 * Math.PI;
         }
         return angle;
     }
 
-
-    //        public void autoWait(int time){
-//         while(time > -1){
-//        wait(1);
-//        time -= 1;
-//        }
     public void Init() {
         dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-       //telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 //TODO:FIX THIS
         colorSenseInit();
         LightsInit();
@@ -287,34 +264,26 @@ public void lightsUpdate(){
         transferMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pixelLiftMotor.setTargetPosition(1);
         pixelLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         pixelLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         DriverOrientationDriveMode = true;
         climberMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         pixelLiftMotor.setPower(0.8);
         fourBarServo.setPosition(0.92);
-
-
-climberMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        climberMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         droneTrigger.setPosition(0.4);
         intakeServo.setPosition(0.8);
-
         ClimberLimitSwitchBottom = hardwareMap.get(DigitalChannel.class, "Climber_Limit_Switch_Bottom");
         ClimberLimitSwitchBottom.setMode(DigitalChannel.Mode.INPUT);
-
-               leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
         rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
         rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
 
-      //  pixelLiftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-       imu.resetYaw();
-       liftPosition = pixelLiftMotor.getCurrentPosition();
+        imu.resetYaw();
+        liftPosition = pixelLiftMotor.getCurrentPosition();
         leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -329,9 +298,10 @@ climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
-    public void OdometrypodInit () {
-       odometrypodx = hardwareMap.get(DcMotor.class,"odometrypodX");
-      odometrypody = hardwareMap.get(DcMotor.class, "odometrypodY");
+
+    public void OdometrypodInit() {
+        odometrypodx = hardwareMap.get(DcMotor.class, "odometrypodX");
+        odometrypody = hardwareMap.get(DcMotor.class, "odometrypodY");
         imu = hardwareMap.get(IMU.class, "imu");
         odometrypodx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         odometrypody.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -347,7 +317,6 @@ climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     public String ColorSensorCheck(NormalizedColorSensor sensor) {
 
 
-
         NormalizedRGBA colors = sensor.getNormalizedColors();
 
         Color.colorToHSV(colors.toColor(), hsvValues);
@@ -357,9 +326,7 @@ climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 relativeLayout.setBackgroundColor(Color.HSVToColor(hsvValues));
             }
         });
-//        telemetry.addData("Color Data:H", hsvValues[0]);
-//        telemetry.addData("Color Data:S", hsvValues[1]);
-//        telemetry.addData("Color Data:V", hsvValues[2]);
+
         if (((DistanceSensor) sensor).getDistance(DistanceUnit.CM) <= 3) {
             if (hsvValues[2] > .13) {
                 //white pixel
@@ -380,4 +347,3 @@ climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
 }
-

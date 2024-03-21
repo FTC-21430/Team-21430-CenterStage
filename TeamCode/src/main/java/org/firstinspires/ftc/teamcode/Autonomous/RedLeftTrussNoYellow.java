@@ -1,10 +1,12 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name = "BlueRightTrussNoYellow", group = "CenterStage")
-public class BlueRightTrussNoYellow extends OctopusAutoFunctions{
+import org.firstinspires.ftc.teamcode.Genral.OctopusAutoFunctions;
+
+@Autonomous(name = "RedLeftTrussNoYellow", group = "CenterStage")
+public class RedLeftTrussNoYellow extends OctopusAutoFunctions {
     @Override
     public void runOpMode() {
         Init();
@@ -15,22 +17,22 @@ public class BlueRightTrussNoYellow extends OctopusAutoFunctions{
 
         pattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE;
         blinkinLedDriver.setPattern(pattern);
-        robotHeading = -Math.PI;
-        Target = -180;
-        startOfsetRadians = -Math.PI;
+        robotHeading = 0;
+        TargetAngle = 0;
+        AutoStartAngle = 0;
         IsProgramAutonomous = true;
 
         ZoneTelemetryUntilStart();
 
         runtime.reset();
-        RobotX = -38;
-        RobotY = 62;
-        InitX= -38;
-        InitY = 62;
+        RobotX = -41;
+        RobotY = -62;
+        InitX = -41;
+        InitY = -62;
 
-        PurplePixelBlueRightTruss();
+        PurplePixelRedLeftTruss();
 
-        Speed =0.8;
+        Speed = 0.8;
 
         CamEnd();
 
@@ -38,17 +40,20 @@ public class BlueRightTrussNoYellow extends OctopusAutoFunctions{
         WaitFunction();
         Speed = 0.9;
         setTurn(90);
-        RunToPoint(35,60,1,5);
+        RunToPoint(35, -61, 1, 5);
 
-        RunToPoint(48,57,1,5);
-        // ParkRed();
+        RunToPoint(48, -61, 1, 5);
         pixelLiftMotor.setTargetPosition(100);
         intakeMotor.setPower(0);
         frontDepositorServo.setPosition(1);
         backDepositorServo.setPosition(0);
         stateMachineTimer = getRuntime();
-        while (stateMachineTimer >= getRuntime() - 1  && opModeIsActive()){}
+        while (stateMachineTimer >= getRuntime() - 1 && opModeIsActive()) {
+        }
         pixelLiftMotor.setTargetPosition(0);
-        while (stateMachineTimer >= getRuntime() - 5  && opModeIsActive()){}
+        while (stateMachineTimer >= getRuntime() - 5 && opModeIsActive()) {
+        }
+    }
+}
 
-    }}
+

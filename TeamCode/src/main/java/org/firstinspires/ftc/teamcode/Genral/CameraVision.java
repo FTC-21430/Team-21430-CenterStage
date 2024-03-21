@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Genral;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -57,15 +57,14 @@ import java.util.List;
 //@TeleOp(name = "CameraVision", group = "Concept")
 
 public abstract class CameraVision extends GeneralCode {
-public float camBarrierONE=200;
-public float camBarrierTwo=400;
-public double x;
-public double y;
-public int Zone = 2;
-public double Delay = 0;
-private boolean dpadUpOLD;
-private boolean dpadDownOLD;
-
+    public float camBarrierONE = 200;
+    public float camBarrierTwo = 400;
+    public double x;
+    public double y;
+    public int Zone = 2;
+    public double Delay = 0;
+    private boolean dpadUpOLD;
+    private boolean dpadDownOLD;
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
 
     // TFOD_MODEL_ASSET points to a model file stored in the project Asset location,
@@ -95,99 +94,79 @@ private boolean dpadDownOLD;
     private TfodProcessor tfod;
     public boolean aprilTagProcessorActive = false;
 
-    public void AprilTagInit(){
+    public void AprilTagInit() {
         aprilTagProcessorActive = true;
         ATProcessor = AprilTagProcessor.easyCreateWithDefaults();
         AprilTagVisionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 2"), ATProcessor);
     }
 
-    public float[] aprilTagFindRobotPosition(){
+    public float[] aprilTagFindRobotPosition() {
         float[] returnArray = {0, 0, 0};
 
         List<AprilTagDetection> detections = ATProcessor.getDetections();
-        for (AprilTagDetection detection : detections){
+        for (AprilTagDetection detection : detections) {
             AprilTagMetadata metaData = detection.metadata;
             AprilTagPoseRaw rawpose = detection.rawPose;
-        if (!detections.isEmpty()) {
+            if (!detections.isEmpty()) {
+                float tagInFieldX = metaData.fieldPosition.get(0);
+                float tagInFieldY = metaData.fieldPosition.get(1);
+                float tagInFieldZ = metaData.fieldPosition.get(2);
+                OpenGLMatrix tagInFieldR = new OpenGLMatrix(metaData.fieldOrientation.toMatrix());
+                OpenGLMatrix tagInFieldFrame = OpenGLMatrix.identityMatrix()
+                        .translated(tagInFieldX, tagInFieldY, tagInFieldZ)
+                        .multiplied(tagInFieldR);
+                float tagInCameraX = (float) rawpose.x;
+                float tagInCameraY = (float) rawpose.y;
+                float tagInCameraZ = (float) rawpose.z;
+                OpenGLMatrix tagInCameraR = new OpenGLMatrix((rawpose.R));
+                OpenGLMatrix cameraInTagFrame = OpenGLMatrix.identityMatrix()
+                        .translated(tagInCameraX, tagInCameraY, tagInCameraZ)
+                        .multiplied(tagInCameraR)
+                        .inverted();
+                //TODO:Make these values true to the robot THESE VALUES ARE ONLY TEMPORARY
+                float cameraInRobotX = 1;
+                float cameraInRobotY = -4.5f;
+                float cameraInRobotZ = 1.75f;
+                OpenGLMatrix cameraInRobotR = new Orientation(AxesReference.INTRINSIC, AxesOrder.XYZ,
+                        AngleUnit.DEGREES, -90, 180, 0, 0)
+                        .getRotationMatrix();
+                OpenGLMatrix robotInCameraFrame = OpenGLMatrix.identityMatrix()
+                        .translated(cameraInRobotX, cameraInRobotY, cameraInRobotZ)
+                        .multiplied(cameraInRobotR)
+                        .inverted();
+                OpenGLMatrix robotInFieldFrame =
+                        tagInFieldFrame
+                                .multiplied(cameraInTagFrame)
+                                .multiplied(robotInCameraFrame);
+                VectorF robotInFieldTranslation = robotInFieldFrame.getTranslation();
 
+                Orientation robotInFieldOrientation = Orientation.getOrientation(robotInFieldFrame,
+                        AxesReference.INTRINSIC, AxesOrder.YXZ, AngleUnit.DEGREES);
 
-            float tagInFieldX = metaData.fieldPosition.get(0);
-            float tagInFieldY = metaData.fieldPosition.get(1);
-            float tagInFieldZ = metaData.fieldPosition.get(2);
-            OpenGLMatrix tagInFieldR = new OpenGLMatrix(metaData.fieldOrientation.toMatrix());
+                float robotInFieldX = robotInFieldTranslation.get(0);
+                float robotInFieldY = robotInFieldTranslation.get(1);
+                float robotInFieldZ = robotInFieldTranslation.get(2);
+                float robotInFieldRoll = robotInFieldOrientation.firstAngle;
+                float robotInFieldPitch = robotInFieldOrientation.secondAngle;
+                float robotInFieldYaw = robotInFieldOrientation.thirdAngle;
 
-            OpenGLMatrix tagInFieldFrame = OpenGLMatrix.identityMatrix()
-                    .translated(tagInFieldX, tagInFieldY, tagInFieldZ)
-                    .multiplied(tagInFieldR);
+                returnArray[0] = robotInFieldX;
+                returnArray[1] = robotInFieldY;
+                returnArray[2] = robotInFieldYaw * ((float) Math.PI / 180);
+                telemetry.addData("robotX", robotInFieldX);
+                telemetry.addData("robotY", robotInFieldY);
+                telemetry.addData("robotZ", robotInFieldZ);
 
-            float tagInCameraX = (float) rawpose.x;
-            float tagInCameraY = (float) rawpose.y;
-            float tagInCameraZ = (float) rawpose.z;
-            OpenGLMatrix tagInCameraR = new OpenGLMatrix((rawpose.R));
+                telemetry.addData("robotRoll", robotInFieldRoll);
+                telemetry.addData("robotPitch", robotInFieldPitch);
+                telemetry.addData("robotYaw", robotInFieldYaw);
 
-            OpenGLMatrix cameraInTagFrame = OpenGLMatrix.identityMatrix()
-                    .translated(tagInCameraX, tagInCameraY, tagInCameraZ)
-                    .multiplied(tagInCameraR)
-                    .inverted();
-            //TODO:Make these values true to the robot THESE VALUES ARE ONLY TEMPORARY
-            float cameraInRobotX = 1;
-            float cameraInRobotY = -4.5f;
-            float cameraInRobotZ = 1.75f;
-            OpenGLMatrix cameraInRobotR = new Orientation(AxesReference.INTRINSIC, AxesOrder.XYZ,
-                    AngleUnit.DEGREES, -90, 180, 0, 0)
-                    .getRotationMatrix();
-
-            OpenGLMatrix robotInCameraFrame = OpenGLMatrix.identityMatrix()
-                    .translated(cameraInRobotX, cameraInRobotY, cameraInRobotZ)
-                    .multiplied(cameraInRobotR)
-                    .inverted();
-
-            OpenGLMatrix robotInFieldFrame =
-                    tagInFieldFrame
-                            .multiplied(cameraInTagFrame)
-                            .multiplied(robotInCameraFrame);
-
-            VectorF robotInFieldTranslation = robotInFieldFrame.getTranslation();
-
-            Orientation robotInFieldOrientation = Orientation.getOrientation(robotInFieldFrame,
-                    AxesReference.INTRINSIC, AxesOrder.YXZ, AngleUnit.DEGREES);
-
-            float robotInFieldX = robotInFieldTranslation.get(0);
-            float robotInFieldY = robotInFieldTranslation.get(1);
-            float robotInFieldZ = robotInFieldTranslation.get(2);
-
-
-            float robotInFieldRoll = robotInFieldOrientation.firstAngle;
-            float robotInFieldPitch = robotInFieldOrientation.secondAngle;
-            float robotInFieldYaw = robotInFieldOrientation.thirdAngle;
-
-            returnArray[0] = robotInFieldX;
-            returnArray[1] = robotInFieldY;
-            returnArray[2] = robotInFieldYaw * ((float) Math.PI / 180);
-//            RobotX = robotInFieldX;
-//            RobotY = robotInFieldY;
-//            InitX = robotInFieldX;
-//            InitY = robotInFieldY;
-            // RobotAngle = robotInFieldYaw * (Math.PI/180);
-//            startOfsetRadians -= RobotAngle - robotInFieldYaw * (Math.PI/180);
-
-
-            telemetry.addData("robotX", robotInFieldX);
-            telemetry.addData("robotY", robotInFieldY);
-            telemetry.addData("robotZ", robotInFieldZ);
-
-            telemetry.addData("robotRoll", robotInFieldRoll);
-            telemetry.addData("robotPitch", robotInFieldPitch);
-            telemetry.addData("robotYaw", robotInFieldYaw);
-
-            telemetry.addData("decision Margin", detection.decisionMargin);
-        }
+                telemetry.addData("decision Margin", detection.decisionMargin);
+            }
             break;
         }
-
         return returnArray;
     }
-
 
     public void CamInit() {
 
@@ -198,13 +177,14 @@ private boolean dpadDownOLD;
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
     }
-public void configDelay(){
+
+    public void configDelay() {
         if (gamepad1.dpad_up && !dpadUpOLD) Delay += 1;
         if (gamepad1.dpad_down && !dpadDownOLD) Delay -= 1;
         dpadDownOLD = gamepad1.dpad_down;
         dpadUpOLD = gamepad1.dpad_up;
-        telemetry.addData("Auto Delay = ",Delay);
-}
+        telemetry.addData("Auto Delay = ", Delay);
+    }
 
     public void ZoneTelemetryUntilStart() {
         while (!isStarted()) {
@@ -215,37 +195,20 @@ public void configDelay(){
         }
         Zone = findZone();
     }
-public void CamEnd(){
 
-        // Save more CPU resources when camera is no longer needed.
+    public void CamEnd() {
         TensorFlowVisionPortal.close();
-
-    }   // end runOpMode()
+    }
 
     /**
      * Initialize the TensorFlow Object Detection processor.
      */
     private void initTfod() {
 
-        // Create the TensorFlow processor by using a builder.
         tfod = new TfodProcessor.Builder()
 
-                // With the following lines commented out, the default TfodProcessor Builder
-                // will load the default model for the season. To define a custom model to load,
-                // choose one of the following:
-                //   Use setModelAssetName() if the custom TF Model is built in as an asset (AS only).
-                //   Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
                 .setModelAssetName(TFOD_MODEL_ASSET)
-                //.setModelFileName(TFOD_MODEL_FILE)
-
-                // The following default settings are available to un-comment and edit as needed to
-                // set parameters for custom models.
                 .setModelLabels(LABELS)
-                //.setIsModelTensorFlow2(true)
-                //.setIsModelQuantized(true)
-                //.setModelInputSize(300)
-                //.setModelAspectRatio(16.0 / 9.0)
-
                 .build();
 
         // Create the vision portal by using a builder.
@@ -289,22 +252,22 @@ public void CamEnd(){
     /**
      * Add telemetry about TensorFlow Object Detection (TFOD) recognitions.
      */
-    public int findZone(){
-        if (x <= camBarrierONE){
+    public int findZone() {
+        if (x <= camBarrierONE) {
             telemetry.addData("ZoneREAD", "1");
             return 1;
-        }else if(x >= camBarrierONE && x <=camBarrierTwo){
+        } else if (x >= camBarrierONE && x <= camBarrierTwo) {
             telemetry.addData("ZoneREAD", "2");
             return 2;
-        }else if(x >= camBarrierTwo){
+        } else if (x >= camBarrierTwo) {
             telemetry.addData("ZoneREAD", "3");
             return 3;
-
-        }else{
+        } else {
             telemetry.addData("ZoneREAD", "Did not work :'( ");
             return 2;
         }
     }
+
     private void TfodZoneAndTelemetry() {
 
         List<Recognition> currentRecognitions = tfod.getRecognitions();
@@ -312,16 +275,14 @@ public void CamEnd(){
 
         // Step through the list of recognitions and display info for each one.
         for (Recognition recognition : currentRecognitions) {
-             x = (recognition.getLeft() + recognition.getRight()) / 2 ;
-             y = (recognition.getTop()  + recognition.getBottom()) / 2 ;
-             Zone = findZone();
-            telemetry.addData("zone!",Zone);
-            telemetry.addData(""," ");
+            x = (recognition.getLeft() + recognition.getRight()) / 2;
+            y = (recognition.getTop() + recognition.getBottom()) / 2;
+            Zone = findZone();
+            telemetry.addData("zone!", Zone);
+            telemetry.addData("", " ");
             telemetry.addData("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100);
             telemetry.addData("- Position", "%.0f / %.0f", x, y);
             telemetry.addData("- Size", "%.0f x %.0f", recognition.getWidth(), recognition.getHeight());
         }   // end for() loop
-
     }   // end method telemetryTfod()
-
 }   // end class
