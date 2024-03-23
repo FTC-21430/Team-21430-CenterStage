@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.General.OctopusAutoFunctions;
+import org.firstinspires.ftc.teamcode.General.AutoFunctionsWORLDS;
 
-@Autonomous(name = "BlueRightTrussNoYellow", group = "CenterStage")
-public class BlueRightTrussNoYellow extends OctopusAutoFunctions {
+@Autonomous(name = "BlueRightOctopusasdadsg", group = "CenterStage")
+public class RedLeftAdvancedWORLDS extends AutoFunctionsWORLDS {
     @Override
     public void runOpMode() {
         Init();
@@ -29,27 +29,18 @@ public class BlueRightTrussNoYellow extends OctopusAutoFunctions {
         RobotY = 62;
         InitX = -38;
         InitY = 62;
+        Speed = 0.8;
 
-        PurplePixelBlueRightTruss();
+
+        CamEnd();
+        AprilTagInit();
+
+
+        Speed = 0.5;
 
         Speed = 0.8;
 
-        CamEnd();
 
-        AprilTagInit();
-        WaitFunction();
-        Speed = 0.9;
-        setTurn(90);
-        RunToPoint(35, 60, 1, 5);
-
-        RunToPoint(48, 57, 1, 5);
-        pixelLiftMotor.setTargetPosition(100);
-        intakeMotor.setPower(0);
-        frontDepositorServo.setPosition(1);
-        backDepositorServo.setPosition(0);
-        stateMachineTimer = getRuntime();
-        while (stateMachineTimer >= getRuntime() - 1 && opModeIsActive()) {
-        }
         pixelLiftMotor.setTargetPosition(0);
         while (stateMachineTimer >= getRuntime() - 5 && opModeIsActive()) {
         }

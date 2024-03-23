@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.Genral.OctopusAutoFunctions;
+import org.firstinspires.ftc.teamcode.General.OctopusAutoFunctions;
 
 @Autonomous(name = "BlueRightTruss", group = "CenterStage")
 public class BlueRightTruss extends OctopusAutoFunctions {
