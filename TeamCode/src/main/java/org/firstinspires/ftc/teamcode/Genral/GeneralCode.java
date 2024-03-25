@@ -609,6 +609,15 @@ public abstract class GeneralCode extends Robot {
     public void liftDock() {
         pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
         pixelLiftRunToPosition(0);
-        if (pixelLiftMotor.getCurrentPosition() <= 5) currentState = idle;
+        int dockedCalabrationHeight = 120;
+        if (pixelLiftMotor.getCurrentPosition() <= dockedCalabrationHeight) {
+            pixelLiftMotor.setPower(0.4);
+        }else{
+            pixelLiftMotor.setPower(0.8);
+        }
+        if (PixelLiftLimitSwitch.getState() == true || getRuntime() - liftTimeOut >= 2) {
+            currentState = idle;
+            pixelLiftMotor.setPower(0.8);
+        }
     }
 }

@@ -31,6 +31,7 @@ public abstract class Robot extends LinearOpMode {
     public IMU imu;
     public boolean resettingImu = false;
     // Declare OpMode members.
+    public DigitalChannel PixelLiftLimitSwitch;
     public double TargetAngle = 0;
     public double error = 0;
     public double current = 0;
@@ -232,6 +233,9 @@ public abstract class Robot extends LinearOpMode {
 //TODO:FIX THIS
         colorSenseInit();
         LightsInit();
+
+        PixelLiftLimitSwitch = hardwareMap.get(DigitalChannel.class, "LiftLimitSwitch");
+        PixelLiftLimitSwitch.setMode(DigitalChannel.Mode.INPUT);
 
         DroneLinkageServo = hardwareMap.get(Servo.class, "DroneLinkage");
         DroneLinkageServo.setPosition(0.9);
