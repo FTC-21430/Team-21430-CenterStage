@@ -52,6 +52,13 @@ public abstract class GeneralCode extends Robot {
     public float communicationMode;
     public double liftTimeOut;
 
+    int pixelLiftHeightLevel = 1;
+    float HeightOne = 450;
+    float HeightTwo = 700;
+    float HeightThree = 900;
+    float HeightFour = 1100;
+    float HeightFive = 1350;
+
     public double PixelPickerBottom = 0.278;
     public double PixelPickerTop = 0.8;
 
@@ -520,7 +527,7 @@ public abstract class GeneralCode extends Robot {
 
     public void extendLift() {
 
-        pixelLiftMotor.setTargetPosition(safeLiftHeight);
+        pixelLiftMotor.setTargetPosition(pixelLiftHeightLevel);
 
         if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight || stateMachineTimer <= getRuntime() - 3) {
             // We made it an or statement just in case the robot doesn't reach the exact safe lift height then will be okay :)
@@ -537,10 +544,12 @@ public abstract class GeneralCode extends Robot {
     public void liftOut() {
         frontDepositorServo.setPosition(0.5);
         backDepositorServo.setPosition(0.5);
-        liftPosition += gamepad2.left_stick_y * -50;
+        int liftMovementSpeed = -80;
+        liftPosition += gamepad2.left_stick_y * liftMovementSpeed;
         if (liftPosition >= LiftMAX) liftPosition = LiftMAX;
         if (liftPosition <= safeLiftHeight) liftPosition = safeLiftHeight;
         telemetry.addData("liftPosition", liftPosition);
+        updateSavedLiftHeight(liftPosition);
         pixelLiftMotor.setTargetPosition(liftPosition);
 
         if (gamepad2.b) {
@@ -618,6 +627,26 @@ public abstract class GeneralCode extends Robot {
         if (PixelLiftLimitSwitch.getState() == true || getRuntime() - liftTimeOut >= 2) {
             currentState = idle;
             pixelLiftMotor.setPower(0.8);
+        }
+    }
+    public void updateSavedLiftHeight(int liftHeight){
+        if (liftHeight >= HeightOne && liftHeight < HeightTwo){
+            pixelLiftHeightLevel = 1;
+        }
+        else if (liftHeight >= HeightTwo && liftHeight < HeightThree){
+            pixelLiftHeightLevel = 2;
+        }
+        else if (liftHeight >= HeightThree && liftHeight < HeightFour){
+            pixelLiftHeightLevel = 3;
+        }
+        else if (liftHeight >= HeightFour && liftHeight < HeightFive){
+            pixelLiftHeightLevel = 4;
+        }
+        else if (liftHeight >= HeightFive){
+            pixelLiftHeightLevel = 5;
+        }
+        else{
+            pixelLiftHeightLevel = 1;
         }
     }
 }
