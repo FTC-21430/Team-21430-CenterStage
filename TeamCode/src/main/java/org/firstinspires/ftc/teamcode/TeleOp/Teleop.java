@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Genral.OdometryCode;
+import org.firstinspires.ftc.teamcode.General.OdometryCode;
 
 @TeleOp(name = "Teleop", group = "Linear Opmode")
 public class Teleop extends OdometryCode {

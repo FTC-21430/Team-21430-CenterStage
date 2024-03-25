@@ -4,7 +4,7 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.Genral.AutonomousFunction;
+import org.firstinspires.ftc.teamcode.General.AutonomousFunction;
 
 @Disabled
 @Autonomous(name = "BlueRightJellyfish", group = "CenterStage")
