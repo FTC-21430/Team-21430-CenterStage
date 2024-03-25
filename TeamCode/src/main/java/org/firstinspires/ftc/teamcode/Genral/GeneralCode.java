@@ -289,7 +289,7 @@ public abstract class GeneralCode extends Robot {
 
     public void scoreDocked() {
         frontDepositorServo.setPosition(1);
-        backDepositorServo.setPosition(0);
+        backDepositorServo.setPosition(1);
 
         if (!gamepad2.b) {
             frontDepositorServo.setPosition(0.5);
@@ -300,6 +300,7 @@ public abstract class GeneralCode extends Robot {
     }
 
     public void dockedScoreFinished() {
+        frontDepositorServo.setPosition(0.5);
         frontDepositorServo.setPosition(0.5);
         if (ColorSensorCheck(backColorSensor) != "None") {
             currentState = transferDocked;
@@ -316,7 +317,7 @@ public abstract class GeneralCode extends Robot {
 
     public void transferDocked() {
         frontDepositorServo.setPosition(1);
-        backDepositorServo.setPosition(-1);
+        backDepositorServo.setPosition(1);
         if (ColorSensorCheck(frontColorSensor) != "None") {
             currentState = idle;
             frontDepositorServo.setPosition(0.5);
@@ -340,7 +341,7 @@ public abstract class GeneralCode extends Robot {
             pixelPickerCurrent = 6;
             pixelPickerUp = true;
 
-            backDepositorServo.setPosition(-1);
+            backDepositorServo.setPosition(1);
         }
         if (gamepad2.dpad_up) {
             currentState = extendLift;
@@ -556,7 +557,7 @@ public abstract class GeneralCode extends Robot {
 
     public void score() {
         frontDepositorServo.setPosition(0);
-        backDepositorServo.setPosition(1);
+        backDepositorServo.setPosition(0);
 
         if (!gamepad2.b) {
             frontDepositorServo.setPosition(0.5);

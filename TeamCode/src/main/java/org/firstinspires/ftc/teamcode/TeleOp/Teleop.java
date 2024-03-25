@@ -15,7 +15,7 @@ public class Teleop extends OdometryCode {
     public void runOpMode() {
         Init();
         IsProgramAutonomous = false;
-        AprilTagInit();
+        //AprilTagInit();
         //TODO: Add centerstage specific init
         waitForStart();
         IMUReset();
@@ -49,12 +49,12 @@ public class Teleop extends OdometryCode {
             }
             speedControl();
             straferAlgorithm();
-            UpdateEncoders();
-            UpdateOdometry();
+            //UpdateEncoders();
+            //UpdateOdometry();
             updateCommunication();
             updateColorSensors();
             lightsUpdate();
-            endGameThings();
+            //endGameThings();
             if (gamepad2.y && !gamepad2Yold) {
                 pixelLiftMotor.setTargetPosition(100);
                 LiftHeightAtButtonPressed = pixelLiftMotor.getCurrentPosition();
