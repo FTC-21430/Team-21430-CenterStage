@@ -1,20 +1,20 @@
-package org.firstinspires.ftc.teamcode.Genral;
+package org.firstinspires.ftc.teamcode.General;
 
-import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.depoTransition;
-import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.extendLift;
-import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.fourBarDock;
-import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.fourBarWait;
-import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.highFourBarExtend;
-import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.idle;
-import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.intakeCancel;
-import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.intakeDone;
-import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.intaking;
-import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.liftDock;
-import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.liftOut;
-import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.score;
-import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.scoreDocked;
-import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.scoreIdle;
-import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.transferDocked;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.depoTransition;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.extendLift;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.fourBarDock;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.fourBarWait;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.highFourBarExtend;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.idle;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.intakeCancel;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.intakeDone;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.intaking;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.liftDock;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.liftOut;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.score;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.scoreDocked;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.scoreIdle;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.transferDocked;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 

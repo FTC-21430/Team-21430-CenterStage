@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.Genral;
+package org.firstinspires.ftc.teamcode.General;
 
-import static org.firstinspires.ftc.teamcode.Genral.Robot.operatorState.extendLift;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.extendLift;
 
 public abstract class AutonomousFunction extends OdometryCode {
     public boolean closeStartPos;
