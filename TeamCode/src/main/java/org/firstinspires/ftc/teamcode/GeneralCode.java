@@ -608,7 +608,8 @@ public void idleCode(){
     public void liftDock(){
         pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
         pixelLiftRunToPosition(0);
-        if (pixelLiftMotor.getCurrentPosition() <= 120) {
+        int dockedCalabrationHeight = 120;
+        if (pixelLiftMotor.getCurrentPosition() <= dockedCalabrationHeight) {
             pixelLiftMotor.setPower(0.4);
         }else{
             pixelLiftMotor.setPower(0.8);
