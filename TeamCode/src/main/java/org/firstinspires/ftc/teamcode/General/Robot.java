@@ -155,7 +155,7 @@ public abstract class Robot extends LinearOpMode {
             slide = -drive * Math.sin(-robotHeading) + slide * Math.cos(-robotHeading);
             if (!CurrentAlign) drive = temp;
         }
-
+        telemetry.addData("USED", turn);
         leftFrontPower = Range.clip(drive + slide + turn, -1.0, 1.0);
         leftBackPower = Range.clip(drive - slide + turn, -1.0, 1.0);
         rightFrontPower = Range.clip(drive - slide - turn, -1.0, 1.0);
@@ -200,21 +200,22 @@ public abstract class Robot extends LinearOpMode {
         telemetry.addData("angle", (RobotAngle * 180) / Math.PI);
         telemetry.addData("target", TargetAngle);
         telemetry.addData("IsProgramAutonomous", IsProgramAutonomous);
-        error = Wrap(TargetAngle - RobotAngle);
-        if (gamepad1.right_stick_x != 0 || (TurnOLD == true) || turnTimer + 0.3 >= getRuntime()) {
+        error = Wrap((TargetAngle/180)*Math.PI - RobotAngle)*180/Math.PI;
+        if (gamepad1.right_stick_x != 0 || turnTimer + 0.3 >= getRuntime()) {
             if (!IsProgramAutonomous) {
                 TargetAngle = (RobotAngle * 180 / Math.PI);
             }
-
         }
-        if (gamepad1.right_stick_x != 0 && TurnOLD == true) {
+        if (gamepad1.right_stick_x == 0 && !TurnOLD) {
             turnTimer = getRuntime();
         }
+
         if (gamepad1.right_stick_x != 0) TurnOLD = false;
         if (gamepad1.right_stick_x == 0) TurnOLD = true;
-        if (gamepad1.right_stick_x == 0 || IsProgramAutonomous) {
-            turn -= error / 20;
-        }
+        telemetry.addData("ERROR", error);
+        telemetry.addData("BEFORE", turn);
+        turn -= error/20;
+        telemetry.addData("AFTER", turn);
     }
 
     double Wrap(double angle) {
@@ -275,17 +276,17 @@ public abstract class Robot extends LinearOpMode {
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pixelLiftMotor.setPower(0.8);
-        fourBarServo.setPosition(0.92);
+        fourBarServo.setPosition(0.954);
         climberMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         droneTrigger.setPosition(0.4);
         intakeServo.setPosition(0.8);
         ClimberLimitSwitchBottom = hardwareMap.get(DigitalChannel.class, "Climber_Limit_Switch_Bottom");
         ClimberLimitSwitchBottom.setMode(DigitalChannel.Mode.INPUT);
-        leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
-        leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
-        rightBackMotor.setDirection(DcMotor.Direction.FORWARD);
+        leftFrontMotor.setDirection(DcMotor.Direction.FORWARD);
+        leftBackMotor.setDirection(DcMotor.Direction.FORWARD);
+        rightFrontMotor.setDirection(DcMotor.Direction.REVERSE);
+        rightBackMotor.setDirection(DcMotor.Direction.REVERSE);
 
         imu.resetYaw();
         liftPosition = pixelLiftMotor.getCurrentPosition();

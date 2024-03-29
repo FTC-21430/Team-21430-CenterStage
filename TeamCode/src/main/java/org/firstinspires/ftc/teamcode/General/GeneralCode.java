@@ -16,8 +16,9 @@ import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.scoreDo
 import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.scoreIdle;
 import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.transferDocked;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
-
+@Config
 public abstract class GeneralCode extends Robot {
     public boolean ClimbAutoUp = false;
     public int LiftManual = 0;
@@ -51,13 +52,13 @@ public abstract class GeneralCode extends Robot {
     public boolean barHeightHigh = false;
     public float communicationMode;
     public double liftTimeOut;
-
+    public static double PixelPickerServoPosition = 0.8;
     int pixelLiftHeightLevel = 1;
-    float HeightOne = 450;
-    float HeightTwo = 700;
-    float HeightThree = 900;
-    float HeightFour = 1100;
-    float HeightFive = 1350;
+    int HeightOne = 450;
+    int HeightTwo = 700;
+    int HeightThree = 900;
+    int HeightFour = 1100;
+    int HeightFive = 1350;
 
     public double PixelPickerBottom = 0.278;
     public double PixelPickerTop = 0.8;
@@ -79,11 +80,6 @@ public abstract class GeneralCode extends Robot {
         fastMode = gamepad1.right_trigger;
 
         Intake = gamepad2.b;
-        highJunction = gamepad2.dpad_up;
-        mediumJunction = gamepad2.dpad_right;
-        lowJunction = gamepad2.dpad_left;
-        groundJunction = gamepad2.dpad_down;
-        //toggle Driver Orientation Mode
         communicationMode = gamepad2.right_trigger;
     }
 
@@ -183,9 +179,7 @@ public abstract class GeneralCode extends Robot {
         }
 
         if (gamepad1.left_trigger >= 0.5 && gamepad1.left_bumper) LaunchDrone();
-        if (endGameMode) {
-            Climber();
-        }
+
     }
 
     public void updateCommunication() {
@@ -400,18 +394,19 @@ public abstract class GeneralCode extends Robot {
                 }
             }
         }
+
         if (pixelPickerCurrent == 6) {
             intakeServo.setPosition(0.8);
         } else if (pixelPickerCurrent == 5) {
-            intakeServo.setPosition(0.371);
+            intakeServo.setPosition(0.604);
         } else if (pixelPickerCurrent == 4) {
-            intakeServo.setPosition(0.346);
+            intakeServo.setPosition(0.583);
         } else if (pixelPickerCurrent == 3) {
-            intakeServo.setPosition(0.327);
+            intakeServo.setPosition(0.565);
         } else if (pixelPickerCurrent == 2) {
-            intakeServo.setPosition(0.30);
+            intakeServo.setPosition(0.54);
         } else if (pixelPickerCurrent == 1) {
-            intakeServo.setPosition(0.278);
+            intakeServo.setPosition(0.53);
         }
 
         telemetry.addData("current pixel picker", pixelPickerCurrent);
@@ -527,7 +522,29 @@ public abstract class GeneralCode extends Robot {
 
     public void extendLift() {
 
-        pixelLiftMotor.setTargetPosition(pixelLiftHeightLevel);
+        if (pixelLiftHeightLevel == 1){
+            pixelLiftMotor.setTargetPosition(HeightOne);
+            liftPosition = HeightOne;
+        }else
+        if (pixelLiftHeightLevel == 2){
+            pixelLiftMotor.setTargetPosition(HeightTwo);
+            liftPosition = HeightTwo;
+        }else
+        if (pixelLiftHeightLevel == 3){
+            pixelLiftMotor.setTargetPosition(HeightThree);
+            liftPosition = HeightThree;
+        }else
+        if (pixelLiftHeightLevel == 4){
+            pixelLiftMotor.setTargetPosition(HeightFour);
+            liftPosition = HeightFour;
+        }else
+        if (pixelLiftHeightLevel == 5) {
+            pixelLiftMotor.setTargetPosition(HeightFive);
+            liftPosition = HeightFive;
+        }else{
+            pixelLiftMotor.setTargetPosition(HeightOne);
+            liftPosition = HeightOne;
+        }
 
         if (pixelLiftMotor.getCurrentPosition() >= safeLiftHeight || stateMachineTimer <= getRuntime() - 3) {
             // We made it an or statement just in case the robot doesn't reach the exact safe lift height then will be okay :)
@@ -558,7 +575,7 @@ public abstract class GeneralCode extends Robot {
         }
         if (gamepad2.dpad_down) {
             currentState = fourBarWait;
-            fourBarServo.setPosition(0.96);
+            fourBarServo.setPosition(0.954);
             pixelLiftMotor.setTargetPosition(safeLiftHeight + 200);
             stateMachineTimer = getRuntime();
         }
@@ -582,7 +599,7 @@ public abstract class GeneralCode extends Robot {
             currentState = depoTransition;
         }
         if (gamepad2.dpad_down) {
-            fourBarServo.setPosition(0.92);
+            fourBarServo.setPosition(0.954);
             currentState = fourBarWait;
             stateMachineTimer = getRuntime();
         }
@@ -607,7 +624,7 @@ public abstract class GeneralCode extends Robot {
     }
 
     public void fourBarDock() {
-        fourBarServo.setPosition(0.92);
+        fourBarServo.setPosition(0.954);
         if (gamepad2.dpad_down) {
             currentState = liftDock;
             stateMachineTimer = getRuntime();
@@ -618,12 +635,8 @@ public abstract class GeneralCode extends Robot {
     public void liftDock() {
         pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
         pixelLiftRunToPosition(0);
-        int dockedCalabrationHeight = 120;
-        if (pixelLiftMotor.getCurrentPosition() <= dockedCalabrationHeight) {
-            pixelLiftMotor.setPower(0.4);
-        }else{
-            pixelLiftMotor.setPower(0.8);
-        }
+
+
         if (PixelLiftLimitSwitch.getState() == true || getRuntime() - liftTimeOut >= 2) {
             currentState = idle;
             pixelLiftMotor.setPower(0.8);

@@ -49,12 +49,12 @@ public class Teleop extends OdometryCode {
             }
             speedControl();
             straferAlgorithm();
-            //UpdateEncoders();
-            //UpdateOdometry();
+//            UpdateEncoders();
+//            UpdateOdometry();
             updateCommunication();
             updateColorSensors();
             lightsUpdate();
-            //endGameThings();
+            endGameThings();
             if (gamepad2.y && !gamepad2Yold) {
                 pixelLiftMotor.setTargetPosition(100);
                 LiftHeightAtButtonPressed = pixelLiftMotor.getCurrentPosition();
@@ -64,11 +64,11 @@ public class Teleop extends OdometryCode {
                 pixelLiftMotor.setTargetPosition(LiftHeightAtButtonPressed);
             }
             gamepad2Yold = gamepad2.y;
-            if (endGameMode) {
-                intakeServo.setPosition(0.5);
-            } else {
-                intakeServo.setPosition(1);
-            }
+           // if (endGameMode) {
+             //   intakeServo.setPosition(0.5);
+            //} else {
+              //  intakeServo.setPosition(1);
+            //}
 
             intakeMotor.setPower(0);
             transferMotor.setPower(0);
