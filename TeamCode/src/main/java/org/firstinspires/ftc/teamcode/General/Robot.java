@@ -7,6 +7,7 @@ import android.view.View;
 //import com.acmerobotics.dashboard.FtcDashboard;
 //import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -26,7 +27,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-
+@Config
 public abstract class Robot extends LinearOpMode {
     public IMU imu;
     public boolean resettingImu = false;
@@ -40,20 +41,24 @@ public abstract class Robot extends LinearOpMode {
     public double slide;
     public double turn;
     public boolean UseAprilTags;
-    public double distanceX, distanceY, PowerX, PowerY, PowerF, PowerS;
+    public double distanceX, distanceY, PowerX, PowerY, PowerF, PowerS, derivativeX, derivativeY;
+    public double lastErrorX, lastErrorY, lastTime;
     public double RobotX, RobotY;
     public ElapsedTime runtime = new ElapsedTime();
     public DcMotor leftFrontMotor = null;
     public DcMotor leftBackMotor = null;
     public DcMotor rightFrontMotor = null;
     public DcMotor rightBackMotor = null;
+    public double lastErrorAngle;
+    public double derivativeAngle;
 
     public float controlHubChange = 51;  
     public int liftPosition;
     public boolean TurnOLD = false;
     public boolean CurrentAlign = true;
     public boolean IsProgramAutonomous;
-
+    public static double derivativeConstantAngle = 0.0015;
+    public static double proportionalConstantAngle = 0.02;
     public enum operatorState {
         idle,
         intaking,
@@ -105,6 +110,7 @@ public abstract class Robot extends LinearOpMode {
     public final float[] hsvValues = new float[3];
     public NormalizedColorSensor backColorSensor;
     public NormalizedColorSensor frontColorSensor;
+    public double lastTimeAngle;
 
     View relativeLayout;
 
@@ -194,12 +200,14 @@ public abstract class Robot extends LinearOpMode {
     }
 
     public void ProportionalFeedbackControl() {
+        double currentTime = getRuntime();
         if (resettingImu)
             return;
         telemetry.addData("angle", (RobotAngle * 180) / Math.PI);
         telemetry.addData("target", TargetAngle);
         telemetry.addData("IsProgramAutonomous", IsProgramAutonomous);
         error = Wrap((TargetAngle/180)*Math.PI - RobotAngle)*180/Math.PI;
+        derivativeAngle = (error - lastErrorAngle)/(currentTime - lastTimeAngle);
         if (gamepad1.right_stick_x != 0 || turnTimer + 0.3 >= getRuntime()) {
             if (!IsProgramAutonomous) {
                 TargetAngle = (RobotAngle * 180 / Math.PI);
@@ -213,8 +221,10 @@ public abstract class Robot extends LinearOpMode {
         if (gamepad1.right_stick_x == 0) TurnOLD = true;
         telemetry.addData("ERROR", error);
         telemetry.addData("BEFORE", turn);
-        turn -= error/20;
+        turn -= error * proportionalConstantAngle + (derivativeConstantAngle * derivativeAngle);
         telemetry.addData("AFTER", turn);
+        lastTimeAngle = currentTime;
+        lastErrorAngle = error;
     }
 
     double Wrap(double angle) {

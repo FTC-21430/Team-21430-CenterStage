@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.General;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
-
+@Config
 public abstract class OdometryCode extends CameraVision {
     public double InitX, InitY;
     public double DForward, DSideways;
@@ -22,9 +23,13 @@ public abstract class OdometryCode extends CameraVision {
     public boolean GamepadAOld;
     public double OdometryPodOldX, OdometryPodOldY;
     public double OdometryPodX, OdometryPodY;
-    public double RadiusX = 6.75;
-    public double RadiusY = 7.75;
-    public double Speed = 0.5;
+    public static double RadiusX = 6.75;
+    public static double RadiusY = 7.73886;
+    public static double Speed = 0.5;
+    public static double derivativeConstantX = 0.015;
+    public static double derivativeConstantY = 0.015;
+    public static double proportionalConstantX = 0.1;
+    public static double proportionalConstantY = 0.1;
 
     public void ProportionalFeedbackControlAuto() {
         error = Wrap(((TargetAngle - ((180 * RobotAngle) / Math.PI))));
@@ -71,12 +76,15 @@ public abstract class OdometryCode extends CameraVision {
     }
 
     public void keepAtPoint(double Tx, double Ty) {
-
+    double CurrentTime = getRuntime();
         distanceX = RobotX - Tx;
         distanceY = RobotY - Ty;
 
-        PowerX = -distanceX * .55 / 3;
-        PowerY = -distanceY * .4 / 3;
+        derivativeX = (distanceX-lastErrorX)/(CurrentTime-lastTime);
+        derivativeY = (distanceY-lastErrorY)/(CurrentTime-lastTime);
+
+        PowerX = -distanceX * proportionalConstantX + (-derivativeConstantX * derivativeX);
+        PowerY = -distanceY * proportionalConstantY + (-derivativeConstantY * derivativeY);
 
         PowerS = PowerX * Math.cos(-RobotAngle) - PowerY * Math.sin(-RobotAngle);
         PowerF = PowerX * Math.sin(-RobotAngle) + PowerY * Math.cos(-RobotAngle);
@@ -90,6 +98,9 @@ public abstract class OdometryCode extends CameraVision {
         drive = PowerF;
         slide = PowerS;
         straferAlgorithm();
+        lastTime = CurrentTime;
+        lastErrorY = distanceY;
+        lastErrorX = distanceX;
     }
 
     public void RunToPoint(double TargetX, double TargetY, double Timeout) {

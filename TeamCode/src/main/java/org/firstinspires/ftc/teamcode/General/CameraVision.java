@@ -97,7 +97,12 @@ public abstract class CameraVision extends GeneralCode {
     public void AprilTagInit() {
         aprilTagProcessorActive = true;
         ATProcessor = AprilTagProcessor.easyCreateWithDefaults();
-        AprilTagVisionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 2"), ATProcessor);
+        VisionPortal.Builder atBuilder = new VisionPortal.Builder();
+        atBuilder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 2"));
+        atBuilder.addProcessor(ATProcessor);
+        atBuilder.enableLiveView(false);
+        AprilTagVisionPortal = atBuilder.build();
+//        AprilTagVisionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 2"), ATProcessor);
     }
 
     public float[] aprilTagFindRobotPosition() {
@@ -197,7 +202,7 @@ public abstract class CameraVision extends GeneralCode {
     }
 
     public void CamEnd() {
-        TensorFlowVisionPortal.close();
+        //TensorFlowVisionPortal.close();
     }
 
     /**

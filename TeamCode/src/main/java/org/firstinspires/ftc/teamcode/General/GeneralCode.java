@@ -60,7 +60,7 @@ public abstract class GeneralCode extends Robot {
     int HeightFour = 1100;
     int HeightFive = 1350;
 
-    public double PixelPickerBottom = 0.278;
+    public double PixelPickerBottom = 0.53;
     public double PixelPickerTop = 0.8;
 
     public void pixelLiftRunToPosition(int encoderTick) {
