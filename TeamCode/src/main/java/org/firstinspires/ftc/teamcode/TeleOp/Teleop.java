@@ -49,8 +49,8 @@ public class Teleop extends OdometryCode {
             }
             speedControl();
             straferAlgorithm();
-//            UpdateEncoders();
-//            UpdateOdometry();
+            UpdateEncoders();
+            UpdateOdometry();
             updateCommunication();
             updateColorSensors();
             lightsUpdate();

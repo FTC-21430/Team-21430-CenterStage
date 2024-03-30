@@ -47,8 +47,7 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor leftBackMotor = null;
     public DcMotor rightFrontMotor = null;
     public DcMotor rightBackMotor = null;
-    public DcMotor odometrypodx;
-    public DcMotor odometrypody;
+
     public float controlHubChange = 51;  
     public int liftPosition;
     public boolean TurnOLD = false;
@@ -267,6 +266,7 @@ public abstract class Robot extends LinearOpMode {
         frontDepositorServo = hardwareMap.get(Servo.class, "frontDepo");
         droneTrigger = hardwareMap.get(Servo.class, "DroneTrigger");
         pixelLiftMotor.setTargetPosition(1);
+        transferMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         transferMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pixelLiftMotor.setTargetPosition(1);
         pixelLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -274,6 +274,7 @@ public abstract class Robot extends LinearOpMode {
         DriverOrientationDriveMode = true;
         climberMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
+        intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pixelLiftMotor.setPower(0.8);
         fourBarServo.setPosition(0.954);
@@ -306,21 +307,6 @@ public abstract class Robot extends LinearOpMode {
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
     }
-
-    public void OdometrypodInit() {
-        odometrypodx = hardwareMap.get(DcMotor.class, "odometrypodX");
-        odometrypody = hardwareMap.get(DcMotor.class, "odometrypodY");
-        imu = hardwareMap.get(IMU.class, "imu");
-        odometrypodx.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        odometrypody.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        odometrypodx.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        odometrypody.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        RevHubOrientationOnRobot.LogoFacingDirection logoDirection = RevHubOrientationOnRobot.LogoFacingDirection.FORWARD;
-        RevHubOrientationOnRobot.UsbFacingDirection usbDirection = RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
-        RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logoDirection, usbDirection);
-        imu.initialize(new IMU.Parameters(orientationOnRobot));
-    }
-
 
     public String ColorSensorCheck(NormalizedColorSensor sensor) {
 

@@ -20,10 +20,10 @@ public abstract class OdometryCode extends CameraVision {
     public double FrontLeftOld, FrontRightOld, BackLeftOld, BackRightOld;
     public float TESTfLeft, TESTfRight, TESTbLeft, TESTbRight;
     public boolean GamepadAOld;
-    //TODO: CONFIGURE STUFF
     public double OdometryPodOldX, OdometryPodOldY;
     public double OdometryPodX, OdometryPodY;
-    public double RadiusX, RadiusY;
+    public double RadiusX = 6.75;
+    public double RadiusY = 7.75;
     public double Speed = 0.5;
 
     public void ProportionalFeedbackControlAuto() {
@@ -65,6 +65,9 @@ public abstract class OdometryCode extends CameraVision {
         InitX = RobotX;
         InitY = RobotY;
         OldAngle = RobotAngle;
+        telemetry.addData("RobotX", RobotX);
+        telemetry.addData("RobotY", RobotY);
+
     }
 
     public void keepAtPoint(double Tx, double Ty) {
@@ -128,6 +131,7 @@ public abstract class OdometryCode extends CameraVision {
                     .setStroke("goldenrod")
                     .setFill("black")
                     .fillPolygon(bxPoints, byPoints);
+
             dashboard.sendTelemetryPacket(packet);
             telemetry.addData("RobotX:", RobotX);
             telemetry.addData("Angle:", RobotAngle);
@@ -137,14 +141,16 @@ public abstract class OdometryCode extends CameraVision {
             telemetry.addData("X", RobotX);
             telemetry.addData("Angle", RobotAngle);
             telemetry.addData("a motor", FrontLeft);
-
             telemetry.addData("Zone", Zone);
             telemetry.update();
+
             TESTfLeft = leftFrontMotor.getCurrentPosition();
             TESTfRight = rightFrontMotor.getCurrentPosition();
             TESTbLeft = leftBackMotor.getCurrentPosition();
             TESTbRight = rightBackMotor.getCurrentPosition();
+
             turn = 0;
+
 //THIS IS HERE FOR AUTONOMOUS PURPOSES
             if (ColorSensorCheck(frontColorSensor) != "None") {
                 frontDepositorServo.setPosition(.5);
@@ -247,8 +253,9 @@ public abstract class OdometryCode extends CameraVision {
     }
 
     public void UpdateEncoders() {
-        OdometryPodX = odometrypodx.getCurrentPosition();
-        OdometryPodY = odometrypody.getCurrentPosition();
+        OdometryPodX = -transferMotor.getCurrentPosition();
+        OdometryPodY = intakeMotor.getCurrentPosition();
+        //the Y Odometry pod is plugged into port 2 which is the same port as the intake and its the same thing for the transfer
         double tempX = OdometryPodX - OdometryPodOldX;
         double tempY = OdometryPodY - OdometryPodOldY;
 
