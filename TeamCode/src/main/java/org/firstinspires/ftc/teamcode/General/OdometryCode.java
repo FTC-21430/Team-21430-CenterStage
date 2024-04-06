@@ -23,9 +23,9 @@ public abstract class OdometryCode extends CameraVision {
     public boolean GamepadAOld;
     public double OdometryPodOldX, OdometryPodOldY;
     public double OdometryPodX, OdometryPodY;
-    public static double RadiusX = 6.75;
+    public static double RadiusX = 6.08;
     public static double RadiusY = 7.73886;
-    public static double Speed = 0.5;
+    public static double Speed = 1;
     public static double derivativeConstantX = 0.015;
     public static double derivativeConstantY = 0.015;
     public static double proportionalConstantX = 0.1;

@@ -27,8 +27,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+
+import java.util.function.ToDoubleBiFunction;
+
 @Config
 public abstract class Robot extends LinearOpMode {
+    //TODO tune these values
+    public static double ClimberBarDockedPosition = 0.55105;
+    public static double ClimberBarOutPosition = 0.62;
+    public static double ClimberBarMidPosition = 0.60;
+
     public IMU imu;
     public boolean resettingImu = false;
     // Declare OpMode members.
@@ -86,6 +94,7 @@ public abstract class Robot extends LinearOpMode {
     public DcMotor intakeMotor = null;
     public DcMotor pixelLiftMotor = null;
     public Servo intakeServo = null;
+    public Servo ClimberBarServo = null;
     public Servo DroneLinkageServo = null;
     public Servo fourBarServo = null;
     public Servo backDepositorServo = null;
@@ -240,7 +249,6 @@ public abstract class Robot extends LinearOpMode {
     public void Init() {
         dashboard = FtcDashboard.getInstance();
         telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-//TODO:FIX THIS
         colorSenseInit();
         LightsInit();
 
@@ -275,6 +283,8 @@ public abstract class Robot extends LinearOpMode {
         backDepositorServo = hardwareMap.get(Servo.class, "backDepo");
         frontDepositorServo = hardwareMap.get(Servo.class, "frontDepo");
         droneTrigger = hardwareMap.get(Servo.class, "DroneTrigger");
+        ClimberBarServo = hardwareMap.get(Servo.class, "climberBarServo");
+        ClimberBarServo.setPosition(ClimberBarDockedPosition);
         pixelLiftMotor.setTargetPosition(1);
         transferMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         transferMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -287,6 +297,8 @@ public abstract class Robot extends LinearOpMode {
         intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pixelLiftMotor.setPower(0.8);
+
+
         fourBarServo.setPosition(0.954);
         climberMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

@@ -20,6 +20,9 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 @Config
 public abstract class GeneralCode extends Robot {
+    private boolean ClimberBarDepoyed = false;
+    public boolean IntakeOLD = false;
+    private boolean frontDepoReverse = false;
     public boolean ClimbAutoUp = false;
     public int LiftManual = 0;
     public boolean calabrate_Lift = false;
@@ -60,7 +63,7 @@ public abstract class GeneralCode extends Robot {
     int HeightFour = 1100;
     int HeightFive = 1350;
 
-    public double PixelPickerBottom = 0.53;
+    public double PixelPickerBottom = 0.54;
     public double PixelPickerTop = 0.8;
 
     public void pixelLiftRunToPosition(int encoderTick) {
@@ -139,31 +142,30 @@ public abstract class GeneralCode extends Robot {
     }
 
     public void Climber() {
+        if (gamepad2.right_bumper && currentState != intaking) ClimberBarDepoyed = true;
+      if (gamepad2.right_trigger >= 0.1 && currentState != intaking){
+          ClimberBarServo.setPosition(ClimberBarOutPosition);
+          ClimberBarDepoyed = true;
+      }
+      else if (ClimberBarDepoyed){
+          ClimberBarServo.setPosition(ClimberBarMidPosition);
+      }
+      if (gamepad2.right_bumper) ClimberBarDepoyed = true;
+      if (gamepad2.right_stick_y >= 0.3) {climberMotor.setPower(-1);}
+      else
+      if (gamepad2.right_stick_y <= -0.3){ climberMotor.setPower(1);}
+      else{
+          climberMotor.setPower(0);
+      }
 
-        telemetry.addData("encoderCount:", climberMotor.getCurrentPosition());
-        if (gamepad2.dpad_right && climberMotor.getCurrentPosition() > -18700) ClimbAutoUp = true;
-        if (gamepad2.dpad_left || climberMotor.getCurrentPosition() <= -18690) ClimbAutoUp = false;
-        if (ClimbAutoUp) {
-            climberMotor.setPower(-1);
-        }
-        if (!ClimbAutoUp && gamepad2.dpad_right) {
-            climberMotor.setPower(-0.1);
-        }
-        if (gamepad2.dpad_left && !ClimberLimitSwitchBottom.getState()) {
-            climberMotor.setPower(1);
-        }
-        if (!gamepad2.dpad_left && !gamepad2.dpad_right && !ClimbAutoUp) {
-            climberMotor.setPower(0);
-        }
-        telemetry.addData("climber power", climberMotor.getPower());
     }
 
     public void LaunchDrone() {
         hasDroneLaunched = true;
         droneTrigger.setPosition(0.67);
     }
-
     public void endGameThings() {
+        if (endGameMode) Climber();
         if (gamepad2.back == true && oldEndGameMode == false) {
             if (!endGameMode) {
                 endGameMode = true;
@@ -331,9 +333,7 @@ public abstract class GeneralCode extends Robot {
     }
 
     public void idleCode() {
-        if (endGameMode) {
-            intakeServo.setPosition(1);
-        }
+
         if (gamepad2.b) currentState = scoreDocked;
         backDepositorServo.setPosition(0.5);
         pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
@@ -341,8 +341,11 @@ public abstract class GeneralCode extends Robot {
             currentState = intaking;
             pixelPickerCurrent = 6;
             pixelPickerUp = true;
-
-            backDepositorServo.setPosition(1);
+            if (ColorSensorCheck(frontColorSensor) == "None") {
+                frontDepositorServo.setPosition(0.8);
+            }
+            frontDepoReverse = false;
+            backDepositorServo.setPosition(0.8);
         }
         if (gamepad2.dpad_up) {
             currentState = extendLift;
@@ -425,12 +428,12 @@ public abstract class GeneralCode extends Robot {
             currentState = intakeCancel;
             stateMachineTimer = getRuntime();
         }
-        if (ColorSensorCheck(frontColorSensor) == "None") {
-            frontDepositorServo.setPosition(1);
-        }
+
         if (ColorSensorCheck(frontColorSensor) != "None") {
             frontDepositorServo.setPosition(.5);
         }
+
+
         if (ColorSensorCheck(frontColorSensor) != "None" && ColorSensorCheck(backColorSensor) != "None") {
             currentState = intakeDone;
             stateMachineTimer = getRuntime();
@@ -448,7 +451,7 @@ public abstract class GeneralCode extends Robot {
         intakeServo.setPosition(1);
         frontDepositorServo.setPosition(0.5);
         backDepositorServo.setPosition(0.5);
-        pattern = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
+
         intakeMotor.setPower(0.9);
 
         transferMotor.setPower(-1);
@@ -503,7 +506,13 @@ public abstract class GeneralCode extends Robot {
 
     public void scoreIdle() {
         if (gamepad2.b) currentState = scoreDocked;
+        if (gamepad2.left_bumper && !IntakeOLD) {
+            currentState = intaking;
+            pixelPickerCurrent = 6;
+            pixelPickerUp = true;
 
+            backDepositorServo.setPosition(1);
+        }
         if (gamepad2.a) currentState = idle;
         if (gamepad2.x) {
             transferMotor.setPower(-1);
@@ -637,7 +646,7 @@ public abstract class GeneralCode extends Robot {
         pixelLiftRunToPosition(0);
 
 
-        if (PixelLiftLimitSwitch.getState() == true || getRuntime() - liftTimeOut >= 2) {
+        if (PixelLiftLimitSwitch.getState() == true || getRuntime() - liftTimeOut >= 0.6) {
             currentState = idle;
             pixelLiftMotor.setPower(0.8);
         }

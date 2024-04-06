@@ -4,64 +4,68 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
 
     public void PurplePixelRedLeft() {
         if (Zone == 1) {
-            Speed = 0.8;
-
-//            intakeServo.setPosition(PixelPickerBottom);
+            intakeServo.setPosition(PixelPickerBottom);
             setTurn(0);
             RunToPoint(-53, -46, 1, 5);
 
-//            intakeMotor.setPower(0.7);
-//            stateMachineTimer = getRuntime();
-//            while (stateMachineTimer >= getRuntime() - 0.5 && opModeIsActive()) {
-//
-//            }
-//            intakeMotor.setPower(0);
-//            intakeServo.setPosition(PixelPickerTop);
-            RunToPoint(-38, -52, 1, 5);
+            intakeMotor.setPower(0.6);
+            stateMachineTimer = getRuntime();
+            while (stateMachineTimer >= getRuntime() - 0.5 && opModeIsActive()) {
+
+            }
+            intakeMotor.setPower(0);
+            intakeServo.setPosition(PixelPickerTop);
+            RunToPoint(-38, -52, 3, 5);
             setTurn(0);
-            RunToPoint(-38, -12, 1, 5);
+            RunToPoint(-38, -12, 1.5, 5);
             setTurn(90);
-            RunToPoint(-35, -12, 1, 5);
+            RunToPoint(-35, -12, 1.5, 3);
+
         } else if (Zone == 2) {
-            Speed = 0.8;
+
             intakeServo.setPosition(PixelPickerBottom);
             RunToPoint(-49,-54,2,6);
             setTurn(-90);
 
-            Speed = 0.85;
-            RunToPoint(-54,-28.8,0.8,3);
+            RunToPoint(-54,-26.3,1.4,3);
             intakeMotor.setPower(0.5);
             stateMachineTimer = getRuntime();
             while (stateMachineTimer >= getRuntime() - 0.5 && opModeIsActive()) {
 
             }
-            Speed = 1;
             intakeMotor.setPower(0);
             intakeServo.setPosition(PixelPickerTop);
-            RunToPoint(-52,-15,3,5);
+            RunToPoint(-52,-12,3,5);
+            setTurn(90);
+            while (stateMachineTimer >= getRuntime() - 0.5 && opModeIsActive()) {
+
+            }
 
 
         } else {
             if (Zone == 3) {
-                Speed = 0.7;
+
                 RunToPoint(-38, -62, 3, 3);
-                RunToPoint(-52, -53, 3, 2);
-                setTurn(-45);
-                RunToPoint(-44, -44, 3, 3);
+
+
+
+                RunToPoint(-50, -44, 3, 3);
                 setTurn(-90);
-//                intakeServo.setPosition(PixelPickerBottom);
-                RunToPoint(-38, -28, 1, 2);
-//                intakeMotor.setPower(0.7);
-//                stateMachineTimer = getRuntime();
-//                while (stateMachineTimer >= getRuntime() - 1.5 && opModeIsActive()) {
-//
-//                }
-//                intakeMotor.setPower(0);
-//                intakeServo.setPosition(PixelPickerTop);
-                setTurn(-135);
-                RunToPoint(-50, -25, 3, 3);
+                intakeServo.setPosition(PixelPickerBottom);
+                RunToPoint(-37, -33.5, 1, 2);
+                intakeMotor.setPower(0.3);
+                stateMachineTimer = getRuntime();
+                while (stateMachineTimer >= getRuntime() - 0.7 && opModeIsActive()) {
+
+                }
+                intakeMotor.setPower(0);
+                intakeServo.setPosition(PixelPickerTop);
+                RunToPoint(-48, -25, 3, 2);
                 setTurn(-270);
-                RunToPoint(-40, -10, 3, 3);
+                RunToPoint(-48, -10, 3, 2);
+                RunToPoint(-30, -7, 3, 2);
+
+
             }
         }
     }
@@ -268,15 +272,15 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
     public void YellowPixelRed() {
 
         stateMachineTimer = getRuntime();
-       // pixelLiftMotor.setTargetPosition(safeLiftHeight);
-//        while (pixelLiftMotor.getCurrentPosition() <= safeLiftHeight && opModeIsActive()) {
-//            keepAtPoint(RobotX, RobotY);
-//            ProportionalFeedbackControlAuto();
-//        }
+        pixelLiftMotor.setTargetPosition(safeLiftHeight+150);
+        while (pixelLiftMotor.getCurrentPosition() <= safeLiftHeight && opModeIsActive()) {
+            keepAtPoint(RobotX, RobotY);
+            ProportionalFeedbackControlAuto();
+        }
 
-//        fourBarServo.setPosition(0.015);
-//        stateMachineTimer = getRuntime();
-//        pixelLiftMotor.setTargetPosition(410);
+        fourBarServo.setPosition(0.015);
+        stateMachineTimer = getRuntime();
+        pixelLiftMotor.setTargetPosition(410);
 
         if (Zone == 3) {
             RunToPoint(51, -45, 2, 2);
@@ -288,22 +292,22 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
 //            pixelLiftMotor.setTargetPosition(460);
             RunToPoint(50, -30, 2, 1.4);
         }
-//        backDepositorServo.setPosition(1);
-//        frontDepositorServo.setPosition(0);
-//        stateMachineTimer = getRuntime();
-//        while (stateMachineTimer > getRuntime() - 1 && opModeIsActive()) {
-//            keepAtPoint(RobotX, RobotY);
-//        }
-//        backDepositorServo.setPosition(0.5);
-//        frontDepositorServo.setPosition(0.5);
-        RunToPoint(44, -36, 3, 1.2);
-//        fourBarServo.setPosition(0.92);
-//        stateMachineTimer = getRuntime();
-//        while (stateMachineTimer > getRuntime() - 0.5 && opModeIsActive()) {
-//            ProportionalFeedbackControl();
-//            keepAtPoint(RobotX, RobotY);
-//        }
-//        pixelLiftMotor.setTargetPosition(1);
+        backDepositorServo.setPosition(0);
+        frontDepositorServo.setPosition(0);
+        stateMachineTimer = getRuntime();
+        while (stateMachineTimer > getRuntime() - 1 && opModeIsActive()) {
+            keepAtPoint(RobotX, RobotY);
+        }
+        backDepositorServo.setPosition(0.5);
+        frontDepositorServo.setPosition(0.5);
+        RunToPoint(35, -36, 3, 1.2);
+        fourBarServo.setPosition(0.92);
+        stateMachineTimer = getRuntime();
+        while (stateMachineTimer > getRuntime() - 0.5 && opModeIsActive()) {
+            ProportionalFeedbackControl();
+            keepAtPoint(RobotX, RobotY);
+        }
+        pixelLiftMotor.setTargetPosition(1);
     }
 
     public void PlacePurplePixelWithPurplePixelPlacerOnThePixelPickerThatPlacesPerfectly() {

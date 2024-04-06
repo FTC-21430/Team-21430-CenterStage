@@ -81,6 +81,7 @@ public class Teleop extends OdometryCode {
             telemetry.addData("Color Sensor Readings", ColorSensorCheck(frontColorSensor));
             telemetry.update();
             GamepadAOld = gamepad1.a;
+            IntakeOLD = gamepad2.left_bumper;
         }
     }
 }
