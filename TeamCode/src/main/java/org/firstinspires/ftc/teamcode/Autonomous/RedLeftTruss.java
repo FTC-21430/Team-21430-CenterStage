@@ -32,23 +32,24 @@ public class RedLeftTruss extends OctopusAutoFunctions {
 
         PurplePixelRedLeftTruss();
 
-        Speed = 0.8;
+
 
         CamEnd();
 
         AprilTagInit();
         WaitFunction();
-        Speed = 0.9;
+
         setTurn(90);
         RunToPoint(35, -60, 1, 5);
         setTurn(90);
         if (Zone != 2) {
             RunToPoint(36, -36, 1, 5);
-            Speed = 0.6;
+
+
             YellowPixelRed();
         }
 
-        Speed = 0.9;
+
         RunToPoint(48, -57, 1, 5);
         if (Zone == 2) {
             pixelLiftMotor.setTargetPosition(100);

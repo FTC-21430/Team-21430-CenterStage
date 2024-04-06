@@ -32,13 +32,13 @@ public class RedLeftTrussNoYellow extends OctopusAutoFunctions {
 
         PurplePixelRedLeftTruss();
 
-        Speed = 0.8;
+
 
         CamEnd();
 
         AprilTagInit();
         WaitFunction();
-        Speed = 0.9;
+
         setTurn(90);
         RunToPoint(35, -61, 1, 5);
 

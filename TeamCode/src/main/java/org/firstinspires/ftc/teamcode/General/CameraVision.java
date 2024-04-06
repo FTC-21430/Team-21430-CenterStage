@@ -97,12 +97,7 @@ public abstract class CameraVision extends GeneralCode {
     public void AprilTagInit() {
         aprilTagProcessorActive = true;
         ATProcessor = AprilTagProcessor.easyCreateWithDefaults();
-        VisionPortal.Builder atBuilder = new VisionPortal.Builder();
-        atBuilder.setCamera(hardwareMap.get(WebcamName.class, "Webcam 2"));
-        atBuilder.addProcessor(ATProcessor);
-        atBuilder.enableLiveView(false);
-        AprilTagVisionPortal = atBuilder.build();
-//        AprilTagVisionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 2"), ATProcessor);
+        AprilTagVisionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 2"), ATProcessor);
     }
 
     public float[] aprilTagFindRobotPosition() {
@@ -160,13 +155,7 @@ public abstract class CameraVision extends GeneralCode {
                 returnArray[2] = robotInFieldYaw * ((float) Math.PI / 180);
                 telemetry.addData("robotX", robotInFieldX);
                 telemetry.addData("robotY", robotInFieldY);
-                telemetry.addData("robotZ", robotInFieldZ);
-
-                telemetry.addData("robotRoll", robotInFieldRoll);
-                telemetry.addData("robotPitch", robotInFieldPitch);
                 telemetry.addData("robotYaw", robotInFieldYaw);
-
-                telemetry.addData("decision Margin", detection.decisionMargin);
             }
             break;
         }
@@ -174,7 +163,6 @@ public abstract class CameraVision extends GeneralCode {
     }
 
     public void CamInit() {
-
         initTfod();
 
         // Wait for the DS start button to be touched.
@@ -202,7 +190,7 @@ public abstract class CameraVision extends GeneralCode {
     }
 
     public void CamEnd() {
-        //TensorFlowVisionPortal.close();
+        TensorFlowVisionPortal.close();
     }
 
     /**

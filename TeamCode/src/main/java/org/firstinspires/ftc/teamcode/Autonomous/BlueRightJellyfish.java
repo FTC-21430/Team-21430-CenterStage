@@ -29,7 +29,7 @@ public class BlueRightJellyfish extends AutonomousFunction {
         blinkinLedDriver.setPattern(pattern);
         PurplePixelBlueRight();
 
-        Speed = 0.6;
+
         CamEnd();
         RunToPoint(-50, 58, 2, 5);
         RunToPoint(-62.5, 42, 2, 5);
@@ -41,12 +41,12 @@ public class BlueRightJellyfish extends AutonomousFunction {
         while (0.4 + TempTimer >= getRuntime() && opModeIsActive()) {
             ProportionalFeedbackControl();
         }
-        Speed = 0.8;
+
         RunToPoint(-11, 11, 2, 5);
         RunToPoint(36, 12, 2, 5);
         RunToPoint(36, 12, 2, 5);
         RunToPoint(36, 36, 3, 5);
-        Speed = 0.5;
+
 
         YellowPixelBlue();
         ParkBlue();

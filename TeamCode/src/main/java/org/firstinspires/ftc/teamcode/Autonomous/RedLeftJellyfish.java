@@ -27,7 +27,7 @@ public class RedLeftJellyfish extends AutonomousFunction {
         InitY = -62;
         PurplePixelRedLeft();
 
-        Speed = 0.6;
+
         CamEnd();
         AprilTagInit();
 
@@ -40,11 +40,11 @@ public class RedLeftJellyfish extends AutonomousFunction {
         while (0.4 >= getRuntime() && opModeIsActive()) {
             ProportionalFeedbackControl();
         }
-        Speed = 0.8;
+
         RunToPoint(12, -12, 2, 5);
         RunToPoint(36, -12, 2, 5);
         RunToPoint(36, -36, 3, 5);
-        Speed = 0.5;
+
 
         YellowPixelRed();
         ParkRed();

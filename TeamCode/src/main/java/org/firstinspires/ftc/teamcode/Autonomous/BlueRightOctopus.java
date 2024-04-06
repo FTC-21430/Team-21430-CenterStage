@@ -32,7 +32,7 @@ public class BlueRightOctopus extends OctopusAutoFunctions {
 
         PurplePixelBlueRight();
 
-        Speed = 0.8;
+
 
         CamEnd();
 
@@ -44,11 +44,11 @@ public class BlueRightOctopus extends OctopusAutoFunctions {
 
         RunToPoint(36, 36, 3, 5);
 
-        Speed = 0.5;
+
 
         YellowPixelBlue();
 
-        Speed = 0.8;
+
         RunToPoint(40, 37, 3, 5);
         RunToPoint(40, 9, 3, 3);
         RunToPoint(5, 8, 5, 3);
@@ -58,7 +58,7 @@ public class BlueRightOctopus extends OctopusAutoFunctions {
         frontDepositorServo.setPosition(1);
         intakeServo.setPosition(0.371);
         RunToPoint(-46, 9, 3, 5);
-        Speed = 0.4;
+
         RunToPoint(-52.4, 11, 1.4, 1.4);
 
         stateMachineTimer = getRuntime();
@@ -72,16 +72,16 @@ public class BlueRightOctopus extends OctopusAutoFunctions {
         }
         RunToPoint(-54, 9, 1, 1);
         intakeServo.setPosition(0.8);
-        Speed = 0.3;
+
         RunToPoint(-52, 9, 1, 1);
         stateMachineTimer = getRuntime();
         while (stateMachineTimer >= getRuntime() - 1 && opModeIsActive()) {
 
         }
 
-        Speed = 1;
+
         RunToPoint(48, 9, 1, 5);
-        Speed = 0.4;
+
         RunToPoint(53, 14, 3, 2);
         pixelLiftMotor.setTargetPosition(100);
         intakeMotor.setPower(0);

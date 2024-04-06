@@ -169,7 +169,7 @@ public abstract class Robot extends LinearOpMode {
             slide = -drive * Math.sin(-robotHeading) + slide * Math.cos(-robotHeading);
             if (!CurrentAlign) drive = temp;
         }
-        telemetry.addData("USED", turn);
+
         leftFrontPower = Range.clip(drive + slide + turn, -1.0, 1.0);
         leftBackPower = Range.clip(drive - slide + turn, -1.0, 1.0);
         rightFrontPower = Range.clip(drive - slide - turn, -1.0, 1.0);
@@ -212,9 +212,7 @@ public abstract class Robot extends LinearOpMode {
         double currentTime = getRuntime();
         if (resettingImu)
             return;
-        telemetry.addData("angle", (RobotAngle * 180) / Math.PI);
         telemetry.addData("target", TargetAngle);
-        telemetry.addData("IsProgramAutonomous", IsProgramAutonomous);
         error = Wrap((TargetAngle/180)*Math.PI - RobotAngle)*180/Math.PI;
         derivativeAngle = (error - lastErrorAngle)/(currentTime - lastTimeAngle);
         if (gamepad1.right_stick_x != 0 || turnTimer + 0.3 >= getRuntime()) {

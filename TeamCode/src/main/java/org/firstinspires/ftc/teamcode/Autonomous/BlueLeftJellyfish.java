@@ -23,11 +23,10 @@ public class BlueLeftJellyfish extends AutonomousFunction {
         InitX = 9.5;
         InitY = 62;
         RunToPoint(24, 48, 0, 2.4);
-        Speed = 0.6;
+
         CamEnd();
         AprilTagInit();
 
-        Speed = 0.5;
         YellowPixelBlue();
         ParkBlue();
     }

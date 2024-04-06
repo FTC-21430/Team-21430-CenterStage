@@ -358,8 +358,6 @@ public abstract class GeneralCode extends Robot {
     }
 
     public void intake() {
-        telemetry.addData("rightBumperOLD", rightBumperOLD);
-        telemetry.addData("pickerUp", pixelPickerUp);
         if (gamepad2.right_trigger >= 0.5) pixelPickerCurrent = 6;
         if (gamepad2.left_trigger >= 0.5) pixelPickerCurrent = 1;
         if (gamepad2.right_bumper && !rightBumperOLD) {
@@ -412,7 +410,7 @@ public abstract class GeneralCode extends Robot {
             intakeServo.setPosition(0.53);
         }
 
-        telemetry.addData("current pixel picker", pixelPickerCurrent);
+
         if (pixelPickerCurrent == 6 || pixelPickerCurrent == 2 || pixelPickerCurrent == 3) {
             intakeMotor.setPower(-0.7);
         } else if (pixelPickerCurrent == 5 || pixelPickerCurrent == 4) {
@@ -574,7 +572,7 @@ public abstract class GeneralCode extends Robot {
         liftPosition += gamepad2.left_stick_y * liftMovementSpeed;
         if (liftPosition >= LiftMAX) liftPosition = LiftMAX;
         if (liftPosition <= safeLiftHeight) liftPosition = safeLiftHeight;
-        telemetry.addData("liftPosition", liftPosition);
+
         updateSavedLiftHeight(liftPosition);
         pixelLiftMotor.setTargetPosition(liftPosition);
 

@@ -38,58 +38,55 @@ public class RedLeftOctopus extends OctopusAutoFunctions {
         RobotY = -62;
         InitX = -41;
         InitY = -62;
-
+        Speed = 1;
         PurplePixelRedLeft();
 
         CamEnd();
 
         AprilTagInit();
 
-        RunToPoint(12, -8, 2, 5);
 
-        RunToPoint(36, -8, 2, 5);
 
-        RunToPoint(36, -36, 3, 5);
+        RunToPoint(26, -4, 5, 5);
 
-        Speed = 0.5;
+        RunToPoint(25.3, -33, 3, 5);
+        RunToPoint(RobotX,RobotY,-1,10.4);
 
         YellowPixelRed();
 
-        Speed = 0.8;
-        RunToPoint(38, -37, 3, 5);
-        RunToPoint(36, -9, 3, 3);
-        RunToPoint(5, -8, 5, 3);
+        RunToPoint(38, -37, 5, 5);
+        RunToPoint(36, -5, 1, 1.3);
+        RunToPoint(5, -5, 5, 3);
         intakeMotor.setPower(-0.9);
         transferMotor.setPower(-1);
         backDepositorServo.setPosition(-1);
         frontDepositorServo.setPosition(1);
         intakeServo.setPosition(0.604);
-        RunToPoint(-56, -9, 3, 5);
-        Speed = 0.4;
-        RunToPoint(-60, -9, 1.4, 1.4);
+        RunToPoint(-60, -9, 3, 5);
+        RunToPoint(-67, -11, 1.4, 1.4);
 
         stateMachineTimer = getRuntime();
         while (stateMachineTimer >= getRuntime() - 0.1 && opModeIsActive()) {
 
         }
-        intakeServo.setPosition(0.583);
+        intakeServo.setPosition(0.584);
         stateMachineTimer = getRuntime();
         while (stateMachineTimer >= getRuntime() - 0.2 && opModeIsActive()) {
 
         }
-        RunToPoint(-59, -9, 1, 1);
+        RunToPoint(-63, -11, 1, 1);
         intakeServo.setPosition(0.8);
-        Speed = 0.3;
-        RunToPoint(-60, -9, 1, 1);
+
+        RunToPoint(-66.5, -11, 0, 2);
         stateMachineTimer = getRuntime();
         while (stateMachineTimer >= getRuntime() - 1 && opModeIsActive()) {
 
         }
 
-        Speed = 1;
-        RunToPoint(48, -9, 1, 5);
-        Speed = 0.4;
-        RunToPoint(49, -10, 3, 2);
+
+
+
+        RunToPoint(40, 0, 3, 2);
         pixelLiftMotor.setTargetPosition(100);
         intakeMotor.setPower(0);
         frontDepositorServo.setPosition(1);

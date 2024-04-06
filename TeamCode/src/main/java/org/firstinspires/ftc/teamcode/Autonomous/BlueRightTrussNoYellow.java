@@ -32,13 +32,13 @@ public class BlueRightTrussNoYellow extends OctopusAutoFunctions {
 
         PurplePixelBlueRightTruss();
 
-        Speed = 0.8;
+
 
         CamEnd();
 
         AprilTagInit();
         WaitFunction();
-        Speed = 0.9;
+
         setTurn(90);
         RunToPoint(35, 60, 1, 5);
 

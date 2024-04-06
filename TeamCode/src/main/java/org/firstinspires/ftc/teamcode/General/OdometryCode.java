@@ -148,12 +148,8 @@ public abstract class OdometryCode extends CameraVision {
             telemetry.addData("Angle:", RobotAngle);
             telemetry.addData("RobotY:", RobotY);
             telemetry.addData("distance", distanceCircle(TargetX, TargetY));
-            telemetry.addData("Y", RobotY);
-            telemetry.addData("X", RobotX);
-            telemetry.addData("Angle", RobotAngle);
-            telemetry.addData("a motor", FrontLeft);
             telemetry.addData("Zone", Zone);
-            telemetry.update();
+
 
             TESTfLeft = leftFrontMotor.getCurrentPosition();
             TESTfRight = rightFrontMotor.getCurrentPosition();
@@ -191,7 +187,7 @@ public abstract class OdometryCode extends CameraVision {
         leftBackMotor.setPower(0);
         rightFrontMotor.setPower(0);
         rightBackMotor.setPower(0);
-
+        telemetry.update();
     }
 
     public double distanceCircle(double x, double y) {
@@ -235,11 +231,6 @@ public abstract class OdometryCode extends CameraVision {
         telemetry.addData("RobotX:", RobotX);
         telemetry.addData("Angle:", RobotAngle);
         telemetry.addData("RobotY:", RobotY);
-        telemetry.addData("zone", Zone);
-        telemetry.addData("Y", RobotY);
-        telemetry.addData("X", RobotX);
-        telemetry.addData("Angle", RobotAngle);
-        telemetry.addData("a motor", FrontLeft);
 
         TESTfLeft = leftFrontMotor.getCurrentPosition();
         TESTfRight = rightFrontMotor.getCurrentPosition();
