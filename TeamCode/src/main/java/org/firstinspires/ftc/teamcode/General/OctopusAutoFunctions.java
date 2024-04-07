@@ -6,7 +6,7 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
         if (Zone == 1) {
             intakeServo.setPosition(PixelPickerBottom);
             setTurn(0);
-            RunToPoint(-53, -46, 1, 5);
+            RunToPoint(-53, -46, 1, 0.9);
 
             intakeMotor.setPower(0.6);
             stateMachineTimer = getRuntime();
@@ -16,10 +16,9 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
             intakeMotor.setPower(0);
             intakeServo.setPosition(PixelPickerTop);
             RunToPoint(-38, -52, 3, 5);
-            setTurn(0);
             RunToPoint(-38, -12, 1.5, 5);
             setTurn(90);
-            RunToPoint(-35, -12, 1.5, 3);
+            RunToPoint(RobotX,RobotY,-1,1.2);
 
         } else if (Zone == 2) {
 
@@ -31,36 +30,35 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
             RunToPoint(RobotX,RobotY,-1,.4);
             intakeMotor.setPower(0);
             intakeServo.setPosition(PixelPickerTop);
-            RunToPoint(-52,-9.5,5,5);
+            RunToPoint(-52,-12,5,5);
             setTurn(-180);
             RunToPoint(RobotX,RobotY,-1,.3);
             setTurn(90);
             RunToPoint(RobotX,RobotY,-1,1.7);
-
+            RunToPoint(-52,-11,2,2);
 
         } else {
             if (Zone == 3) {
 
-                RunToPoint(-38, -62, 3, 3);
+                setTurn(0);
+                RunToPoint(-50,-53,1,5);
 
-
-                RunToPoint(-50, -44, 3, 3);
                 setTurn(-90);
+                RunToPoint(-45,-34,1,2);
                 intakeServo.setPosition(PixelPickerBottom);
-                RunToPoint(-37, -33.5, 1, 2);
+                RunToPoint(RobotX,RobotY,-1,.5);
+                RunToPoint(-39,-34,1,1.3);
                 intakeMotor.setPower(0.3);
-                stateMachineTimer = getRuntime();
-                while (stateMachineTimer >= getRuntime() - 0.7 && opModeIsActive()) {
-
-                }
+                RunToPoint(RobotX,RobotY,-1,.5);
                 intakeMotor.setPower(0);
                 intakeServo.setPosition(PixelPickerTop);
-                RunToPoint(-48, -25, 3, 2);
-                setTurn(-270);
-                RunToPoint(-48, -10, 3, 2);
-                RunToPoint(-30, -7, 3, 2);
-
-
+                RunToPoint(-45,-34,1,5);
+                RunToPoint(-45,-12.5,5,5);
+                setTurn(-180);
+                RunToPoint(RobotX,RobotY,-1,.3);
+                setTurn(90);
+                RunToPoint(RobotX,RobotY,-1,1.7);
+                RunToPoint(-35,-10,2,2);
             }
         }
     }
@@ -267,7 +265,7 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
     public void YellowPixelRed() {
 
         stateMachineTimer = getRuntime();
-        pixelLiftMotor.setTargetPosition(safeLiftHeight+150);
+        pixelLiftMotor.setTargetPosition(safeLiftHeight+160);
         while (pixelLiftMotor.getCurrentPosition() <= safeLiftHeight && opModeIsActive()) {
             keepAtPoint(RobotX, RobotY);
             ProportionalFeedbackControlAuto();
@@ -275,7 +273,7 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
 
         fourBarServo.setPosition(0.015);
         stateMachineTimer = getRuntime();
-        pixelLiftMotor.setTargetPosition(410);
+        pixelLiftMotor.setTargetPosition(safeLiftHeight+130);
         stateMachineTimer =getRuntime();
         while (stateMachineTimer >= getRuntime()-0.6){
             keepAtPoint(RobotX, RobotY);
@@ -283,14 +281,14 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
         }
         Speed = 0.6;
         if (Zone == 3) {
-            RunToPoint(51, -45, 2, 2);
+            RunToPoint(53.5, -45.4, 1, 1);
 
         } else if (Zone == 2) {
-            RunToPoint(45, -30, 1, 1.7);
+            RunToPoint(52, -39, 1, 1.7);
 
         } else {
 //            pixelLiftMotor.setTargetPosition(460);
-            RunToPoint(50, -30, 2, 1.4);
+            RunToPoint(52.5, -31, 1, 1);
         }
         Speed = 1;
         backDepositorServo.setPosition(0);

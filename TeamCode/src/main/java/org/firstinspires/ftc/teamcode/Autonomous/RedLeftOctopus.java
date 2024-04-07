@@ -46,15 +46,25 @@ public class RedLeftOctopus extends OctopusAutoFunctions {
         AprilTagInit();
 
 
+        if (Zone == 1){
+            RunToPoint(38, -4, 5, 4);
 
-        RunToPoint(26, -4, 5, 5);
+            RunToPoint(38, -33, 2, 0.8);
+        }else{
+            RunToPoint(26, -4, 5, 5);
 
-        RunToPoint(25.3, -33, 3, 5);
-        RunToPoint(RobotX,RobotY,-1,10.4);
+            RunToPoint(25.3, -33, 2, 1.2);
+        }
 
+        stateMachineTimer = getRuntime();
+        while (!HasSeenTag && stateMachineTimer >= getRuntime() - 3 && opModeIsActive()){
+            RunToPoint(RobotX,RobotY,-1,0.01);
+        }
+        RunToPoint(39.3, -33, 3, 1.3);
         YellowPixelRed();
 
         RunToPoint(38, -37, 5, 5);
+
         RunToPoint(36, -5, 1, 1.3);
         RunToPoint(5, -5, 5, 3);
         intakeMotor.setPower(-0.9);

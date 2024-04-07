@@ -57,6 +57,7 @@ import java.util.List;
 //@TeleOp(name = "CameraVision", group = "Concept")
 
 public abstract class CameraVision extends GeneralCode {
+    public boolean HasSeenTag = false;
     public float camBarrierONE = 200;
     public float camBarrierTwo = 400;
     public double x;
@@ -101,10 +102,12 @@ public abstract class CameraVision extends GeneralCode {
     }
 
     public float[] aprilTagFindRobotPosition() {
+        HasSeenTag = false;
         float[] returnArray = {0, 0, 0};
 
         List<AprilTagDetection> detections = ATProcessor.getDetections();
         for (AprilTagDetection detection : detections) {
+            HasSeenTag = true;
             AprilTagMetadata metaData = detection.metadata;
             AprilTagPoseRaw rawpose = detection.rawPose;
             if (!detections.isEmpty()) {
