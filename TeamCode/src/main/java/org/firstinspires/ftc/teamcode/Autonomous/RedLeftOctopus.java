@@ -5,6 +5,7 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.General.OctopusAutoFunctions;
+import org.firstinspires.ftc.teamcode.General.Robot;
 
 import java.sql.Time;
 import java.util.concurrent.TimeoutException;
@@ -51,9 +52,9 @@ public class RedLeftOctopus extends OctopusAutoFunctions {
 
             RunToPoint(38, -33, 2, 0.8);
         }else{
-            RunToPoint(26, -4, 5, 5);
+            RunToPoint(27, -3, 5, 5);
 
-            RunToPoint(25.3, -33, 2, 1.2);
+            RunToPoint(27.3, -33, 2, 1.2);
         }
 
         stateMachineTimer = getRuntime();
@@ -65,47 +66,36 @@ public class RedLeftOctopus extends OctopusAutoFunctions {
 
         RunToPoint(38, -37, 5, 5);
 
-        RunToPoint(36, -5, 1, 1.3);
-        RunToPoint(5, -5, 5, 3);
+        RunToPoint(36, -10, 1, 1.3);
+        RunToPoint(5, -10, 5, 3);
         intakeMotor.setPower(-0.9);
-        transferMotor.setPower(-1);
-        backDepositorServo.setPosition(-1);
+        transferMotor.setPower(1);
+        backDepositorServo.setPosition(1);
         frontDepositorServo.setPosition(1);
-        intakeServo.setPosition(0.604);
-        RunToPoint(-60, -9, 3, 5);
-        RunToPoint(-67, -11, 1.4, 1.4);
+        RunToPoint(-40, -10, 3, 2);
+        intakeServo.setPosition(0.595);
+        RunToPoint(-55.5, -13, 0, 0.5);
+        RunToPoint(RobotX,RobotY,-1,0.2);//wait
+        RunToPoint(-53, -14, 0, 0.4);
+        intakeServo.setPosition(0.585);
+        RunToPoint(-57.5, -14, 0, 0.15);
+        RunToPoint(-55.5, -14, 0, 0.2);
 
-        stateMachineTimer = getRuntime();
-        while (stateMachineTimer >= getRuntime() - 0.1 && opModeIsActive()) {
-
-        }
-        intakeServo.setPosition(0.584);
-        stateMachineTimer = getRuntime();
-        while (stateMachineTimer >= getRuntime() - 0.2 && opModeIsActive()) {
-
-        }
-        RunToPoint(-63, -11, 1, 1);
         intakeServo.setPosition(0.8);
-
-        RunToPoint(-66.5, -11, 0, 2);
-        stateMachineTimer = getRuntime();
-        while (stateMachineTimer >= getRuntime() - 1 && opModeIsActive()) {
-
-        }
-
-
-
-
-        RunToPoint(40, 0, 3, 2);
+        RunToPoint(-53, -14, 0, 0.4);
+        RunToPoint(-58.8, -14, 0, 0.4);
+        RunToPoint(-40, -10, 3, 0.8);
+        RunToPoint(57, -10, 3, 1.5);
         pixelLiftMotor.setTargetPosition(100);
         intakeMotor.setPower(0);
+        RunToPoint(57, -14, 2, 1.5);
         frontDepositorServo.setPosition(1);
-        backDepositorServo.setPosition(0);
-        stateMachineTimer = getRuntime();
-        while (stateMachineTimer >= getRuntime() - 1 && opModeIsActive()) {
-        }
+        backDepositorServo.setPosition(1);
+
+        RunToPoint(RobotX,RobotY,-1,2.0);
         pixelLiftMotor.setTargetPosition(0);
-        while (stateMachineTimer >= getRuntime() - 5 && opModeIsActive()) {
-        }
+        RunToPoint(49, -10, 1, 0.4);
+        setTurn(0);
+        RunToPoint(RobotX,RobotY,-1,0.5);//wait
     }
 }
