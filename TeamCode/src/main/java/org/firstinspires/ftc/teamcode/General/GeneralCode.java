@@ -9,6 +9,7 @@ import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.idle;
 import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.intakeCancel;
 import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.intakeDone;
 import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.intaking;
+import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.liftCalibrate;
 import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.liftDock;
 import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.liftOut;
 import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.score;
@@ -18,6 +19,8 @@ import static org.firstinspires.ftc.teamcode.General.Robot.operatorState.transfe
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 @Config
 public abstract class GeneralCode extends Robot {
 
@@ -275,6 +278,9 @@ public abstract class GeneralCode extends Robot {
                 break;
             case liftDock:
                 liftDock();
+                break;
+            case liftCalibrate:
+                liftCalibrate();
                 break;
             case scoreDocked:
                 scoreDocked();
@@ -648,9 +654,20 @@ public abstract class GeneralCode extends Robot {
         pixelLiftRunToPosition(30);
 
 
-        if (PixelLiftLimitSwitch.getState() == true || getRuntime() - liftTimeOut >= 0.6) {
+        if (pixelLiftMotor.getCurrentPosition() <= 35) {
+            currentState = liftCalibrate;
+            pixelLiftMotor.setPower(0.3);
+            pixelLiftMotor.setTargetPosition(0);
+        }
+    }
+    public void liftCalibrate(){
+        if (PixelLiftLimitSwitch.getState() == true || getRuntime() - liftTimeOut >= 1 || pixelLiftMotor.getCurrentPosition() <= -4) {
+            pixelLiftMotor.setTargetPosition(pixelLiftMotor.getCurrentPosition());
             currentState = idle;
-            pixelLiftMotor.setPower(0.8);
+            pixelLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            pixelLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            pixelLiftMotor.setTargetPosition(0);
+            pixelLiftMotor.setPower(1);
         }
     }
     public void updateSavedLiftHeight(int liftHeight){

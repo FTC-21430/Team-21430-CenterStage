@@ -82,8 +82,8 @@ public abstract class Robot extends LinearOpMode {
         depoTransition,
         fourBarWait,
         fourBarDock,
-        
         liftDock,
+        liftCalibrate,
         scoreDocked,
         transferDocked,
         dockedScoreFinished,
