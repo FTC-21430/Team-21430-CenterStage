@@ -82,6 +82,7 @@ public abstract class Robot extends LinearOpMode {
         depoTransition,
         fourBarWait,
         fourBarDock,
+        
         liftDock,
         scoreDocked,
         transferDocked,
@@ -194,7 +195,6 @@ public abstract class Robot extends LinearOpMode {
         }
         telemetry.addData("resettingIMU", resettingImu);
         AngularVelocity angularVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES);
-
 
         robotHeading = orientation.getYaw(AngleUnit.RADIANS);
         RobotAngle = orientation.getYaw(AngleUnit.RADIANS);

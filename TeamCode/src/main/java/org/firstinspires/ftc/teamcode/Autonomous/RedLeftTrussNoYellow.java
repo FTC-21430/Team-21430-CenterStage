@@ -4,6 +4,7 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.General.OctopusAutoFunctions;
+import org.firstinspires.ftc.teamcode.General.Robot;
 
 @Autonomous(name = "RedLeftTrussNoYellow", group = "CenterStage")
 public class RedLeftTrussNoYellow extends OctopusAutoFunctions {
@@ -40,19 +41,18 @@ public class RedLeftTrussNoYellow extends OctopusAutoFunctions {
         WaitFunction();
 
         setTurn(90);
-        RunToPoint(35, -61, 1, 5);
+        RunToPoint(35, -61, 1, 0.3);
 
-        RunToPoint(48, -61, 1, 5);
+        RunToPoint(48, -61, 1, 1);
         pixelLiftMotor.setTargetPosition(100);
         intakeMotor.setPower(0);
         frontDepositorServo.setPosition(1);
-        backDepositorServo.setPosition(0);
+        backDepositorServo.setPosition(1);
         stateMachineTimer = getRuntime();
-        while (stateMachineTimer >= getRuntime() - 1 && opModeIsActive()) {
-        }
+        AutoColorSensorUse = false;
+        RunToPoint(RobotX, RobotY, -1, 2);
         pixelLiftMotor.setTargetPosition(0);
-        while (stateMachineTimer >= getRuntime() - 5 && opModeIsActive()) {
-        }
+        RunToPoint(RobotX, RobotY, -1, 2);
     }
 }
 

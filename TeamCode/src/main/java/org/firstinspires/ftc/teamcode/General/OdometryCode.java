@@ -7,6 +7,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 @Config
 public abstract class OdometryCode extends CameraVision {
+    public boolean AutoColorSensorUse = false;
     public double InitX, InitY;
     public double DForward, DSideways;
     public double correctionFactor = 1;
@@ -32,8 +33,8 @@ public abstract class OdometryCode extends CameraVision {
     public static double proportionalConstantY = 0.1;
 
     public void ProportionalFeedbackControlAuto() {
-        error = Wrap(((TargetAngle - ((180 * RobotAngle) / Math.PI))));
-        turn -= error / 20;
+        error = Wrap(TargetAngle*(Math.PI/180) - RobotAngle);
+        turn -= (error*(180/Math.PI)) / 20;
     }
 
     public static void rotatePoints(double[] xPoints, double[] yPoints, double angle) {
@@ -56,7 +57,7 @@ public abstract class OdometryCode extends CameraVision {
         InitY = y;
     }
 
-    double OldAngle = RobotAngle;
+    public double OldAngle = RobotAngle;
 
     public void UpdateOdometry() {
 
@@ -159,13 +160,18 @@ public abstract class OdometryCode extends CameraVision {
             turn = 0;
 
 //THIS IS HERE FOR AUTONOMOUS PURPOSES
-            if (ColorSensorCheck(frontColorSensor) != "None") {
-                frontDepositorServo.setPosition(.5);
+            //UPDATE, you need to turn this on via the AutoColorSensorUse variable.
+            // this is so pixels can scored as well without stopping.
+            if (AutoColorSensorUse){
+                if (ColorSensorCheck(frontColorSensor) != "None") {
+                    frontDepositorServo.setPosition(.5);
+                }
+                if (ColorSensorCheck(frontColorSensor) != "None" && ColorSensorCheck(backColorSensor) != "None") {
+                    frontDepositorServo.setPosition(.5);
+                    backDepositorServo.setPosition(.5);
+                }
             }
-            if (ColorSensorCheck(frontColorSensor) != "None" && ColorSensorCheck(backColorSensor) != "None") {
-                frontDepositorServo.setPosition(.5);
-                backDepositorServo.setPosition(.5);
-            }
+
 
             ProportionalFeedbackControl();
             UpdateEncoders();
@@ -180,7 +186,7 @@ public abstract class OdometryCode extends CameraVision {
             rightFrontPower = rightFrontPower * Speed;
             rightBackPower = rightBackPower * Speed;
             setMotorPower();
-
+            telemetry.update();
 
         }
         leftFrontMotor.setPower(0);
@@ -248,7 +254,7 @@ public abstract class OdometryCode extends CameraVision {
     public void WaitFunction() {
         telemetry.addData("runtime", runtime.seconds());
         while (Delay >= runtime.seconds() && opModeIsActive()) {
-            ProportionalFeedbackControl();
+            RunToPoint(RobotX, RobotY, -1 , 0.01);
             telemetry.addData("runtime", getRuntime());
             telemetry.update();
         }

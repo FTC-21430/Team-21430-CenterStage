@@ -20,6 +20,9 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 @Config
 public abstract class GeneralCode extends Robot {
+
+    public static double DroneLaunchPosition = 0.784;
+
     private boolean ClimberBarDepoyed = false;
     public boolean IntakeOLD = false;
     private boolean frontDepoReverse = false;
@@ -63,7 +66,7 @@ public abstract class GeneralCode extends Robot {
     int HeightFour = 1100;
     int HeightFive = 1350;
 
-    public double PixelPickerBottom = 0.54;
+    public double PixelPickerBottom = 0.53;
     public double PixelPickerTop = 0.8;
 
     public void pixelLiftRunToPosition(int encoderTick) {
@@ -175,7 +178,7 @@ public abstract class GeneralCode extends Robot {
         }
         oldEndGameMode = gamepad2.back;
         if (gamepad1.left_bumper) {
-            DroneLinkageServo.setPosition(0.75);
+            DroneLinkageServo.setPosition(DroneLaunchPosition);
         } else {
             DroneLinkageServo.setPosition(0.9);
         }
@@ -429,6 +432,7 @@ public abstract class GeneralCode extends Robot {
 
         if (ColorSensorCheck(frontColorSensor) != "None") {
             frontDepositorServo.setPosition(.5);
+            pattern = RevBlinkinLedDriver.BlinkinPattern.ORANGE;
         }
 
 
@@ -641,7 +645,7 @@ public abstract class GeneralCode extends Robot {
 
     public void liftDock() {
         pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_2_COLOR_WAVES;
-        pixelLiftRunToPosition(0);
+        pixelLiftRunToPosition(30);
 
 
         if (PixelLiftLimitSwitch.getState() == true || getRuntime() - liftTimeOut >= 0.6) {

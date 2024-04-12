@@ -70,32 +70,33 @@ public class RedLeftOctopus extends OctopusAutoFunctions {
         RunToPoint(5, -10, 5, 3);
         intakeMotor.setPower(-0.9);
         transferMotor.setPower(1);
+        AutoColorSensorUse = true;
         backDepositorServo.setPosition(1);
         frontDepositorServo.setPosition(1);
         RunToPoint(-40, -10, 3, 2);
         intakeServo.setPosition(0.595);
-        RunToPoint(-55.5, -13, 0, 0.5);
+        RunToPoint(-56, -14, 0, 0.5);
         RunToPoint(RobotX,RobotY,-1,0.2);//wait
         RunToPoint(-53, -14, 0, 0.4);
         intakeServo.setPosition(0.585);
         RunToPoint(-57.5, -14, 0, 0.15);
         RunToPoint(-55.5, -14, 0, 0.2);
-
         intakeServo.setPosition(0.8);
         RunToPoint(-53, -14, 0, 0.4);
-        RunToPoint(-58.8, -14, 0, 0.4);
-        RunToPoint(-40, -10, 3, 0.8);
-        RunToPoint(57, -10, 3, 1.5);
+        RunToPoint(-59.5, -14, 0, 0.4);
+        RunToPoint(-40, -11, 3, 0.8);
+        RunToPoint(40, -11, 3, 1.5);
         pixelLiftMotor.setTargetPosition(100);
         intakeMotor.setPower(0);
-        RunToPoint(57, -14, 2, 1.5);
+        transferMotor.setPower(0);
+        RunToPoint(48, -19, 2, 1.5);
+        AutoColorSensorUse = false;
         frontDepositorServo.setPosition(1);
         backDepositorServo.setPosition(1);
 
-        RunToPoint(RobotX,RobotY,-1,2.0);
+        RunToPoint(RobotX,RobotY,-1,1.0);
         pixelLiftMotor.setTargetPosition(0);
-        RunToPoint(49, -10, 1, 0.4);
         setTurn(0);
-        RunToPoint(RobotX,RobotY,-1,0.5);//wait
+        RunToPoint(RobotX,RobotY,-1,1);//wait
     }
 }
