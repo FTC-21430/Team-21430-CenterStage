@@ -656,16 +656,18 @@ public abstract class GeneralCode extends Robot {
 
         if (pixelLiftMotor.getCurrentPosition() <= 35) {
             currentState = liftCalibrate;
-            pixelLiftMotor.setPower(0.3);
-            pixelLiftMotor.setTargetPosition(0);
+            pixelLiftMotor.setPower(0.03);
+            pixelLiftMotor.setTargetPosition(-50);
         }
     }
     public void liftCalibrate(){
-        if (PixelLiftLimitSwitch.getState() == true || getRuntime() - liftTimeOut >= 1 || pixelLiftMotor.getCurrentPosition() <= -4) {
-            pixelLiftMotor.setTargetPosition(pixelLiftMotor.getCurrentPosition());
+        telemetry.addData("current pixel lift", pixelLiftMotor.getCurrentPosition());
+        telemetry.addData("target pixel lift", pixelLiftMotor.getTargetPosition());
+        telemetry.addData("limit switch", PixelLiftLimitSwitch.getState());
+        if (PixelLiftLimitSwitch.getState() == true|| getRuntime() - liftTimeOut >= 2 || pixelLiftMotor.getCurrentPosition() <= -51) {
             currentState = idle;
             pixelLiftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            pixelLiftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            pixelLiftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             pixelLiftMotor.setTargetPosition(0);
             pixelLiftMotor.setPower(1);
         }

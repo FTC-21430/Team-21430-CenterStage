@@ -17,9 +17,9 @@ public class BlueRightTrussNoYellow extends OctopusAutoFunctions {
 
         pattern = RevBlinkinLedDriver.BlinkinPattern.COLOR_WAVES_PARTY_PALETTE;
         blinkinLedDriver.setPattern(pattern);
-        robotHeading = -Math.PI;
-        TargetAngle = -180;
-        AutoStartAngle = -Math.PI;
+        TargetAngle = 180;
+        AutoStartAngle = Math.PI;
+        OldAngle = AutoStartAngle;
         IsProgramAutonomous = true;
 
         ZoneTelemetryUntilStart();
@@ -40,9 +40,9 @@ public class BlueRightTrussNoYellow extends OctopusAutoFunctions {
         WaitFunction();
 
         setTurn(90);
-        RunToPoint(35, 60, 1, 5);
 
-        RunToPoint(48, 57, 1, 5);
+
+        RunToPoint(41, 63, 1, 1.4);
         pixelLiftMotor.setTargetPosition(100);
         intakeMotor.setPower(0);
         frontDepositorServo.setPosition(1);

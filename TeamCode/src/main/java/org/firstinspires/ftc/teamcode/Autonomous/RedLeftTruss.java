@@ -46,7 +46,7 @@ public class RedLeftTruss extends OctopusAutoFunctions {
             RunToPoint(36, -36, 1, 5);
 
 
-            YellowPixelRed();
+            YellowPixelRed(false);
         }
 
 

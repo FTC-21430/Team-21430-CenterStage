@@ -45,7 +45,7 @@ public class BlueRightTruss extends OctopusAutoFunctions {
         if (Zone != 2) {
             RunToPoint(36, 36, 1, 5);
 
-            YellowPixelBlue();
+            YellowPixelBlue(false);
         }
 
 

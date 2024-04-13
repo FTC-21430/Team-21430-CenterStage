@@ -79,6 +79,9 @@ public class Teleop extends OdometryCode {
             telemetry.addData("Operator Current State", currentState);
             telemetry.addData("autoDriving", CurrentAlign);
             telemetry.addData("Color Sensor Readings", ColorSensorCheck(frontColorSensor));
+            telemetry.addData("current pixel lift", pixelLiftMotor.getCurrentPosition());
+            telemetry.addData("target pixel lift", pixelLiftMotor.getTargetPosition());
+            telemetry.addData("limit switch", PixelLiftLimitSwitch.getState());
             telemetry.update();
             GamepadAOld = gamepad1.a;
             IntakeOLD = gamepad2.left_bumper;

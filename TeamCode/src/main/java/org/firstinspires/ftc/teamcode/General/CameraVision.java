@@ -189,6 +189,7 @@ public abstract class CameraVision extends GeneralCode {
             // Push telemetry to the Driver Station.
             telemetry.update();
         }
+        Zone = 0;
         Zone = findZone();
     }
 

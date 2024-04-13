@@ -55,7 +55,7 @@ public class BlueRightOctopus extends OctopusAutoFunctions {
             RunToPoint(RobotX,RobotY,-1,0.01);
         }
         RunToPoint(39.3, 33, 3, 1.3);
-        YellowPixelBlue();
+        YellowPixelBlue(false);
 
         RunToPoint(38, 37, 5, 5);
 

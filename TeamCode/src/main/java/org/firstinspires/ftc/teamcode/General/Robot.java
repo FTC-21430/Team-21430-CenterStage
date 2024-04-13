@@ -294,7 +294,7 @@ public abstract class Robot extends LinearOpMode {
         intakeMotor = hardwareMap.get(DcMotor.class, "Intake");
         intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        pixelLiftMotor.setPower(0.8);
+        pixelLiftMotor.setPower(1);
 
 
         fourBarServo.setPosition(0.954);
