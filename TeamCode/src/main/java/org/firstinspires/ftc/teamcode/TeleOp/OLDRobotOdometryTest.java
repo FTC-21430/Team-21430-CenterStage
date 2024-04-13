@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.General.OdometryCode;
 
 @TeleOp(name = "OLDRobotOdometryTest", group = "Linear Opmode")
+@Disabled
 public class OLDRobotOdometryTest extends OdometryCode {
     @Override
     public void runOpMode() throws InterruptedException {
