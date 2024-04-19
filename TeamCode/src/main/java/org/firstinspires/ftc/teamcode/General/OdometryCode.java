@@ -252,6 +252,7 @@ public abstract class OdometryCode extends CameraVision {
     }
 
     public void WaitFunction() {
+        runtime.reset();
         telemetry.addData("runtime", runtime.seconds());
         while (Delay >= runtime.seconds() && opModeIsActive()) {
             RunToPoint(RobotX, RobotY, -1 , 0.01);

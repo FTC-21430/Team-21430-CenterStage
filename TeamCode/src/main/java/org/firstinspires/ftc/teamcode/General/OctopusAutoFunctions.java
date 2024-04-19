@@ -255,7 +255,7 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
     public void YellowPixelRed(boolean stageSide) {
         if (!stageSide){
         stateMachineTimer = getRuntime();
-        pixelLiftMotor.setTargetPosition(safeLiftHeight+50);
+        pixelLiftMotor.setTargetPosition(safeLiftHeight+90);
         while (pixelLiftMotor.getCurrentPosition() <= safeLiftHeight && opModeIsActive()) {
             keepAtPoint(RobotX, RobotY);
             ProportionalFeedbackControlAuto();
@@ -263,7 +263,7 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
 
         fourBarServo.setPosition(0.015);
         stateMachineTimer = getRuntime();
-        pixelLiftMotor.setTargetPosition(safeLiftHeight+50);
+        pixelLiftMotor.setTargetPosition(safeLiftHeight+90);
         stateMachineTimer =getRuntime();
         while (stateMachineTimer >= getRuntime()-0.6){
             keepAtPoint(RobotX, RobotY);

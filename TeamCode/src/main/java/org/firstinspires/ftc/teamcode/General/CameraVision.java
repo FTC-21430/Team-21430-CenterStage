@@ -191,6 +191,7 @@ public abstract class CameraVision extends GeneralCode {
         }
         Zone = 0;
         Zone = findZone();
+
     }
 
     public void CamEnd() {
@@ -261,7 +262,7 @@ public abstract class CameraVision extends GeneralCode {
             return 3;
         } else {
             telemetry.addData("ZoneREAD", "Did not work :'( ");
-            return 2;
+            return 1;
         }
     }
 
