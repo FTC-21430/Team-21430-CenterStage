@@ -38,7 +38,7 @@ public class BlueRightOctopus extends OctopusAutoFunctions {
         CamEnd();
 
         AprilTagInit();
-
+        RunToPoint(RobotX,RobotY,-1,7);
 
         if (Zone == 1){
             RunToPoint(30, 13.2, 5, 4);
@@ -59,29 +59,29 @@ public class BlueRightOctopus extends OctopusAutoFunctions {
 
         RunToPoint(38, 37, 5, 5);
 
-        RunToPoint(36, 9, 1, 1.3);
-        RunToPoint(5, 9, 5, 3);
-        intakeMotor.setPower(-0.9);
-        transferMotor.setPower(1);
-        AutoColorSensorUse = true;
-        backDepositorServo.setPosition(1);
-        frontDepositorServo.setPosition(1);
-        RunToPoint(-40, 10, 3, 2);
-        intakeServo.setPosition(0.595);
-        RunToPoint(-57, 9.5, 0, 0.5);
-        RunToPoint(RobotX,RobotY,-1,0.2);//wait
-        RunToPoint(-55, 9.5, 0, 0.4);
-        intakeServo.setPosition(0.585);
-        RunToPoint(-57.5, 9.5, 0, 0.15);
-        RunToPoint(-56.2,9.5 ,0, 0.2);
-        intakeServo.setPosition(0.8);
-        RunToPoint(-55, 9.5, 0, 0.4);
-        RunToPoint(-58.4, 9.5, 0, 0.4);
-        RunToPoint(-40, 9.5, 3, 0.8);
-        RunToPoint(40, 9.5, 3, 1.5);
-        pixelLiftMotor.setTargetPosition(100);
-        intakeMotor.setPower(0);
-        transferMotor.setPower(0);
+//        RunToPoint(36, 9, 1, 1.3);
+//        RunToPoint(5, 9, 5, 3);
+//        intakeMotor.setPower(-0.9);
+//        transferMotor.setPower(1);
+//        AutoColorSensorUse = true;
+//        backDepositorServo.setPosition(1);
+//        frontDepositorServo.setPosition(1);
+//        RunToPoint(-40, 10, 3, 2);
+//        intakeServo.setPosition(0.595);
+//        RunToPoint(-57, 9.5, 0, 0.5);
+//        RunToPoint(RobotX,RobotY,-1,0.2);//wait
+//        RunToPoint(-55, 9.5, 0, 0.4);
+//        intakeServo.setPosition(0.585);
+//        RunToPoint(-57.5, 9.5, 0, 0.15);
+//        RunToPoint(-56.2,9.5 ,0, 0.2);
+//        intakeServo.setPosition(0.8);
+//        RunToPoint(-55, 9.5, 0, 0.4);
+//        RunToPoint(-58.4, 9.5, 0, 0.4);
+//        RunToPoint(-40, 9.5, 3, 0.8);
+//        RunToPoint(40, 9.5, 3, 1.5);
+//        pixelLiftMotor.setTargetPosition(100);
+//        intakeMotor.setPower(0);
+//        transferMotor.setPower(0);
         RunToPoint(48, 19, 2, 1.5);
         AutoColorSensorUse = false;
         frontDepositorServo.setPosition(1);

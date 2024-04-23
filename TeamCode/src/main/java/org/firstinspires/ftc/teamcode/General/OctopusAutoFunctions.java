@@ -23,7 +23,7 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
             RunToPoint(-49,-54,2,6);
             setTurn(-90);
             RunToPoint(-59,-26.3,3,1.2);
-            RunToPoint(-54,-23.3,1.4,1.6);
+            RunToPoint(-52,-23.3,1.4,1.6);
             intakeMotor.setPower(0.5);
             RunToPoint(RobotX,RobotY,-1,.4);
             intakeMotor.setPower(0);
@@ -195,7 +195,7 @@ public abstract class OctopusAutoFunctions extends OdometryCode {
         if (Zone == 3) {
             intakeServo.setPosition(PixelPickerBottom);
             setTurn(-180);
-            RunToPoint(-47.5, 45, 1, 0.9);
+            RunToPoint(-46.5, 45, 1, 0.9);
 
             intakeMotor.setPower(0.6);
             stateMachineTimer = getRuntime();
