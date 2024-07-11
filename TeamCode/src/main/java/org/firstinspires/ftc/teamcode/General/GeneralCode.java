@@ -25,7 +25,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public abstract class GeneralCode extends Robot {
 
     public static double DroneLaunchPosition = 0.784;
-
     private boolean ClimberBarDepoyed = false;
     public boolean IntakeOLD = false;
     private boolean frontDepoReverse = false;
@@ -68,7 +67,6 @@ public abstract class GeneralCode extends Robot {
     int HeightThree = 900;
     int HeightFour = 1100;
     int HeightFive = 1350;
-
     public double PixelPickerBottom = 0.53;
     public double PixelPickerTop = 0.8;
 
