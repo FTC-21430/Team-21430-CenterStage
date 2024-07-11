@@ -56,7 +56,7 @@ import java.util.List;
  */
 //@TeleOp(name = "CameraVision", group = "Concept")
 
-public abstract class CameraVision extends GeneralCode {
+public abstract class CameraVision extends Robot {
     public boolean HasSeenTag = false;
     public float camBarrierONE = 200;
     public float camBarrierTwo = 400;

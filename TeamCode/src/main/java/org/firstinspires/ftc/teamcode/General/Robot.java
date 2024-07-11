@@ -14,44 +14,27 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @Config
 public abstract class Robot {
-    //TODO tune these values
-
     private IMU imu;
-    private boolean resettingImu = false;
-    // Declare OpMode members.
     private double TargetAngle = 0;
-    private double error = 0;
-    private double current = 0;
     private double RobotAngle = 0;
     private double drive;
     private double slide;
     private double turn;
-    private double distanceX, distanceY, PowerX, PowerY, PowerF, PowerS, derivativeX, derivativeY;
-    private double lastErrorX, lastErrorY, lastTime;
     private double RobotX, RobotY;
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftFrontMotor = null;
     private DcMotor leftBackMotor = null;
     private DcMotor rightFrontMotor = null;
     private DcMotor rightBackMotor = null;
-    private double lastErrorAngle;
-    private double derivativeAngle;
-    private boolean CurrentAlign = true;
-    private boolean IsProgramAutonomous;
-    private static double derivativeConstantAngle = 0.0015;
-    private static double proportionalConstantAngle = 0.02;
     FtcDashboard dashboard;
     private double robotHeading;
+    private double lastTimeAngle;
+    private boolean CurrentAlign = true;
+    private boolean DriverOrientationDriveMode = true;
     private double leftFrontPower;
     private double leftBackPower;
     private double rightFrontPower;
     private double rightBackPower;
-    private boolean DriverOrientationDriveMode = true;
-    private double AutoStartAngle = 0;
-    private float gain = 5;
-    private double lastTimeAngle;
-    View relativeLayout;
-
     public void straferAlgorithm() {
 
         if (DriverOrientationDriveMode == true) {
@@ -67,6 +50,17 @@ public abstract class Robot {
         rightBackPower = Range.clip(drive + slide - turn, -1.0, 1.0);
 
     }
+
+    public void setMotorPower() {
+        // Send calculated power to wheels
+        leftFrontMotor.setPower(leftFrontPower);
+        leftBackMotor.setPower(leftBackPower);
+        rightFrontMotor.setPower(rightFrontPower);
+        rightBackMotor.setPower(rightBackPower);
+        //Set the servo to the new position and pause;
+    }
+    private boolean resettingImu = false;
+    private double AutoStartAngle = 0;
 
     public void IMU_Update() {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
@@ -98,8 +92,13 @@ public abstract class Robot {
         TargetAngle = 0;
     }
 
+    private double lastErrorAngle;
+    private boolean IsProgramAutonomous;
+
     public void ProportionalFeedbackControl() {
         double currentTime = getRuntime();
+        double derivativeAngle;
+        double error = 0;
         if (resettingImu)
             return;
         telemetry.addData("target", TargetAngle);
@@ -132,5 +131,43 @@ public abstract class Robot {
             angle += 2 * Math.PI;
         }
         return angle;
+    }
+
+    public void GridRunner() {
+        if (gamepad1.dpad_up) {
+            drive = 1;
+            slide = 0;
+        }
+        if (gamepad1.dpad_left) {
+            drive = 0;
+            slide = -1;
+        }
+        if (gamepad1.dpad_right) {
+            drive = 0;
+            slide = 1;
+        }
+        if (gamepad1.dpad_down) {
+            drive = -1;
+            slide = 0;
+        }
+    }
+
+    public boolean slowMode;
+
+    public void speedControl() {
+        drive /= 2;
+        slide /= 2;
+        turn /= 2;
+        if (fastMode == 1) {
+            drive *= 2;
+            slide *= 2;
+            turn *= 2;
+        }
+        if (slowMode) {
+            drive /= 2;
+            slide /= 2;
+            turn *= 0.8;
+
+        }
     }
 }
