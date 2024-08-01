@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.General.OctopusAutoFunctions;
-import org.firstinspires.ftc.teamcode.General.Robot;
+
 @Autonomous(name = "RedRightWhitePixelBackdrop", group = "CenterStage")
 @Disabled
 public class RedRightWhitePixelBackdropV1 extends OctopusAutoFunctions {

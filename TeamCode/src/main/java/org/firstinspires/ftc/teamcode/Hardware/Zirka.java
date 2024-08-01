@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.General;
+package org.firstinspires.ftc.teamcode.Hardware;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -186,10 +186,6 @@ public class Zirka extends Robot {
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
         transferMotor = hardwareMap.get(DcMotor.class, "TransferMotor");
-        leftFrontMotor = hardwareMap.get(DcMotor.class, "left_Front");
-        leftBackMotor = hardwareMap.get(DcMotor.class, "left_Back");
-        rightFrontMotor = hardwareMap.get(DcMotor.class, "right_Front");
-        rightBackMotor = hardwareMap.get(DcMotor.class, "right_Back");
         climberMotor = hardwareMap.get(DcMotor.class, "climber");
         pixelLiftMotor = hardwareMap.get(DcMotor.class, "LiftMotor");
         intakeServo = hardwareMap.get(Servo.class, "IntakeServo");
@@ -212,7 +208,6 @@ public class Zirka extends Robot {
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pixelLiftMotor.setPower(1);
 
-
         fourBarServo.setPosition(0.954);
         climberMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -220,25 +215,9 @@ public class Zirka extends Robot {
         intakeServo.setPosition(0.8);
         ClimberLimitSwitchBottom = hardwareMap.get(DigitalChannel.class, "Climber_Limit_Switch_Bottom");
         ClimberLimitSwitchBottom.setMode(DigitalChannel.Mode.INPUT);
-        leftFrontMotor.setDirection(DcMotor.Direction.FORWARD);
-        leftBackMotor.setDirection(DcMotor.Direction.FORWARD);
-        rightFrontMotor.setDirection(DcMotor.Direction.REVERSE);
-        rightBackMotor.setDirection(DcMotor.Direction.REVERSE);
 
         imu.resetYaw();
         liftPosition = pixelLiftMotor.getCurrentPosition();
-        leftFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBackMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFrontMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightFrontMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightBackMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         transferMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 

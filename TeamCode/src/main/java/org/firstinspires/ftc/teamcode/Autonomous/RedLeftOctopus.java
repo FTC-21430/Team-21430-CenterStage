@@ -5,10 +5,6 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.General.OctopusAutoFunctions;
-import org.firstinspires.ftc.teamcode.General.Robot;
-
-import java.sql.Time;
-import java.util.concurrent.TimeoutException;
 
 @Config
 @Autonomous(name = "RedLeftOctopus", group = "CenterStage")

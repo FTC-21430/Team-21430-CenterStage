@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.General;
+package org.firstinspires.ftc.teamcode.Hardware;
 
 import android.view.View;
 import com.acmerobotics.dashboard.FtcDashboard;
@@ -20,21 +20,17 @@ public abstract class Robot {
     private double drive;
     private double slide;
     private double turn;
+
+    private MecanumDriveTrain driveTrain;
     private double RobotX, RobotY;
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftFrontMotor = null;
-    private DcMotor leftBackMotor = null;
-    private DcMotor rightFrontMotor = null;
-    private DcMotor rightBackMotor = null;
+
     FtcDashboard dashboard;
     private double robotHeading;
     private double lastTimeAngle;
     private boolean CurrentAlign = true;
     private boolean DriverOrientationDriveMode = true;
-    private double leftFrontPower;
-    private double leftBackPower;
-    private double rightFrontPower;
-    private double rightBackPower;
+
     public void straferAlgorithm() {
 
         if (DriverOrientationDriveMode == true) {
@@ -44,19 +40,13 @@ public abstract class Robot {
             if (!CurrentAlign) drive = temp;
         }
 
-        leftFrontPower = Range.clip(drive + slide + turn, -1.0, 1.0);
-        leftBackPower = Range.clip(drive - slide + turn, -1.0, 1.0);
-        rightFrontPower = Range.clip(drive - slide - turn, -1.0, 1.0);
-        rightBackPower = Range.clip(drive + slide - turn, -1.0, 1.0);
 
     }
 
+
     public void setMotorPower() {
         // Send calculated power to wheels
-        leftFrontMotor.setPower(leftFrontPower);
-        leftBackMotor.setPower(leftBackPower);
-        rightFrontMotor.setPower(rightFrontPower);
-        rightBackMotor.setPower(rightBackPower);
+        driveTrain.setDrivePower(drive, slide, turn);
         //Set the servo to the new position and pause;
     }
     private boolean resettingImu = false;

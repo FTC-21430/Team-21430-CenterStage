@@ -4,7 +4,6 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.General.OctopusAutoFunctions;
-import org.firstinspires.ftc.teamcode.General.Robot;
 
 @Autonomous(name = "RedLeftTrussNoYellow", group = "CenterStage")
 public class RedLeftTrussNoYellow extends OctopusAutoFunctions {
